@@ -568,7 +568,12 @@ Route::group(['middleware' => ['wx.auth']], function () {
     });
     Route::get('/posts/{name}/{block_type?}', function(Request $request, $name = null, $block_type){
         $page = App\Page::where('name',$name)->first();
-        $orm = $posts = App\Post::where('page_id', $page->id)->where('block_type', $block_type);
+        if( null == $page ){
+            $orm = App\Post::where('page_id', null)->where('block_type', $block_type);
+        }
+        else{
+            $orm = App\Post::where('page_id', $page->id)->where('block_type', $block_type);
+        }
         if( $block_type == 'slides' ){
             $posts = $orm->get();
         }
