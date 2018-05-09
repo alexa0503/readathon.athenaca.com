@@ -10,7 +10,7 @@ class Wx
     public function __construct($url)
     {
         $this->appId = env('WX_APPID');
-        $this->appSecret = env('WX_APPSECRET');
+        $this->appSecret = env('WX_SECRET');
         $this->url = $url;
     }
 

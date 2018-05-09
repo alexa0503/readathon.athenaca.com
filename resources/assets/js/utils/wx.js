@@ -1,6 +1,6 @@
 window.axios = require('axios')
 import * as apiUrls from './../utils/api-urls' 
-export const wxShare = function(data) {
+export const share = function(data) {
     wx.ready(function () {
         wx.onMenuShareAppMessage({
             title: data.title, // 分享标题
@@ -32,7 +32,7 @@ export const wxShare = function(data) {
         });
     });
 }
-export const initConfig = function(){
+export const initConfig = function(debug=false){
     let url = window.location.href
     axios.get(apiUrls.WX_CONFIG_URL, {
         params: {
@@ -40,10 +40,9 @@ export const initConfig = function(){
         }
     })
     .then(function (response) {
-        console.log(response)
-        /*
+        let data = response.data
         wx.config({
-            debug: false,
+            debug: debug,
             appId: data.appId,
             timestamp: data.timestamp,
             nonceStr: data.nonceStr,
@@ -52,8 +51,7 @@ export const initConfig = function(){
                 'onMenuShareAppMessage',
                 'onMenuShareTimeline'
             ]
-          });
-        */
+        });
     })
     .catch(function (error) {
     });

@@ -4,7 +4,7 @@
             @destroy="handleDestroy" @edge="handleEdge" @init="handleInit" @reInit="handleReInit" @setPosition="handleSetPosition"
             @swipe="handleSwipe" @lazyLoaded="handleLazyLoaded" @lazyLoadError="handleLazeLoadError">
             <a href="#" v-for="item in slides.data" v-if="slides && slides.data" v-bind:key="item.id">
-                <img :src="item.image" alt="">
+                <img :src="item.image" :alt="item.name" class="img-fluid">
             </a>
         </slick>
     </div>

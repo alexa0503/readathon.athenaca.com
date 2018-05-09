@@ -13,7 +13,12 @@
         }),
         created(){
             jssdk.initConfig()
-            console.log(window.wx)
+            jssdk.share({
+                title: '坚持阅读，人生处处有惊喜！',
+                desc: '邀请好友一起参加阅读马拉松，就能获得500字数奖励！',
+                imgUrl: 'http://readathon.athenaca.com/image/share.png',
+                link: 'http://readathon.athenaca.com/'
+            })
         }
     }
 </script>
