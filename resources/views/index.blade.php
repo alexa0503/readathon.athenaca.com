@@ -9,16 +9,14 @@
 	<meta name="keywords" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<script language="javascript" id="temp">
-		document.write('<meta name="viewport" content="width=750, initial-scale=' + window.screen.width / 750 +
-			',user-scalable=no, target-densitydpi=device-dpi">');
-	</script>
 	<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 </head>
 
 <body>
+	<div class="loading">
+        <div class="main-content"><img src="/images/icon-logo.png" class="img-fluid" width="100" /></div>
+    </div>
 	<div id="app">
-		<router-view name="loading"></router-view>
 		<router-view name="topper"></router-view>
 		<router-view name="mainContent"></router-view>
 		<router-view name="navigation"></router-view>

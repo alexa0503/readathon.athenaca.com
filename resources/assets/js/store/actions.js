@@ -5,9 +5,7 @@ export default {
         dispatch,
         commit
     }) {
-        dispatch('getSelfInfo').then(() => {
-            dispatch('getCites')
-        })
+        dispatch('getCites')
     },
     initBoardPage({
         dispatch,
@@ -26,9 +24,7 @@ export default {
         dispatch,
         commit
     }) {
-        dispatch('getSelfInfo').then(() => {
-            dispatch('getCites')
-        })
+        dispatch('getCites')
     },
     initQuestionPage({
         dispatch,
@@ -40,7 +36,7 @@ export default {
         dispatch,
         commit
     }) {
-        dispatch('getSelfInfo')
+        //dispatch('getSelfInfo')
     },
     initIndexPage({
         dispatch,
@@ -69,7 +65,7 @@ export default {
     }, id) {
         (async function () {
             await dispatch('getUserInfo', id)
-            await dispatch('getSelfInfo')
+            //await dispatch('getSelfInfo')
             dispatch('getReadingLogs', {
                 page: 1,
                 id: id
@@ -99,16 +95,27 @@ export default {
 
     },
     loading({
+        dispatch,
         commit
     }) {
-        commit('loading', true)
+        return new Promise((resolve, reject) => {
+            commit('loading', true)
+            setTimeout(function () {
+            }, 500)
+            resolve()
+        })
+        
     },
     finished({
         commit
     }) {
-        setTimeout(function () {
-            commit('loading', false)
-        }, 500)
+        return new Promise((resolve, reject) => {
+            setTimeout(function () {
+                commit('loading', false)
+                resolve()
+            }, 500)
+        });
+        
     },
     getUserInfo({
         state,
@@ -130,18 +137,27 @@ export default {
         state,
         commit
     }, type) {
-        if (typeof state.self === "object" && !(state.self instanceof Array)) {
-            axios.get(apiUrls.USER_URL, {
-                    params: {
-                        type: type,
-                    }
-                })
-                .then(function (response) {
-                    let user = response.data.data
-                    commit('setSelfInfo', user)
-                })
-                .catch(function (error) {});
-        }
+        return new Promise((resolve, reject) => {
+            if (typeof state.self === "object" && !(state.self instanceof Array)) {
+                axios.get(apiUrls.USER_URL, {
+                        params: {
+                            type: type,
+                        }
+                    })
+                    .then(function (response) {
+                        let user = response.data.data
+                        commit('setSelfInfo', user)
+                        resolve(user)
+                    })
+                    .catch(function (error) {
+                        reject(error)
+                    });
+            }
+            else{
+                resolve()
+            }
+        })
+
     },
     getBoardList({
         state,
@@ -272,17 +288,17 @@ export default {
             })
             .catch(function (error) {});
     },
-    vote({
+    async vote({
         commit
     }, {
-        id,
+        user_id,
         index
     }) {
-        if (id == undefined) {
-            return
-        }
-        let url = apiUrls.VOTE_URL + '/' + id
+        let url = apiUrls.VOTE_URL + '/' + user_id
         return new Promise((resolve, reject) => {
+            if (user_id == undefined) {
+                return reject('no id')
+            }
             axios.post(url).then(function (response) {
                 if (response.data && response.data.ret == 0) {
                     let data = response.data.data

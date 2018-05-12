@@ -1,27 +1,17 @@
 <template>
     <div class="container-fluid prize-page" v-if="!loading">
-        <div class="carousel slide row" data-ride="carousel" id="prizeCarousel" v-if="activities">
-            <ol class="carousel-indicators">
-                <li data-target="#prizeCarousel" v-bind:data-slide-to="index" v-bind:class="index == 0 ?'active' : ''" v-for="(item,index) in activities" v-bind:key="index"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item" v-bind:class="index == 0 ?'active' : ''" v-for="(item,index) in activities" v-bind:key="index">
-                    <router-link :to="{ name: 'prize',params: { id: item.id } }">
-                        <img class="d-block w-100" v-bind:src="item.image">
-                    </router-link>
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="#prizeCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#prizeCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
+        <div class="slick-content">
+        <slick ref="slick" :options="slickOptions" @afterChange="handleAfterChange" @beforeChange="handleBeforeChange" @breakpoint="handleBreakpoint"
+            @destroy="handleDestroy" @edge="handleEdge" @init="handleInit" @reInit="handleReInit" @setPosition="handleSetPosition"
+            @swipe="handleSwipe" @lazyLoaded="handleLazyLoaded" @lazyLoadError="handleLazeLoadError" v-if="activities">
+            <router-link :to="{ name: 'prize',params: { id: item.id } }" v-for="(item,index) in activities" v-if="activities"
+                v-bind:key="index">
+                <img :src="item.image" :alt="item.name" class="img-fluid">
+            </router-link>
+        </slick>
         </div>
         <div class="text-center activity-content" v-if="status">{{ activity.name }}</div>
-        
+
         <div class="prize-content" v-if="!status">
             <h3>敬请期待</h3>
             <div>目前还没有奖品可以领取</div>
@@ -31,13 +21,19 @@
             <div v-html="prize.body"></div>
             <div class="prize-button">
                 <button type="button" class="btn btn-warning btn-lg disabled" v-if="prize.received_status == 1">已领取</button>
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 2">不可领取</button><!--活动未结束-->
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 6">不可领取</button><!--已领取其他奖品-->
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 7">不可领取</button><!--未激活或未参加活动-->
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 3">不可领取</button><!--未到领奖日期-->
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 4">已过领不可领取奖期限</button><!--已过领奖期限-->
+                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 2">不可领取</button>
+                <!--活动未结束-->
+                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 6">不可领取</button>
+                <!--已领取其他奖品-->
+                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 7">不可领取</button>
+                <!--未激活或未参加活动-->
+                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 3">不可领取</button>
+                <!--未到领奖日期-->
+                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 4">已过领不可领取奖期限</button>
+                <!--已过领奖期限-->
                 <button type="button" v-on:click="receivePrize(prize.id)" class="btn btn-warning btn-lg" v-else-if="prize.received_status == 0">领取奖品</button>
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else>不可领取</button><!--未获得该奖品-->
+                <button type="button" class="btn btn-warning btn-lg disabled" v-else>不可领取</button>
+                <!--未获得该奖品-->
             </div>
         </div>
         <div class="row board-more" v-if="status && morePrizes" v-on:click="fetchMore(true)">
@@ -62,6 +58,7 @@
 </template>
 
 <script>
+    import Slick from 'vue-slick'
     import {
         mapGetters,
         mapState,
@@ -69,10 +66,25 @@
     } from 'vuex'
     import * as apiUrls from './../utils/api-urls'
     export default {
-        data(){
+        components: {
+            Slick
+        },
+        data() {
             return {
                 hasError: false,
-                hasPosted: false
+                hasPosted: false,
+                slickOptions: {
+                    slidesToShow: 1,
+                    dots: true,
+                    autoplay: true,
+                    focusOnSelect: true,
+                    autoplaySpeed: 5000
+                },
+            }
+        },
+        watch: {
+            activities(val) {
+                this.reInit();
             }
         },
         computed: {
@@ -92,7 +104,8 @@
                     return state.prizesData.data.activity
                 },
                 status(state) {
-                    return state.prizesData && state.prizesData.ret == 0 && state.prizesData.data.prizes.total > 0 ? true : false
+                    return state.prizesData && state.prizesData.ret == 0 && state.prizesData.data.prizes.total > 0 ?
+                        true : false
                 },
                 morePrizes(state) {
                     if (state.prizesData.data == undefined) {
@@ -122,6 +135,55 @@
             }
         },
         methods: {
+            
+            next() {
+                this.$refs.slick.next();
+            },
+            prev() {
+                this.$refs.slick.prev();
+            },
+            reInit() {
+                // Helpful if you have to deal with v-for to update dynamic lists
+                this.$refs.slick.destroy()
+                this.$nextTick(() => {
+                    this.$refs.slick.create();
+                });
+            },
+            
+            // Events listeners
+            handleAfterChange(event, slick, currentSlide) {
+                //console.log('handleAfterChange', event, slick, currentSlide);
+            },
+            handleBeforeChange(event, slick, currentSlide, nextSlide) {
+                //console.log('handleBeforeChange', event, slick, currentSlide, nextSlide);
+            },
+            handleBreakpoint(event, slick, breakpoint) {
+                //console.log('handleBreakpoint', event, slick, breakpoint);
+            },
+            handleDestroy(event, slick) {
+                //console.log('handleDestroy', event, slick);
+            },
+            handleEdge(event, slick, direction) {
+                //console.log('handleEdge', event, slick, direction);
+            },
+            handleInit(event, slick) {
+                //console.log('handleInit', event, slick);
+            },
+            handleReInit(event, slick) {
+                //console.log('handleReInit', event, slick);
+            },
+            handleSetPosition(event, slick) {
+                //console.log('handleSetPosition', event, slick);
+            },
+            handleSwipe(event, slick, direction) {
+                //console.log('handleSwipe', event, slick, direction);
+            },
+            handleLazyLoaded(event, slick, image, imageSource) {
+                //console.log('handleLazyLoaded', event, slick, image, imageSource);
+            },
+            handleLazeLoadError(event, slick, image, imageSource) {
+                //console.log('handleLazeLoadError', event, slick, image, imageSource);
+            },
             fetchMore: function (more = false) {
                 let page = this.current_page + 1
                 let id = this.$route.params.id
@@ -134,7 +196,7 @@
                         page: page
                     })
                 }
-                if( !has_requested ){
+                if (!has_requested) {
                     has_requested = true
                     request(this)
                     has_requested = false
@@ -146,23 +208,23 @@
                 if (!vm.hasPosted) {
                     vm.hasPosted = true
                     axios.post(url).then(function (response) {
-                        let id = vm.$route.params.id
-                        vm.$store.dispatch('getPrizes', {
-                            id: id
-                        })
-                        $('#prizeModal').modal('show')
-                        vm.hasPosted = false
-                    })
-                    .catch(function (error) {
-                        vm.hasPosted = false
-                        if (error.response.status == 403) {
-                            $('#prizeModal .modal-body h3').html('抱歉，'+ error.response.data.errMsg)
-                            $('#prizeModal .modal-body p').html('如有疑问，请联系客服人员')
+                            let id = vm.$route.params.id
+                            vm.$store.dispatch('getPrizes', {
+                                id: id
+                            })
                             $('#prizeModal').modal('show')
-                        } else {
-                            alert('服务器发生错误')
-                        }
-                    })
+                            vm.hasPosted = false
+                        })
+                        .catch(function (error) {
+                            vm.hasPosted = false
+                            if (error.response.status == 403) {
+                                $('#prizeModal .modal-body h3').html('抱歉，' + error.response.data.errMsg)
+                                $('#prizeModal .modal-body p').html('如有疑问，请联系客服人员')
+                                $('#prizeModal').modal('show')
+                            } else {
+                                alert('服务器发生错误')
+                            }
+                        })
                 }
             }
         }

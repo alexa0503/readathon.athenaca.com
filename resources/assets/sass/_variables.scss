@@ -1,22 +1,19 @@
 // Body
 $body-bg: #7fe2bf;
 $warning: #ffdf5f;
-
 // Typography
-$font-family-sans-serif:
-  // Safari for OS X and iOS (San Francisco)
-  -apple-system,
-  // Chrome < 56 for OS X (San Francisco)
-  BlinkMacSystemFont,
-  // Windows
-  "Segoe UI",
-  // Android
-  "Roboto",
-  // Basic web fallback
-  "Helvetica Neue", Arial, sans-serif,
-  // Emoji fonts
-  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
-$font-size-base: 1.4rem;
+$font-family-sans-serif : // Safari for OS X and iOS (San Francisco)
+-apple-system, // Chrome < 56 for OS X (San Francisco)
+BlinkMacSystemFont, // Windows
+"Segoe UI", // Android
+"Roboto", // Basic web fallback
+"Helvetica Neue",
+Arial,
+sans-serif, // Emoji fonts
+"Apple Color Emoji",
+"Segoe UI Emoji",
+"Segoe UI Symbol" !default;
+$font-size-base: 1.2rem;
 $line-height-base: 1.6;
 $carousel-indicator-width: 10px;
 $carousel-indicator-height: 10px;
@@ -41,7 +38,7 @@ $pagination-focus-box-shadow: none;
 $info: #29cf95;
 $modal-content-bg:#ffdf5f;
 $modal-header-border-width:0;
-$slick-dot-size: 10px;
+$slick-dot-size: .5rem;
 $slick-dot-color-active: #fae260;
 $slick-dot-color: #fff;
 $slick-opacity-not-active: 0.8;

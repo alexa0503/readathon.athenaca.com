@@ -3,20 +3,21 @@
         <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
                 <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'home' }" exact="exact">
-                    <img src="/images/icon-index.png" class="nav-icon" />首页</router-link>
+                    <i class="nav-icon nav-icon-index"></i>首页
+                </router-link>
             </li>
             <li class="nav-item">
                 <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'board' }">
-                    <img src="/images/icon-board.png" class="nav-icon" />排名榜</router-link>
+                    <i class="nav-icon nav-icon-board"></i>排名榜</router-link>
             </li>
             <li class="nav-item">
                 <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'invite' }">
-                    <img src="/images/icon-invite.png" class="nav-icon" />邀请好友</router-link>
+                    <i class="nav-icon nav-icon-invite"></i>邀请好友</router-link>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" v-bind:class="active == true ? 'active' : ''" v-on:click="clearActive" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                     href="javascript:;">
-                    <img src="/images/icon-activity.png" class="nav-icon" />比赛动态</a>
+                    <i class="nav-icon nav-icon-activity"></i>比赛动态</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <router-link class="dropdown-item" active-class="active" :to="{ name: 'activity' }">比赛动态</router-link>
                     <router-link class="dropdown-item" active-class="active" :to="{ name: 'prize' }">奖品详情</router-link>
@@ -27,7 +28,7 @@
             </li>
             <li class="nav-item">
                 <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'account' }">
-                    <img src="/images/icon-account.png" class="nav-icon" />我的账户</router-link>
+                    <i class="nav-icon nav-icon-account"></i>我的账户</router-link>
             </li>
         </ul>
     </div>

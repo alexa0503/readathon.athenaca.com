@@ -20,6 +20,7 @@ class PrizeLog extends JsonResource
             'activity_name' => $this->activity->name,
             'prize_name' => $this->prize->name,
             'rank' => $this->rank,
+            'has_checked' => $this->has_checked,
             'created_at' =>  Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('Y-m-d'),
         ];
     }

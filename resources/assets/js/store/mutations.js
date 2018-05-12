@@ -47,25 +47,23 @@ export default {
     },
     updateVotedNumber(state, payload){
         if( state.boardList.data[payload.index] ){
-            state.boardList.data[payload.index].user.voted_number = payload.voted_number
-            state.boardList.data[payload.index].user.has_voted = payload.has_voted
-            state.boardList.data[payload.index].user.words_number = payload.words_number
+            state.boardList.data[payload.index].voted_number = payload.voted_number
+            state.boardList.data[payload.index].has_voted = payload.has_voted
+            state.boardList.data[payload.index].words_number = payload.words_number
         }
     },
     updateSelfVotedNumber(state, payload){
         if(state.self){
-            state.self.voted_number = payload.voted_number
-            state.self.has_voted = payload.has_voted
-            state.self.words_number = payload.words_number
+            state.self.activity_info.voted_number = payload.voted_number
+            state.self.activity_info.has_voted = payload.has_voted
+            state.self.activity_info.words_number = payload.words_number
         }
     },
     updateUserVotedNumber(state, payload){
         if(state.user){
-            console.log(state.user)
-            state.user.voted_number = payload.voted_number
-            state.user.has_voted = payload.has_voted
-            state.user.words_number = payload.words_number
-            console.log(state.user)            
+            state.user.activity_info.voted_number = payload.voted_number
+            state.user.activity_info.has_voted = payload.has_voted
+            state.user.activity_info.words_number = payload.words_number
         }
     },
     setQuestion(state, question){

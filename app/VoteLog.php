@@ -60,4 +60,10 @@ class VoteLog extends Model
     {
         return $this->belongsTo('App\User','voter_id','id');
     }
+    public static function isVoted($user_id, $activity_id)
+    {
+        $row = self::where('voter_id', session('wx.user.id'))->where('user_id', $user_id)->where('activity_id', $activity_id)->where('vote_date', date('Y-m-d'))->first();
+        return null == $row ? 0 : 1;
+
+    }
 }

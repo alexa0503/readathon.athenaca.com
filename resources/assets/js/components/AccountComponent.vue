@@ -2,20 +2,20 @@
     <div class="container-fluid account" v-if="!loading">
         <div class="account-topper">
             <div class="account-avatar" v-on:click="edit">
-                <div><img :src="user.avatar" width="110" height="110" class="rounded-circle" /></div>
+                <div class="account-img"><img :src="user.avatar" width="110" height="110" class="rounded-circle" /><div class="account-edit" v-if="isSelf"><img src="/images/icon-pen.png" /></div></div>
                 <div class="account-nickname">{{ user.nickname }}</div>
                 <div class="account-city">{{ user.city_name }}</div>
                 <div class="account-name" v-if="isSelf">{{ user.name }}</div>
-                <div class="account-edit" v-if="isSelf"><img src="/images/icon-pen.png" /></div>
+                
             </div>
             <div class="account-info">
-                <div class="account-rank" v-if="isSelf">我的排名<span>{{ user.rank }}</span></div>
-                <div class="account-rank" v-else>TA的排名<span>{{ user.rank }}</span></div>
+                <div class="account-rank" v-if="isSelf">我的排名<span>{{ user.activity_info.rank }}</span></div>
+                <div class="account-rank" v-else>TA的排名<span>{{ user.activity_info.rank }}</span></div>
                 <div class="account-text">阅读水平值<span>GE {{ user.ge }}</span></div>
-                <div class="account-text">阅读书籍数<span>{{ user.reading_number }}</span></div>
-                <div class="account-text">累计阅读字数<span>{{ user.words_number }}</span></div>
+                <div class="account-text">阅读书籍数<span>{{ user.activity_info.reading_number }}</span></div>
+                <div class="account-text">累计阅读字数<span>{{ user.activity_info.words_number }}</span></div>
                 <div class="account-add" v-if="isSelf"><a href="javascript:;" v-on:click="addReadingLog">添加阅读记录</a></div>
-                <div class="account-vote" v-else><a href="javascript:;" v-on:click="vote(user.id)">赞 <img src="/images/icon-account-vote.png" v-if="user.has_voted != 1" /><img src="/images/icon-account-voted.png" v-else /><span>{{ user.voted_number }}</span></a></div>
+                <div class="account-vote" v-else><a href="javascript:;" v-on:click="vote(user.id)">赞 <img src="/images/icon-account-vote.png" v-if="user.activity_info.has_voted != 1" /><img src="/images/icon-account-voted.png" v-else /><span>{{ user.activity_info.voted_number }}</span></a></div>
             </div>
         </div>
         <div class="account-tabs">
@@ -45,7 +45,7 @@
                                 <td>{{ log.created_at }}</td><td>{{ log.reason }}</td><td>{{ log.words_number }}</td>
                             </tr>
                             <tr v-if="type === 'prize' && isSelf" v-for="log in logs.data" v-bind:key="log.id">
-                                <td>{{ log.activity_name }}</td><td>{{ log.prize_name }}</td><td>正常</td>
+                                <td>{{ log.activity_name }}</td><td>{{ log.prize_name }}</td><td>{{ log.has_checked == 0 ? '未核销' : '已核销'}}</td>
                             </tr>
                             <tr v-if="logs.data == undefined || logs.data.length == 0 ">
                                 <td colspan="3">没有任何记录</td>
@@ -120,7 +120,6 @@
             }
         }),
         created() {
-            
             if( this.$route.params.id == undefined ){
                 this.isSelf = true
             }
@@ -159,12 +158,12 @@
                     this.$router.push({name:'profile'})
                 }
             },
-            vote: function(id){
+            vote: function(user_id){
                 let hasVoted = this.user.has_voted
                 let store = this.$store
                 let vm = this
                 if( hasVoted != 1){
-                    let promise = store.dispatch('vote',{id,index:-1})
+                    let promise = store.dispatch('vote',{user_id,index:-1})
                     promise.then(null,function(error){
                         alert(error.errMsg)
                     })

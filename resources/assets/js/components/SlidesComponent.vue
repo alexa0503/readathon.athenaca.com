@@ -38,22 +38,9 @@
         watch: {
             slides(val) {
                 this.reInit();
-                /*
-                this.$refs.slick.destroy()
-                this.$nextTick(() => {
-                    this.$refs.slick.create()
-                    //this.$refs.carousel.goTo(currIndex, true)
-                })
-                */
             }
         },
         created() {
-            let name = this.$route.name
-            this.$store.dispatch('getPosts', {
-                name: name,
-                type: 'slides'
-            })
-
         },
         methods: {
             next() {
@@ -103,6 +90,16 @@
             handleLazeLoadError(event, slick, image, imageSource) {
                 //console.log('handleLazeLoadError', event, slick, image, imageSource);
             },
+        },
+        beforeRouteEnter (to, from, next) {
+            next(vm => {
+                let name = vm.$route.name
+                vm.$store.dispatch('getPosts', {
+                    name: name,
+                    type: 'slides'
+                })
+                // 通过 `vm` 访问组件实例
+            })
         }
     }
 </script>

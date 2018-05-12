@@ -10,9 +10,9 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
+mix.autoload({
+    'moment': ['moment', 'window.moment'],
+})
 mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/app.scss', 'public/css')
- //   .copy('resources/assets/js/wx.js', 'public/js/wx.js')
-
-    
+//   .copy('resources/assets/js/wx.js', 'public/js/wx.js')

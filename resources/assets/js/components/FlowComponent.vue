@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid flow-chart" v-if="!loading">
-            <div class="flow-chart-return"><img src="/images/icon-return-01.png" v-on:click="previous" /></div>
+            <div class="flow-chart-return"><img src="/images/icon-return-01.png" width="40" v-on:click="previous" /></div>
             <div class="flow-chart-topper">阅读马拉松流程</div>
             <div class="flow-chart-content">
                 <div class="flow-chart-number">01</div>
@@ -28,7 +28,7 @@
             </div>
              <div class="flow-chart-content">
                 <div class="flow-chart-number">07</div>
-                <div class="flow-chart-title"><div class="flow-chart-title-center">比赛结束<br/>领取奖品和证书，收获满满</div></div>
+                <div class="flow-chart-title"><div class="flow-chart-title-center">比赛结束，领取奖品和证书<br/>收获满满</div></div>
             </div>
     </div>
 </template>

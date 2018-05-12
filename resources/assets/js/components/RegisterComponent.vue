@@ -1,14 +1,25 @@
 <template>
     <div class="container-fluid" v-if="!loading">
-        <form class="row" v-if="!succeeded && !hasRegistered" method="POST" @submit.prevent="register">
+        <form class="register-form row" v-if="!succeeded && !hasRegistered" method="POST" @submit.prevent="register">
             <div class="form-content">
                 <div class="form-group row" v-bind:class="hasError && errMsg.name ? 'has-error' : ''">
                     <input v-model="user.name" type="text" class="form-control form-control-lg" placeholder="姓名">
                     <label class="help-block" for="" v-if="hasError && errMsg.name">{{ errMsg.name[0] }}</label>
                 </div>
                 <div class="form-group row" v-bind:class="hasError && errMsg.birthdate ? 'has-error' : ''">
-                    <Datetime :value="user.birthdate" placeholder="生日" default-selected-value="2018-01-01" :end-date="endDate" start-date="1980-01-01"
-                        class="form-control form-control-lg"></Datetime>
+                    <input v-model="user.birthdate" type="text" class="form-control form-control-lg" placeholder="出生年月" v-on:click="openPicker">
+                   <mt-datetime-picker
+                        ref="picker"
+                        type="date"
+                        year-format="{value} 年"
+                        month-format="{value} 月"
+                        date-format="{value} 日"
+                        :startDate="startDate"
+                        :endDate="endDate"
+                        @confirm="handleConfirm"
+                        itemHeight="80"
+                        v-model="pickerDate">
+                    </mt-datetime-picker>
                     <label class="help-block" for="" v-if="hasError && errMsg.birthdate">{{ errMsg.birthdate[0] }}</label>
                 </div>
                 <div class="form-group row" v-bind:class="hasError && errMsg.tel ? 'has-error' : ''">
@@ -16,45 +27,46 @@
                     <label class="help-block" for="" v-if="hasError && errMsg.tel">{{ errMsg.tel[0] }}</label>
                 </div>
                 <div class="form-group row" v-bind:class="hasError && errMsg.is_reading ? 'has-error' : ''">
-                    <select v-model="user.is_reading" class="form-control form-control-lg">
-                        <option value="" disabled="disabled">是否Athena Academy知慧学院现任成员</option>
-                        <option value="y">是</option>
-                        <option value="n">否</option>
-                    </select>
+                    <div class="form-control form-control-lg">知慧学院 Athena Academy现任学员<mt-switch v-model="user.is_reading"></mt-switch></div>
                     <label class="help-block" for="" v-if="hasError && errMsg.is_reading">{{ errMsg.is_reading[0] }}</label>
                 </div>
                 <div class="form-group row" v-bind:class="hasError && errMsg.city ? 'has-error' : ''">
-                    <select v-model="user.city" class="form-control form-control-lg no-border">
+                    <select v-model="user.city" class="form-control form-control-lg">
                         <option value="" disabled="disabled">所在城市</option>
                         <option v-for="city in cities" v-bind:key="city.id" v-bind:value="city.id">{{ city.name }}</option>
                     </select>
                     <label class="help-block" for="" v-if="hasError && errMsg.city">{{ errMsg.city[0] }}</label>
                 </div>
+                <div class="form-group row" v-bind:class="hasError && errMsg.is_reading ? 'has-error' : ''">
+                    <div class="form-control form-control-lg  no-border" v-on:click="showPrivacy">
+                        <label>
+                            <input type="checkbox" class="register-checkbox" v-model="privacy" /> 我已经阅读并同意阅读马拉松隐私政策
+                        </label>
+                    </div>
+                    <label class="help-block" for="" v-if="hasError && errMsg.is_reading">{{ errMsg.is_reading[0] }}</label>
+                </div>
             </div>
             <div class="text-center container-fluid">
                 <button type="submit" class="btn btn-lg btn-warning">提交</button>
             </div>
-            <div class="text-center privacy container-fluid">
-                <a href="javascript:;" v-on:click="showPrivacy">隐私协议</a>
-            </div>
+            <div class="board-space container-fluid"></div>
         </form>
         <div class="regester-succeeded" v-else>
             <h3>注册成功！</h3>
             <p>请联系距离您最近的知慧学院Athena Academy，预约英文阅读水平测试，获取阅读水平匹配的英文书单，激活参赛资格！</p>
             <div class="regester-succeeded-link">
+                <router-link :to="{name:'about'}">关于阅读马拉松</router-link>
+            </div>
+            <div class="regester-succeeded-link">
                 <a>预约美国权威STAR英语水平测试</a>
+            </div>
+            <div class="regester-succeeded-link">
+                <router-link :to="{name:'flow'}">关于知慧学院 Athena Academy</router-link>
             </div>
             <div class="regester-succeeded-link">
                 <router-link :to="{name:'flow'}">阅读马拉松流程图</router-link>
             </div>
-            <div class="regester-succeeded-link">
-                <a>关于阅读马拉松</a>
-            </div>
-            <div class="regester-succeeded-link">
-                <a>关于Athena Academy知慧学院 </a>
-            </div>
         </div>
-        <div class="board-space"></div>
     </div>
 </template>
 
@@ -64,17 +76,12 @@
         mapActions
     } from 'vuex'
     import * as apiUrls from './../utils/api-urls'
-    import {
-        Datetime,
-        dateFormat
-    } from 'vux'
-    //import * as datepicker from 'vue-datetime-picker'
+    import { DatetimePicker,Switch } from 'mint-ui';
+    
     export default {
-        components: {
-            Datetime
-        },
-        filters: {
-            dateFormat
+        components:{
+            'mt-datetime-picker':DatetimePicker,
+            'mt-switch':Switch
         },
         data() {
             return {
@@ -83,13 +90,16 @@
                 succeeded: false,
                 errMsg: '',
                 hasPosted: false,
+                pickerVisible: false,
+                pickerDate: new Date('2018-01-01'),
                 user: {
                     city: '',
-                    is_reading: '',
+                    is_reading: false,
                     birthdate: '',
                     tel: '',
-                    name: ''
-                }
+                    name: '',
+                    privacy: '1'
+                },
             }
         },
         computed: {
@@ -99,17 +109,25 @@
                 userInfo: 'self',
                 hasRegistered: 'hasRegistered'
             }),
+            startDate: function(){
+                return new Date('2000-01-01')
+            },
             endDate: function(){
-                //return '2018-01-01'
-                let d = dateFormat(new Date(), 'YYYY-MM-DD')
-                console.log(d)
-                return d
+                return new Date()
             }
         },
         created() {
             this.$store.dispatch('initRegisterPage')
         },
         methods: {
+            openPicker() {
+                this.user.birthdate = '2018-01-01'
+                this.$refs.picker.open();
+            },
+            handleConfirm(date){
+                let d = moment(date).format('YYYY-MM-DD')
+                this.user.birthdate = d
+            },
             showPrivacy: function () {
                 console.log(this.user.birthdate)
                 this.privacySeen = true

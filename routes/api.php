@@ -44,7 +44,28 @@ Route::group(['middleware' => ['wx.auth']], function () {
         if (null == $id) {
             $id = session('wx.user.id');
         }
-        return new UserResource(App\User::find($id));
+        $activity = Activity::current();
+        $has_joined = 0;
+        $activity_info = [
+            'words_number' => 0,
+            'reading_number' => 0,
+            'rank' => '--'
+        ];
+        if( null != $activity ){
+            $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $id)->first();
+            $has_joined = null == $activity_user ? 0 : 1;
+            if( null != $activity_user ){
+                $activity_info = new ActivityUserResource($activity_user, false);
+            }
+        }
+        //dd($data);
+        
+        return (new UserResource(App\User::find($id)))->additional([
+            'data' => [
+                'has_joined' => $has_joined,
+                'activity_info' => $activity_info,
+            ]
+        ]);
     });
 
     Route::get('board', function (Request $request) {
@@ -74,19 +95,31 @@ Route::group(['middleware' => ['wx.auth']], function () {
             }
         }
 
+        $current_activity = Helper::getCurrentActivity();
         if ($request->input('activity')) {
             $orm->where('activity_id', $request->input('activity'));
+            if(null == $current_activity){
+                $is_current_activity = 0;
+            }
+            else{
+                $is_current_activity = $request->input('activity') == $current_activity->id ? 1 : 0;
+            }
         } else {
-            $activity = Helper::getCurrentActivity();
             //没有活动
-            if (null == $activity) {
+            if ( null == $current_activity ) {
                 return response()->json(['ret' => 1001, 'errMsg' => '当前没有活动'], 433);
             }
+            $is_current_activity = null == $current_activity  ? 0 : 1;
             $orm->where('activity_id', $activity->id);
         }
         $orm->orderBy('words_number', 'DESC');
         $activity_users = $orm->paginate(4);
-        return ActivityUserResource::collection($activity_users);
+        
+        return ActivityUserResource::collection($activity_users)->additional([
+            'meta' => [
+                'is_current_activity' => $is_current_activity,
+            ]
+        ]);
     });
 
     Route::get('/cities', function (Request $request) {
@@ -259,7 +292,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
         }
         return [];
     });
-    Route::post('vote/{user_id}', function (Request $request, $user_id) {
+    Route::any('vote/{activity_user_id}', function (Request $request, $activity_user_id) {
         $voter_id = session('wx.user.id');
         $activity = Helper::getCurrentActivity();
         $today = date('Y-m-d');
@@ -271,11 +304,16 @@ Route::group(['middleware' => ['wx.auth']], function () {
             return response()->json(['ret' => 1101, 'errMsg' => '当前没有活动'], 403);
         }
         //判断用户是否参加活动
-        $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $user_id)->first();
+        $activity_user = ActivityUser::where('user_id', $activity_user_id)->where('activity_id', $activity->id)->first();
         if( null == $activity_user ){
             return response()->json(['ret' => 1102, 'errMsg' => '该用户还没参加活动哦'], 403);
         }
 
+        if( $activity_user->activity_id != $activity->id ){
+            return response()->json(['ret' => 1103, 'errMsg' => '活动已结束'], 403);
+        }
+        //被点赞用户
+        $user_id = $activity_user->user_id;
         DB::beginTransaction();
         try {
             $log = App\VoteLog::where('voter_id', $voter_id)->where('user_id', $user_id)->where('activity_id', $activity->id)->where('vote_date', $today)->first();

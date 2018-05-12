@@ -1,12 +1,19 @@
 window.axios = require('axios')
-import * as apiUrls from './../utils/api-urls' 
+import * as apiUrls from './../utils/api-urls'
 export const share = function(data) {
+    //默认值
+    let defaultInfo = {
+        title: '坚持阅读，人生处处有惊喜！',
+        desc: '邀请好友一起参加阅读马拉松，就能获得500字数奖励！',
+        imgUrl: 'http://readathon.athenaca.com/image/share.png',
+        link: 'http://readathon.athenaca.com/'
+    }
     wx.ready(function () {
         wx.onMenuShareAppMessage({
-            title: data.title, // 分享标题
-            desc: data.desc, // 分享描述
-            link: data.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: data.imgUrl, // 分享图标
+            title: data.title || defaultInfo.title, // 分享标题
+            desc: data.desc || defaultInfo.desc, // 分享描述
+            link: data.link || defaultInfo.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: data.imgUrl || defaultInfo.imgUrl, // 分享图标
             type: data.type || 'link', // 分享类型,music、video或link，不填默认为link
             dataUrl: data.dataUrl || '', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {
@@ -17,10 +24,10 @@ export const share = function(data) {
             }
         });
         wx.onMenuShareTimeline({
-            title: data.title, // 分享标题
-            desc: data.desc, // 分享描述
-            link: data.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: data.imgUrl, // 分享图标
+            title: data.title || defaultInfo.title, // 分享标题
+            desc: data.desc || defaultInfo.desc, // 分享描述
+            link: data.link || defaultInfo.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: data.imgUrl || defaultInfo.imgUrl, // 分享图标
             type: data.type || 'link', // 分享类型,music、video或link，不填默认为link
             dataUrl: data.dataUrl || 'link', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {
@@ -49,7 +56,11 @@ export const initConfig = function(debug=false){
             signature: data.signature,
             jsApiList: [
                 'onMenuShareAppMessage',
-                'onMenuShareTimeline'
+                'onMenuShareTimeline',
+                'uploadImage',
+                'previewImage',
+                'getLocalImgData',
+                'chooseImage'
             ]
         });
     })

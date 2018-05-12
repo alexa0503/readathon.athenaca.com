@@ -18,15 +18,15 @@ import QuestionComponent from './../components/QuestionComponent.vue';//Modal提
 import PrizeComponent from './../components/PrizeComponent.vue';//奖品
 import InviteComponent from './../components/InviteComponent.vue';//邀请好友
 import ActivityComponent from './../components/ActivityComponent.vue';//邀请好友
+import AboutComponent from './../components/AboutComponent.vue';//关于马拉松
 
 const router = new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/page',
+            path: '/page/home',
             name: 'home',
             components: {
-                'loading':PreloadComponent,
                 'topper': SlidesComponent,
                 'mainContent': IndexComponent,
                 'navigation': NavigationComponent
@@ -36,7 +36,6 @@ const router = new VueRouter({
             path: '/page/register',
             name: 'register',
             components: {
-                'loading':PreloadComponent,
                 'topper': SlidesComponent,
                 'mainContent': RegisterComponent,
                 'navigation': NavigationComponent
@@ -46,7 +45,6 @@ const router = new VueRouter({
             path: '/page/board',
             name: 'board',
             components: {
-                'loading':PreloadComponent,
                 'mainContent': BoardComponent,
                 'navigation': NavigationComponent
             }
@@ -55,8 +53,7 @@ const router = new VueRouter({
             path: '/page/invite',
             name: 'invite',
             components: {
-                'loading':PreloadComponent,
-                'topper': SlidesComponent,
+                //'topper': SlidesComponent,
                 'mainContent': InviteComponent,
                 'navigation': NavigationComponent
             }
@@ -65,7 +62,6 @@ const router = new VueRouter({
             path: '/page/activity',
             name: 'activity',
             components: {
-                'loading':PreloadComponent,
                 'topper': SlidesComponent,
                 'mainContent': ActivityComponent,
                 'navigation': NavigationComponent
@@ -75,7 +71,6 @@ const router = new VueRouter({
             path: '/page/account/:id?',
             name: 'account',
             components: {
-                'loading':PreloadComponent,
                 //'topper': SlidesComponent,
                 'mainContent': AccountComponent,
                 'navigation': NavigationComponent,
@@ -86,7 +81,6 @@ const router = new VueRouter({
             path: '/page/flow',
             name: 'flow',
             components: {
-                'loading':PreloadComponent,
                 'mainContent': FlowComponent,
                 'navigation': NavigationComponent
             }
@@ -95,7 +89,6 @@ const router = new VueRouter({
             path: '/page/profile',
             name: 'profile',
             components: {
-                'loading':PreloadComponent,
                 'mainContent': ProfileComponent,
                 'modal': SucceededModalComponent
                 //'navigation': NavigationComponent
@@ -105,7 +98,6 @@ const router = new VueRouter({
             path: '/page/question',
             name: 'question',
             components: {
-                'loading':PreloadComponent,
                 'topper': SlidesComponent,
                 'mainContent': QuestionComponent,
                 'navigation': NavigationComponent
@@ -116,7 +108,6 @@ const router = new VueRouter({
             path: '/page/prize/:id?',
             name: 'prize',
             components: {
-                'loading':PreloadComponent,
                 //'topper': SlidesComponent,
                 'mainContent': PrizeComponent,
                 'navigation': NavigationComponent
@@ -126,9 +117,8 @@ const router = new VueRouter({
             path: '/page/about',
             name: 'about',
             components: {
-                'loading':PreloadComponent,
                 'topper': SlidesComponent,
-                'mainContent': QuestionComponent,
+                'mainContent': AboutComponent,
                 'navigation': NavigationComponent
             }
         },
@@ -140,15 +130,6 @@ router.afterEach((to, from) => {
     //store.dispatch('finished')
 })
 */
-//根据路由切换背景
-router.beforeEach((to, from, next) => {
-    if( to.name == 'account' || to.name == 'profile' ){
-        document.body.style.background = '#ebf0f2';
-    }
-    else{
-        document.body.style.background = "#7fe2bf url('/images/bkg-01.png') 0 0 no-repeat";        
-    }
-    next()
-})
+
 
 export default router

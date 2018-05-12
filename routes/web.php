@@ -62,11 +62,11 @@ Route::group(['middleware'=>['wx.auth']], function(){
             return redirect('/page/register');
         }
         else{
-            return redirect('/page');
+            return redirect('/page/home');
         }
     });
     //vue页面 需要判断用户状态然后进行跳转，排行榜页面 账户查看页面等
-    Route::get('/page/{vue?}/{id?}', function (Request $request) {
+    Route::get('/page/{vue}/{id?}', function (Request $request) {
         /*
         $path = $request->path();
         $allow_paths = [
