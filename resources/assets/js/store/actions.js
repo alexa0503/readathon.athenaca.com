@@ -16,12 +16,13 @@ export default {
     initBoardPage({
         dispatch,
         commit
-    }) {
+    }, id) {
         (async function () {
             await dispatch('getCites');
             await dispatch('getAgeGroups');
             await dispatch('getActivities');
             dispatch('getBoardList', {
+                id:id,
                 page: 1
             })
         })()
@@ -177,6 +178,7 @@ export default {
             commit('singleLoading', true)
             axios.get(apiUrls.BOARD_LIST_URL, {
                     params: {
+                        id: payload.id,
                         page: payload.page,
                         type: payload.type,
                         city: payload.city,

@@ -28,7 +28,12 @@
             </div>
         </div>
         <div class="board-content">
-            <div v-for="(item,index) in boardList.data" v-bind:key="item.id" class="board-list " v-bind:class="item.rank < 4 ? 'board-list-'+item.rank : 'board-list-others'">
+            <div class="board-list board-list-home" v-if="currentPage == 1 && id != undefined && boardList.data && boardList.data.length > 0">
+                <div class="board-no-activated">
+                    <router-link :to="{ name: 'board' }">查看所有</router-link>
+                </div>
+            </div>
+            <div v-for="(item,index) in boardList.data" v-bind:key="item.id" class="board-list " v-bind:class="getClass(item)">
                 <div class="vote">
                     <span>{{ item.voted_number }}</span>
                     <a href="javascript:;" v-if="item.has_voted == 1">
@@ -48,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <div class="row board-more" v-if="showMore"  v-on:click="fetchMore(true)">
+        <div class="row board-more" v-if="showMore" v-on:click="fetchMore(true)">
             <img src="/images/icon-more-01.png" />
         </div>
         <div class="board-space"></div>
@@ -66,28 +71,49 @@
             return {
                 ageGroupId: '',
                 cityId: '',
-                activityId: ''
+                activityId: '',
+                currentPage: 1,
+                id: undefined
             }
         },
-        computed: mapState({
-            loading: 'loading',
-            cities: 'cities',
-            activities: 'activities',
-            boardList: 'boardList',
-            ageGroups: 'ageGroups',
-            showMore(state) {
-                return state.boardList.meta && (state.boardList.meta.current_page != state.boardList.meta.last_page)
-            },
-            isCurrentActivity(state) {
-                return state.boardList.meta.is_current_activity
-            }
-        }),
+        computed: {
+            ...mapState({
+                loading: 'loading',
+                cities: 'cities',
+                activities: 'activities',
+                boardList: 'boardList',
+                ageGroups: 'ageGroups',
+                showMore(state) {
+                    return state.boardList.meta && (state.boardList.meta.current_page != state.boardList.meta.last_page)
+                },
+                isCurrentActivity(state) {
+                    return state.boardList.meta.is_current_activity
+                }
+            })
+        },
         created() {
-            this.$store.dispatch('initBoardPage')
+            this.id =  this.$router.history.current.params.id
+            this.$store.dispatch('initBoardPage', this.id)
+        },
+        watch:{
+            '$route' (to, from) {
+                this.id = to.params.id
+                this.$store.dispatch('initBoardPage', this.id)
+            // 对路由变化作出响应...
+            }
         },
         methods: {
+            getClass: function(item){
+                if(this.id == item.user.id && this.id != undefined){
+                    return 'board-list-home'
+                }
+                else{
+                    return item.rank < 4 ? 'board-list-'+item.rank : 'board-list-others'
+                }
+            },
             fetchMore: function (more = false) {
-                let page = 1;
+                let page = this.currentPage;
+                let id = this.id
                 if (more == true) {
                     page = this.boardList.meta.current_page + 1
                 }
@@ -97,6 +123,7 @@
                 //let more = true;
                 this.$store.dispatch('getBoardList', {
                     page: page,
+                    id: id,
                     ageGroup: ageGroupId,
                     city: cityId,
                     activity: activityId,

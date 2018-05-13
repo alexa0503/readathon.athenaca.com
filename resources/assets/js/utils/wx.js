@@ -5,7 +5,7 @@ export const share = function(data) {
     let defaultInfo = {
         title: '坚持阅读，人生处处有惊喜！',
         desc: '邀请好友一起参加阅读马拉松，就能获得500字数奖励！',
-        imgUrl: 'http://readathon.athenaca.com/image/share.png',
+        imgUrl: 'http://readathon.athenaca.com/images/share.png',
         link: 'http://readathon.athenaca.com/'
     }
     wx.ready(function () {

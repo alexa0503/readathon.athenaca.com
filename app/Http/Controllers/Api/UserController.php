@@ -43,9 +43,11 @@ class UserController extends Controller
 
     public function board(Request $request)
     {
+        $current_user_id = $request->input('id');
         $id = session('wx.user.id');
         $orm = ActivityUser::with('user');
         $activity = Helper::getLatestActivity();
+
         if ($request->input('type') == 'withoutme') {
             $wx_activity_user = ActivityUser::where('user_id', session('wx.user.id'))
                 ->where('activity_id', $activity->id)
@@ -71,6 +73,7 @@ class UserController extends Controller
         $current_activity = Helper::getCurrentActivity();
         if ($request->input('activity')) {
             $orm->where('activity_id', $request->input('activity'));
+            $activity_id = $request->input('activity');
             if (null == $current_activity) {
                 $is_current_activity = 0;
             } else {
@@ -82,11 +85,27 @@ class UserController extends Controller
                 return response()->json(['ret' => 1001, 'errMsg' => '当前没有活动'], 433);
             }
             $is_current_activity = null == $current_activity ? 0 : 1;
+            $activity_id = $activity->id;
             $orm->where('activity_id', $activity->id);
         }
-        $orm->orderBy('words_number', 'DESC');
-        $activity_users = $orm->paginate(4);
 
+        $orm->orderBy('words_number', 'DESC');
+        ///获取当前用户的排名 然后计算出是多少页 直接显示排名小于当前用户的用户 然后滚动至底部
+        if ($current_user_id) {
+            $current_activity_user = ActivityUser::where('user_id', $current_user_id)->where('activity_id', $activity_id)->first();
+            if ($current_activity_user) {
+                $count = ActivityUser::where('activity_id', $activity_id)
+                    ->where('words_number', '>', $current_activity_user->words_number)
+                    ->count();
+                $rank = $count + 1;
+                $page = (int)(ceil($rank/4));
+                //$orm->where('words_number', '<=', $current_activity_user->words_number);
+                if( $request->input('page') == 1 || $request->input('page') == null ){
+                    $request->merge(['page'=> $page]);
+                }
+            }
+        }
+        $activity_users = $orm->paginate(4);
         return ActivityUserResource::collection($activity_users)->additional([
             'meta' => [
                 'is_current_activity' => $is_current_activity,

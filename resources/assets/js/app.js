@@ -14,13 +14,20 @@ let wxShare = async function (to) {
     if( store.state.self == undefined ){
         router.push({path:'/'})
     }
-    else if( store.state.self.is_activated == 0 && to.name == 'invite' ){
+    else if( store.state.self.is_activated == 0 &&( to.name == 'invite' || to.name == 'account' || to.name == 'profile') ){
         router.push({name: 'register'})
     }
     jssdk.initConfig()
     if (to.name == 'invite') {
         let id = store.state.self.id
         let link = 'http://readathon.athenaca.com/invite/' + id
+        jssdk.share({
+            link: link
+        })
+    }
+    else if(to.name == 'board'){
+        let id = store.state.self.id
+        let link = 'http://readathon.athenaca.com/page/board/' + id
         jssdk.share({
             link: link
         })
@@ -38,8 +45,6 @@ let wxShare = async function (to) {
 //根据路由切换背景
 router.beforeEach((to, from, next) => {
     //console.log(store.state.self.id)
-    
-    
     wxShare(to)
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board') {
         document.body.style.background = '#fff';

@@ -42,7 +42,7 @@ const router = new VueRouter({
             }
         },
         {
-            path: '/page/board',
+            path: '/page/board/:id?',
             name: 'board',
             components: {
                 'mainContent': BoardComponent,
