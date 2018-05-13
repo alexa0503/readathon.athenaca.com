@@ -64,6 +64,7 @@
                 <router-link :to="{name:'flow'}">关于知慧学院 Athena Academy</router-link>
             </div>
         </div>
+        <div class="board-space container-fluid"></div>
         <div class="privacy-container" v-if="privacySeen">
             <div class="privacy-body">
                 <div class="privacy-content"><div  v-html="privacyContent"></div><div class="close" v-on:click="closePrivacy">&times;</div></div>
@@ -111,7 +112,9 @@ mapState
                 cities: 'cities',
                 loading: 'loading',
                 userInfo: 'self',
-                hasRegistered: 'hasRegistered',
+                hasRegistered(state){
+                    return state.self.name != null
+                },
                 privacyContent(state){
                     if(state.posts.data && state.posts.data[0]){
                         return state.posts.data[0].body

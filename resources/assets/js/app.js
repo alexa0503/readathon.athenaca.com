@@ -11,6 +11,9 @@ import * as jssdk from './utils/wx'
 let wxShare = async function (to) {
     //await store.dispatch('loading')
     await store.dispatch('getSelfInfo')
+    if( store.state.self.is_activated == 0 && to.name == 'invite' ){
+        router.push({name: 'register'})
+    }
     jssdk.initConfig()
     if (to.name == 'invite') {
         let id = store.state.self.id
@@ -31,6 +34,9 @@ let wxShare = async function (to) {
 }
 //根据路由切换背景
 router.beforeEach((to, from, next) => {
+    //console.log(store.state.self.id)
+    
+    
     wxShare(to)
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board') {
         document.body.style.background = '#fff';
