@@ -6,6 +6,12 @@ export default {
         commit
     }) {
         dispatch('getCites')
+        dispatch('getPosts', {
+            name:'register',
+            type:'article',
+            page: 1,
+            more: false
+        })
     },
     initBoardPage({
         dispatch,

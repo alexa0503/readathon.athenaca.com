@@ -10,14 +10,13 @@ use App\Http\Resources\ActivityLog as ActivityLogResource;
 use App\Http\Resources\ActivityUser as ActivityUserResource;
 use App\Http\Resources\AgeGroup as AgeGroupResource;
 use App\Http\Resources\City as CityResource;
+use App\Http\Resources\Page as PageResource;
+use App\Http\Resources\Post as PostResource;
 use App\Http\Resources\PrizeLog as PrizeLogResource;
 use App\Http\Resources\ReadingLog as ReadingLogResource;
 use App\Http\Resources\User as UserResource;
-use App\Http\Resources\Prize as PrizeResource;
-use App\Http\Resources\Page as PageResource;
-use App\Http\Resources\Post as PostResource;
-use App\PrizeLog;
 use App\Prize;
+use App\PrizeLog;
 use App\Question;
 use App\ReadingLog;
 use App\User;
@@ -40,87 +39,8 @@ return $request->user();
 });
  */
 Route::group(['middleware' => ['wx.auth']], function () {
-    Route::get('user/{id?}', function (Request $request, $id = null) {
-        if (null == $id) {
-            $id = session('wx.user.id');
-        }
-        $activity = Activity::current();
-        $has_joined = 0;
-        $activity_info = [
-            'words_number' => 0,
-            'reading_number' => 0,
-            'rank' => '--'
-        ];
-        if( null != $activity ){
-            $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $id)->first();
-            $has_joined = null == $activity_user ? 0 : 1;
-            if( null != $activity_user ){
-                $activity_info = new ActivityUserResource($activity_user, false);
-            }
-        }
-        //dd($data);
-        
-        return (new UserResource(App\User::find($id)))->additional([
-            'data' => [
-                'has_joined' => $has_joined,
-                'activity_info' => $activity_info,
-            ]
-        ]);
-    });
-
-    Route::get('board', function (Request $request) {
-        $id = session('wx.user.id');
-        $orm = ActivityUser::with('user');
-        $activity = Helper::getLatestActivity();
-        if ($request->input('type') == 'withoutme') {
-            $wx_activity_user = ActivityUser::where('user_id', session('wx.user.id'))
-                ->where('activity_id', $activity->id)
-                ->first();
-            if( $wx_activity_user != null){
-                $orm->where('user_id', '!=', $id);
-                //所有城市年龄组
-                //$orm->where('age_group_id', $wx_activity_user->age_group_id);
-                //$orm->where('city_id', $wx_activity_user->city_id);
-            }
-            
-        } else {
-            if ($request->input('agegroup')) {
-                $orm->where('age_group_id', $request->input('agegroup'));
-            }
-
-            if ($request->input('city')) {
-                $orm->whereHas('user', function ($query) use ($request) {
-                    $query->where('city_id', $request->input('city'));
-                });
-            }
-        }
-
-        $current_activity = Helper::getCurrentActivity();
-        if ($request->input('activity')) {
-            $orm->where('activity_id', $request->input('activity'));
-            if(null == $current_activity){
-                $is_current_activity = 0;
-            }
-            else{
-                $is_current_activity = $request->input('activity') == $current_activity->id ? 1 : 0;
-            }
-        } else {
-            //没有活动
-            if ( null == $current_activity ) {
-                return response()->json(['ret' => 1001, 'errMsg' => '当前没有活动'], 433);
-            }
-            $is_current_activity = null == $current_activity  ? 0 : 1;
-            $orm->where('activity_id', $activity->id);
-        }
-        $orm->orderBy('words_number', 'DESC');
-        $activity_users = $orm->paginate(4);
-        
-        return ActivityUserResource::collection($activity_users)->additional([
-            'meta' => [
-                'is_current_activity' => $is_current_activity,
-            ]
-        ]);
-    });
+    Route::get('user/{id?}', 'Api\UserController@index');
+    Route::get('board', 'Api\UserController@board');
 
     Route::get('/cities', function (Request $request) {
         $cities = \App\City::orderBy('sort_id', 'ASC')->get();
@@ -128,7 +48,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
     });
 
     Route::get('/activities', function (Request $request) {
-        $limit = $request->input('limit') ? : 100;
+        $limit = $request->input('limit') ?: 100;
         $activities = \App\Activity::orderBy('start_date', 'DESC')->limit($limit)->get();
         return ActivityResource::collection($activities);
     });
@@ -149,6 +69,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
             'tel.required' => '请输入联系电话~',
             'is_reading.required' => '请选择是否Athena Academy知慧学院现任成员~',
             'city.required' => '请选择所在城市~',
+            'privacy.required' => '请勾选阅读马拉松隐私政策~',
         ];
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:40|min:2',
@@ -156,6 +77,14 @@ Route::group(['middleware' => ['wx.auth']], function () {
             'tel' => 'required',
             'is_reading' => 'required',
             'city' => 'required|exists:cities,id',
+            'privacy' => [
+                'required',
+                function($attribute, $value, $fail){
+                    if( $value == false ){
+                        return $fail('请勾选阅读马拉松隐私政策');
+                    }
+                }
+            ],
         ], $messages);
 
         $validator->after(function ($validator) use ($id) {
@@ -170,19 +99,19 @@ Route::group(['middleware' => ['wx.auth']], function () {
                 $validator->errors()->add('name', '用户已激活过了');
             }
         });
-        try{
+        try {
             $user = User::find($id);
             $user->name = $request->input('name');
             $user->birthdate = substr($request->input('birthdate'), 0, 10);
             $user->city_id = $request->input('city');
             $user->tel = $request->input('tel');
-            $user->is_reading = $request->input('is_reading') == 'y' ? 1 : 0;
+            $user->is_reading = $request->input('is_reading') == true ? 1 : 0;
             $user->is_activated = 0;
             $result = $user->save();
         } catch (Exception $e) {
             $validator->errors()->add('name', '用户已激活过了');
         }
-        
+
         if ($validator->fails()) {
             return response()->json($validator->errors(), 403);
         }
@@ -265,12 +194,12 @@ Route::group(['middleware' => ['wx.auth']], function () {
                 $validator->errors()->add('book_name', '当前没有活动');
             }
             //$activity_user = ActivityUser::where('user_id', $id)->where('activity_id', $activity->id)->first();
-            
+
         });
         if ($validator->fails()) {
             return response()->json($validator->errors(), 403);
         }
-        
+
         DB::beginTransaction();
         try {
             $log = new ReadingLog;
@@ -300,16 +229,16 @@ Route::group(['middleware' => ['wx.auth']], function () {
         $voted_limit_add_times = env('VOTED_LIMIT_ADD_TIMES', 10);
 
         //判断当前是否有活动
-        if( null == $activity ){
+        if (null == $activity) {
             return response()->json(['ret' => 1101, 'errMsg' => '当前没有活动'], 403);
         }
         //判断用户是否参加活动
         $activity_user = ActivityUser::where('user_id', $activity_user_id)->where('activity_id', $activity->id)->first();
-        if( null == $activity_user ){
+        if (null == $activity_user) {
             return response()->json(['ret' => 1102, 'errMsg' => '该用户还没参加活动哦'], 403);
         }
 
-        if( $activity_user->activity_id != $activity->id ){
+        if ($activity_user->activity_id != $activity->id) {
             return response()->json(['ret' => 1103, 'errMsg' => '活动已结束'], 403);
         }
         //被点赞用户
@@ -317,7 +246,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
         DB::beginTransaction();
         try {
             $log = App\VoteLog::where('voter_id', $voter_id)->where('user_id', $user_id)->where('activity_id', $activity->id)->where('vote_date', $today)->first();
-            
+
             if (null != $log) {
                 $has_voted = 1;
             } else {
@@ -330,7 +259,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
 
                 $count = App\VoteLog::where('user_id', $user_id)->where('activity_id', $activity->id)->where('vote_date', $today)->count();
 
-                if($count < $voted_limit_add_times ){
+                if ($count < $voted_limit_add_times) {
                     $activity_user->words_number += $voted_add_words_number;
                     $activity_log = new ActivityLog;
                     $activity_log->activity_id = $activity->id;
@@ -342,13 +271,13 @@ Route::group(['middleware' => ['wx.auth']], function () {
                 $activity_user->voted_number += 1;
                 $activity_user->save();
                 $has_voted = 1;
-                
+
             }
             DB::commit();
-            return response()->json(['ret' => 0, 'data'=>[
-                'words_number'=>$activity_user->words_number,
+            return response()->json(['ret' => 0, 'data' => [
+                'words_number' => $activity_user->words_number,
                 'voted_number' => $activity_user->voted_number,
-                'has_voted' => $has_voted
+                'has_voted' => $has_voted,
             ]]);
         } catch (Exception $e) {
             DB::rollBack();
@@ -356,7 +285,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
         }
     });
     Route::get('question', function () {
-        if( session('wx.user.is_activated') != 1){
+        if (session('wx.user.is_activated') != 1) {
             return response()->json([
                 'ret' => 1300,
                 'errMsg' => '只有激活的用户才可以回答问题呢',
@@ -367,40 +296,50 @@ Route::group(['middleware' => ['wx.auth']], function () {
         $ret = 0;
         $err_msg = '';
         $data = [];
+
         if (null == $activity) {
+            return response()->json([
+                'ret' => 1001,
+                'errMsg' => '现在没有可以回答的问题',
+                'data' => $data,
+            ]);
+        }
+        $activity_user = ActivityUser::where('activity_id', $activity->id)
+            ->where('user_id', $user_id)->first();
+        if (null == $activity_user) {
+            return response()->json([
+                'ret' => 1100,
+                'errMsg' => '您还没用参加活动',
+                'data' => $data,
+            ]);
+        }
+        $question = App\Question::where('activity_id', $activity->id)->first();
+        if (null == $question) {
             $ret = 1001;
             $err_msg = '现在没有可以回答的问题';
-        }
-        else{
-            $question = App\Question::where('activity_id', $activity->id)->first();
-            if( null == $question ){
-                $ret = 1001;
-                $err_msg = '现在没有可以回答的问题';
-            }
-            else{
-                $log = App\QuestionLog::where(['question_id' => $question->id, 'user_id' => $user_id])->first();
-                $data = [
-                    'question' => [
-                        'title' => $question->title,
-                        'id' => $question->id,
-                        'rewarded_number' => $question->rewarded_number,
-                    ],
-                    'answers' => $question->answers,
-                ];
-                if ($log != null) {
-                    $ret = 1003;
-                    $err_msg = '已经没有可以回答的问题了';
-                }
+        } else {
+            $log = App\QuestionLog::where(['question_id' => $question->id, 'user_id' => $user_id])->first();
+            $data = [
+                'question' => [
+                    'title' => $question->title,
+                    'id' => $question->id,
+                    'rewarded_number' => $question->rewarded_number,
+                ],
+                'answers' => $question->answers,
+            ];
+            if ($log != null) {
+                $ret = 1003;
+                $err_msg = '已经没有可以回答的问题了';
             }
         }
-        
+
         return response()->json([
             'ret' => $ret,
             'errMsg' => $err_msg,
             'data' => $data]);
     });
     Route::post('answer/{id}', function (Request $request, $id = null) {
-        if( session('wx.user') && session('wx.user.is_activated') != 1){
+        if (session('wx.user') && session('wx.user.is_activated') != 1) {
             return response()->json(['ret' => 1300, 'errMsg' => '只有激活过才能回答问题哦'], 403);
         }
         $activity = Helper::getCurrentActivity();
@@ -445,52 +384,46 @@ Route::group(['middleware' => ['wx.auth']], function () {
                 $activity_log->user_id = $user_id;
                 $activity_log->save();
                 DB::commit();
-                return response()->json(['ret' => 0,'rewarded_number'=>$question->rewarded_number]);
+                return response()->json(['ret' => 0, 'rewarded_number' => $question->rewarded_number]);
             }
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['ret' => 1100, 'errMsg' => $e->getMessage()]);
         }
     });
-    
 
     //奖品列表
-    Route::get('/prizes/{id?}', function(Request $request, $id = null){
+    Route::get('/prizes/{id?}', function (Request $request, $id = null) {
         //$activity = Helper::getCurrentActivity();
         //获取最近一次可以领取奖品的活动
-        if( $id == null ){
+        if ($id == null) {
             $dt = Carbon::now();
             $activity = Activity::where('start_date', '<=', $dt)->orderBy('start_date', 'ASC')->first();
-        }
-        else{
+        } else {
             $activity = Activity::find($id);
         }
         $user_id = session('wx.user.id');
-        if( null == $activity ){
+        if (null == $activity) {
             return response()->json(['ret' => 1001, 'errMsg' => '当前没有活动哦']);
         }
 
         $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $user_id)->first();
-        if( $activity_user == null ){
+        if ($activity_user == null) {
             $rank = null;
             //return response()->json(['ret' => 1002, 'errMsg' => '你没有办法获取该活动得奖品']);
-        }
-        else{
+        } else {
             $rank = $activity_user->getRank();
         }
-        
 
         $prizes = App\Prize::where('activity_id', $activity->id)->paginate(2);
-        $collection = $prizes->getCollection()->map(function ($item) use($user_id,$rank,$activity) {
+        $collection = $prizes->getCollection()->map(function ($item) use ($user_id, $rank, $activity) {
             $prize_log = PrizeLog::where('user_id', $user_id)->where('activity_id', $item->activity_id)->first();
-            if( null == $prize_log ){
+            if (null == $prize_log) {
                 $received_status = 0;
-            }
-            elseif( $prize_log->prize_id == $item->id ){
+            } elseif ($prize_log->prize_id == $item->id) {
                 $received_status = 1;
-            }
-            else{
-                $received_status = 6;//已领取其他奖品
+            } else {
+                $received_status = 6; //已领取其他奖品
             }
 
             $now = time();
@@ -501,20 +434,18 @@ Route::group(['middleware' => ['wx.auth']], function () {
             $ts4 = strtotime($activity->receive_end_date);
 
             //dd($ts2,$now);
-            if( $now < $ts2){
+            if ($now < $ts2) {
                 $received_status = 2;
-            }
-            elseif($now < $ts3){
+            } elseif ($now < $ts3) {
                 $received_status = 3;
-            }
-            elseif($now > $ts4){
+            } elseif ($now > $ts4) {
                 $received_status = 4;
             }
-            if( $rank == null ){
-                $received_status = 7;//没有排名
+            if ($rank == null) {
+                $received_status = 7; //没有排名
             }
             //dd($rank,$item->winning_min_rank,$item->winning_max_rank);
-            elseif( $rank < $item->winning_min_rank || $rank > $item->winning_max_rank ){
+            elseif ($rank < $item->winning_min_rank || $rank > $item->winning_max_rank) {
                 $received_status = 5;
             }
 
@@ -535,8 +466,8 @@ Route::group(['middleware' => ['wx.auth']], function () {
             $prizes->currentPage(), [
                 'path' => \Request::url(),
                 'query' => [
-                    'page' => $prizes->currentPage()
-                ]
+                    'page' => $prizes->currentPage(),
+                ],
             ]
         );
         //return PrizeResource::collection($prizes);
@@ -545,23 +476,23 @@ Route::group(['middleware' => ['wx.auth']], function () {
             'data' => [
                 'activity' => new ActivityResource($activity),
                 'prizes' => $prizesWithPaginator,
-            ]
+            ],
         ]);
     });
-    Route::post('/receive/{id}', function(Request $request, $id = null){
+    Route::post('/receive/{id}', function (Request $request, $id = null) {
 
         $prize = Prize::where('id', $id)->first();
         $user_id = session('wx.user.id');
 
-        if( null == $user_id ){
+        if (null == $user_id) {
             return response()->json(['ret' => 1200, 'errMsg' => '请登陆'], 403);
         }
-        if( null == $prize ){
+        if (null == $prize) {
             return response()->json(['ret' => 1001, 'errMsg' => '该奖品不存在'], 403);
         }
 
         $prize_log = PrizeLog::where('user_id', $user_id)->where('activity_id', $prize->activity_id)->first();
-        if( null != $prize_log ){
+        if (null != $prize_log) {
             return response()->json(['ret' => 1002, 'errMsg' => '您已经领取过奖品了'], 403);
         }
 
@@ -573,18 +504,18 @@ Route::group(['middleware' => ['wx.auth']], function () {
         $ts3 = strtotime($activity->receive_start_date);
         $ts4 = strtotime($activity->receive_end_date);
 
-        if( $now < $ts2){
+        if ($now < $ts2) {
             return response()->json(['ret' => 1003, 'errMsg' => '活动未结束，该奖品暂时无法领取'], 403);
         }
-        if($now < $ts3){
+        if ($now < $ts3) {
             return response()->json(['ret' => 1004, 'errMsg' => '该奖品还没有到可以领取的时间'], 403);
         }
-        if($now > $ts4){
+        if ($now > $ts4) {
             return response()->json(['ret' => 1005, 'errMsg' => '该奖品领取时间已过期'], 403);
         }
         $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $user_id)->first();
         $rank = $activity_user->getRank();
-        if( $rank < $prize->winning_min_rank || $rank > $prize->winning_max_rank ){
+        if ($rank < $prize->winning_min_rank || $rank > $prize->winning_max_rank) {
             return response()->json(['ret' => 1006, 'errMsg' => '您没有中到此奖品'], 403);
         }
 
@@ -597,35 +528,38 @@ Route::group(['middleware' => ['wx.auth']], function () {
         return response()->json(['ret' => 0]);
     });
 
-    Route::get('/page/{name?}/{block_type?}', function(Request $request, $name = null, $block_type = null){
-        $page = App\Page::where('name',$name)->first();
-        if( null == $page ){
-            return response()->json(['ret' => 1001, 'errMsg' => '没有此页面'], 403); 
+    Route::get('/page/{name?}/{block_type?}', function (Request $request, $name = null, $block_type = null) {
+        $page = App\Page::where('name', $name)->first();
+        if (null == $page) {
+            return response()->json(['ret' => 1001, 'errMsg' => '没有此页面'], 403);
         }
         return new PageResource($page, $block_type);
     });
-    Route::get('/posts/{name}/{block_type?}', function(Request $request, $name = null, $block_type){
-        $page = App\Page::where('name',$name)->first();
-        if( null == $page ){
+    Route::get('/posts/{name}/{block_type?}', function (Request $request, $name = null, $block_type) {
+        $page = App\Page::where('name', $name)->first();
+        if (null == $page) {
             $orm = App\Post::where('page_id', null)->where('block_type', $block_type);
-        }
-        else{
+        } else {
             $orm = App\Post::where('page_id', $page->id)->where('block_type', $block_type);
         }
-        if( $block_type == 'slides' ){
+        if ($block_type == 'slides') {
+            //如果该页面没用幻灯片内容 则取默认
+            $count = $orm->count();
+            if( $count == 0 ){
+                $orm = App\Post::where('page_id', null)->where('block_type', $block_type);
+            }
             $posts = $orm->get();
-        }
-        else{
+        } else {
             $posts = $orm->paginate(2);
         }
-        
+
         return PostResource::collection($posts);
     });
-    
+
     //微信分享接口
-    Route::get('/wx/share', function(Request $request){
+    Route::get('/wx/share', function (Request $request) {
         $url = $request->input('url');
-        if( null == $url ){
+        if (null == $url) {
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
             $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         }

@@ -2,7 +2,7 @@
     <div class="container-fluid account" v-if="!loading">
         <div class="account-topper">
             <div class="account-avatar" v-on:click="edit">
-                <div class="account-img"><img :src="user.avatar" width="110" height="110" class="rounded-circle" /><div class="account-edit" v-if="isSelf"><img src="/images/icon-pen.png" /></div></div>
+                <div class="account-img"><img :src="user.avatar" class="rounded-circle" /><div class="account-edit" v-if="isSelf"><img src="/images/icon-pen.png" /></div></div>
                 <div class="account-nickname">{{ user.nickname }}</div>
                 <div class="account-city">{{ user.city_name }}</div>
                 <div class="account-name" v-if="isSelf">{{ user.name }}</div>
@@ -55,21 +55,24 @@
                 </div>
                 <nav aria-label="Page navigation" class="page">
                     <ul class="pagination justify-content-center" v-if="logs.meta && logs.meta.last_page != 1">
+                         <li class="page-item"><a class="page-link" href="javascript:;" v-on:click="showLogs(type, 1)" v-if=" logs.meta.current_page !=1">|&lt;</a></li>
                         <li class="page-item">
                         <a class="page-link"  v-if="logs.meta.current_page > 1"  href="javascript:;"  v-on:click="showLogs(type, logs.meta.current_page-1)" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                             <span class="sr-only">Previous</span>
                         </a>
                         </li>
-                        <li class="page-item" v-bind:class="logs.meta.current_page == n ? 'active' : ''" v-for="n in logs.meta.last_page" v-bind:key="n"><a class="page-link" href="javascript:;" v-on:click="showLogs(type, n)">{{ n }}</a></li>
+                        <li class="page-item" v-bind:class="logs.meta.current_page == n ? 'active' : ''" v-for="n in logs.meta.last_page" v-bind:key="n"><a class="page-link" href="javascript:;" v-on:click="showLogs(type, n)" v-if="(n < logs.meta.current_page + 2 && n > logs.meta.current_page - 2)">{{ n }}</a></li>
                         <li class="page-item">
                         <a class="page-link" v-if="logs.meta.last_page > logs.meta.current_page" href="javascript:;" v-on:click="showLogs(type, logs.meta.current_page+1)" aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                             <span class="sr-only">Next</span>
                         </a>
                         </li>
+                         <li class="page-item"><a class="page-link" href="javascript:;" v-on:click="showLogs(type, logs.meta.last_page)" v-if=" logs.meta.current_page != logs.meta.last_page">&gt;|</a></li>
                     </ul>
                 </nav>
+                <div class="board-space"></div>
         </div>
         
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">

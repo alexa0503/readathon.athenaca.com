@@ -107,6 +107,10 @@ a:hover {
     background: $white;
 }
 
+.register-form a {
+    color: #2ca6e0;
+}
+
 .register-content,
 .form-content {
     width: 100%;
@@ -446,13 +450,15 @@ a:hover {
     margin: 6rem auto 3rem;
     text-align: center;
 }
+
 .regester-succeeded {
     border-radius: 0.4rem;
     background: #29cf95;
     color: $white;
     font-size: 1.4rem;
-    padding:2rem 0;
+    padding: 2rem 0;
 }
+
 .regester-succeeded h3 {
     color: #FFF;
     text-align: center;
@@ -536,6 +542,7 @@ a:hover {
     font-size: 1.2rem;
     line-height: 2rem;
 }
+
 /*
 .flow-chart-title:after,
 .flow-chart-title:before {
@@ -558,47 +565,55 @@ a:hover {
 
 .account .account-topper .account-avatar {
     float: left;
-    width: 22rem;
-    margin: 4rem 0 0 0rem;
+    width: 50%;
+    margin: 3.5rem 0 0 0rem;
     color: $white;
-    text-align: center;
+    text-align: left;
 }
 
 .account .account-topper .account-nickname {
     margin-top: 1rem;
-    font-size: 2rem;
-    line-height: 2rem;
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    margin-right: 6rem;
+    text-align: center;
 }
-
 .account .account-topper .account-city {
     margin-top: 1.6rem;
     line-height: 1.2rem;
     font-size: 1.2rem;
+    text-align: center;
+    margin-right: 6rem;    
 }
 
 .account .account-topper .account-name {
     margin-top: 1rem;
     line-height: 1.4rem;
     font-size: 1.4rem;
+    text-align: center;
+    margin-right: 6rem;
 }
 
 .account .account-topper .account-img {
     position: relative;
+    margin-right: 6rem;
+    text-align: center;
 }
-
+.account-edit img{
+    width: 1.7rem;
+}
+.account-avatar img.rounded-circle {
+    border: 0.5rem solid #fff;
+    width: 5.5rem;
+}
 .account .account-topper .account-edit {
     position: absolute;
-    right: 5rem;
-    top: 4rem;
+    right: 2rem;
+    top: 3rem;
 }
-
-.account-avatar .rounded-circle {
-    border: 1rem solid #fff;
-}
-
 .account .account-topper .account-info {
-    margin-left: 22rem;
-    font-size: 1.4rem;
+    margin-left: 50%;
+    font-size: 1.2rem;
     line-height: 1.4rem;
     color: $white;
     padding-left: 0rem;
@@ -607,12 +622,13 @@ a:hover {
 }
 
 .account .account-topper .account-rank {
-    font-size: 2rem;
-    line-height: 2rem;
+    font-size: 1.6rem;
+    line-height: 1.6rem;
+    padding-bottom: 1rem;
 }
 
 .account .account-topper .account-text {
-    margin-top: 1.6rem;
+    margin-top: 1.2rem;
 }
 
 .account .account-topper .account-info span {
@@ -626,12 +642,13 @@ a:hover {
 }
 
 .account .account-topper .account-add a {
-    border-radius: 1.8rem;
+    border-radius: 1.35rem;
     background: #76cfe1;
-    font-size: 1.8rem;
-    line-height: 1.8rem;
-    height: 1.8rem;
-    padding: 0.5rem 2rem;
+    font-size: 1.35rem;
+    line-height: 1.35rem;
+    height: 1.35rem;
+    padding: 0.8rem 2rem;
+    font-weight: bold;
 }
 
 .account .account-topper .account-add a span {
@@ -665,7 +682,7 @@ a:hover {
 
 .account .account-tabs .nav-item a {
     background: #b0b0b0;
-    height: 9.5rem;
+    height: 7.5rem;
     font-size: 1.4rem;
     position: relative;
     border-radius: 0 !important;
@@ -677,9 +694,12 @@ a:hover {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 1.6rem;
+    font-size: 1.35rem;
     line-height: 3.2rem;
     left: 0;
+}
+.account .account-tabs .nav-item .center img {
+    width: 2rem;
 }
 
 .account .account-tabs .nav-item a.active {
@@ -714,29 +734,35 @@ a:hover {
 .profile .return {
     padding: 4rem 2rem 0;
 }
+.profile .return img {
+    width: 2rem;
+}
 
 .profile .avatar {
     margin-top: 2rem;
     text-align: center;
 }
-
+.profile .avatar img {
+    width: 6.5rem;
+}
 .profile .edit-text {
     color: #c7c7c7;
     text-align: center;
     margin: 1rem 0 0;
-    padding-bottom: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 1rem solid #ebf0f2;
 }
 
 .profile .form-content {
     border-radius: 0;
     width: 100%;
-    margin: 1rem 0 0 0;
+    margin: 1rem 0 6rem 0;
 }
 
 .profile .form-group {
     border-bottom: 1px solid #ced4da;
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     margin-top: 0.5rem;
 }
 
@@ -747,21 +773,24 @@ a:hover {
 .profile .form-group .form-control {
     border-bottom: none;
     padding: 0.375rem 0rem;
+    height: 3rem;
 }
 
 .profile .col-form-label {
     font-size: 1.4rem;
     color: $black;
     position: relative;
+    width: 10rem;
 }
 
 .profile .form-control-plaintext {
     font-size: 1.4rem;
-    color: #777474;
+    color: #ccc;
 }
 
 .profile .form-check-label {
     font-size: 1.4rem;
+    color: #ccc!important;
 }
 
 .form-group .help-block {
@@ -780,7 +809,7 @@ a:hover {
 }
 
 .form-group.has-error .form-control {
-    border: 1px solid $red;
+    border-bottom: 1px solid $red;
 }
 
 .modal-footer {
@@ -788,12 +817,12 @@ a:hover {
 }
 
 .modal .form-control {
-    height: 5rem;
+    height: 4.1rem;
     text-align: center;
 }
 
 .modal-footer .btn {
-    padding: 1.4rem 0;
+    padding: 1.1rem 0;
     width: 13rem;
     color: $white;
 }
@@ -802,7 +831,8 @@ a:hover {
     padding-bottom: 3rem;
     padding-top: 2rem;
     color: $black;
-    font-size: 1.6rem;
+    font-size: 1.35rem;
+    margin: 0 2.5rem;
 }
 
 .modal-body {
@@ -818,13 +848,12 @@ a:hover {
 .modal-body h3 {
     color: $black;
     line-height: 2.4;
-    font-size: 1.6rem;
+    font-size: 1.35rem;
 }
 
 .modal-body .btn-go {
     padding: 1.4rem 0;
-    width: 13rem;
-    width: 60%;
+    width: 40%;
     color: $white;
 }
 
@@ -835,15 +864,18 @@ a:hover {
     color: $white;
 }
 
-.question .question-content {
+.question .question-content,.about .about-content {
     margin: 2rem 0.5rem;
     border-radius: 0.4rem;
     background: #29cf95;
-    padding: 4rem;
+    padding: 2rem;
     color: $white;
-    font-size: 1.6rem;
+    font-size: 1.35rem;
 }
-
+.about .about-content img {
+    max-width: 100%;
+    margin: 1rem 0;
+}
 .question .question-content .question-answer {
     margin-top: 4rem;
 }
@@ -856,7 +888,7 @@ a:hover {
     padding: 1.4rem 0;
     width: 20rem;
     background: #ffdf5f;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     border-radius: 3rem;
     margin-top: 4rem;
 }
@@ -893,7 +925,6 @@ a:hover {
     z-index: 1050;
 }
 
-
 @keyframes rotate3D {
     0% {
         -webkit-transform: rotate(0deg);
@@ -908,10 +939,10 @@ a:hover {
         -webkit-transform: rotate(0deg);
     }
 }
+
 @keyframes leftEye {
     0% {
-        transform: translate(-0.3rem, 0);
-        //-webkit-transform: translate(0.1rem, 0);
+        transform: translate(-0.3rem, 0); //-webkit-transform: translate(0.1rem, 0);
         //-ms-transform: translate(0.1rem,0)
     }
     50% {
@@ -921,10 +952,10 @@ a:hover {
         transform: translate(-0.3rem, 0);
     }
 }
+
 @keyframes rightEye {
     0% {
-        transform: translate(0.3rem, 0);
-        //-webkit-transform: translate(0.1rem, 0);
+        transform: translate(0.3rem, 0); //-webkit-transform: translate(0.1rem, 0);
         //-ms-transform: translate(0.1rem,0)
     }
     50% {
@@ -934,6 +965,7 @@ a:hover {
         transform: translate(0.3rem, 0);
     }
 }
+
 .invite-share-content .share-txt {
     position: absolute;
     right: 0;
@@ -946,24 +978,28 @@ a:hover {
     font-size: 1.4rem;
     margin: 2.5rem 1rem 0 0;
     padding: 2.4rem 0 0 7rem;
-    width: 21.3rem;
-    //animation: rotate3D  2s infinite linear ;
+    width: 21.3rem; //animation: rotate3D  2s infinite linear ;
 }
-.invite-share-content .left-eye img,.invite-share-content .right-eye img {
+
+.invite-share-content .left-eye img,
+.invite-share-content .right-eye img {
     width: 0.6rem;
 }
+
 .invite-share-content .left-eye {
     position: absolute;
-    top:1.8rem;
-    left:2.25rem;
-    animation: leftEye  2s infinite linear ;
+    top: 1.8rem;
+    left: 2.25rem;
+    animation: leftEye 2s infinite linear;
 }
+
 .invite-share-content .right-eye {
     position: absolute;
-    top:1.8rem;
-    left:3.95rem;
-    animation: rightEye  2s infinite linear ;
+    top: 1.8rem;
+    left: 3.95rem;
+    animation: rightEye 2s infinite linear;
 }
+
 .page-link {
     border-radius: 1.5rem !important;
     width: 3rem !important;
@@ -972,6 +1008,7 @@ a:hover {
     border: none !important;
     text-align: center;
 }
+
 .slick-dotted.slick-slider {
     margin-bottom: 2rem;
 }
@@ -985,7 +1022,7 @@ a:hover {
 .prize-page .prize-content {
     background: #fff;
     border-radius: 0.4rem;
-    margin: 1rem 2rem 4rem 2rem;
+    margin: 1rem 0.5rem 4rem;
     position: relative;
     padding: 2rem 3rem 3rem 3rem;
     color: $gray-600;
@@ -1058,8 +1095,8 @@ input[type="radio"]:checked {
 
 input[type="radio"] {
     position: relative;
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     background-clip: border-box;
     -webkit-appearance: none;
     margin: 0;
@@ -1084,10 +1121,10 @@ input[type="radio"]:before {
 
 input[type="radio"]:checked:before {
     border-radius: 50%;
-    margin: 0.23rem 0 0 0.23rem;
-    background-color: #f2506e;
-    width: 1.4rem;
-    height: 1.4rem;
+    margin: 0.1rem 0 0 0.1rem;
+    background-color: #29cf95;
+    width: 1.1rem;
+    height: 1.1rem;
 }
 
 input[type="radio"]:focus {
@@ -1200,6 +1237,64 @@ input[type="checkbox"]:focus {
 .mint-switch-core::after {
     background-color: #ccc;
 }
+
 .slick-content {
-    margin:0 -15px;
+    margin: 0 -15px;
+}
+
+.privacy-bg {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #000;
+    opacity: 0.5;
+    z-index: 1040;
+}
+.privacy-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1050;
+}
+.privacy-body {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    min-height: calc(100% - (0.5rem * 2));
+    margin: 0.5rem;
+}
+.privacy-content {
+    width: 80%;
+    background: #FFF;
+    height: 50rem;
+    margin: 0 auto;
+    padding: 1rem;
+    border-radius: 0.4rem;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.privacy-content .close {
+    position: absolute;
+    right: -0.8rem;
+    top: -1rem;
+    border-radius: 50%;
+    background: #fff;
+    height: 2rem;
+    width: 2rem;
+    line-height: 1.6rem;
+    font-size: 2rem;
+    text-align: center;
+    opacity: 1;
+}
+.privacy-content img {
+    max-width: 100%;
+    margin: 1rem 0;
 }

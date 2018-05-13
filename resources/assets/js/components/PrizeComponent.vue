@@ -82,11 +82,6 @@
                 },
             }
         },
-        watch: {
-            activities(val) {
-                this.reInit();
-            }
-        },
         computed: {
             ...mapState({
                 loading: 'loading',
@@ -127,6 +122,10 @@
             this.$store.dispatch('initPrizePage', id)
         },
         watch: {
+            activities(val) {
+                console.log(val)
+                this.reInit();
+            },
             $route(to, from) {
                 let id = to.params.id
                 this.$store.dispatch('getPrizes', {
@@ -135,7 +134,6 @@
             }
         },
         methods: {
-            
             next() {
                 this.$refs.slick.next();
             },

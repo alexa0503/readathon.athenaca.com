@@ -37,13 +37,13 @@
                     </select>
                     <label class="help-block" for="" v-if="hasError && errMsg.city">{{ errMsg.city[0] }}</label>
                 </div>
-                <div class="form-group row" v-bind:class="hasError && errMsg.is_reading ? 'has-error' : ''">
-                    <div class="form-control form-control-lg  no-border" v-on:click="showPrivacy">
+                <div class="form-group row" v-bind:class="hasError && errMsg.privacy ? 'has-error' : ''">
+                    <div class="form-control form-control-lg  no-border">
                         <label>
-                            <input type="checkbox" class="register-checkbox" v-model="privacy" /> 我已经阅读并同意阅读马拉松隐私政策
+                            <input type="checkbox" class="register-checkbox" v-model="user.privacy" /> 我已经阅读并同意<a href="javascript:;" v-on:click="showPrivacy">阅读马拉松隐私政策</a>
                         </label>
                     </div>
-                    <label class="help-block" for="" v-if="hasError && errMsg.is_reading">{{ errMsg.is_reading[0] }}</label>
+                    <label class="help-block" for="" v-if="hasError && errMsg.privacy">{{ errMsg.privacy[0] }}</label>
                 </div>
             </div>
             <div class="text-center container-fluid">
@@ -63,17 +63,21 @@
             <div class="regester-succeeded-link">
                 <router-link :to="{name:'flow'}">关于知慧学院 Athena Academy</router-link>
             </div>
-            <div class="regester-succeeded-link">
-                <router-link :to="{name:'flow'}">阅读马拉松流程图</router-link>
+        </div>
+        <div class="privacy-container" v-if="privacySeen">
+            <div class="privacy-body">
+                <div class="privacy-content"><div  v-html="privacyContent"></div><div class="close" v-on:click="closePrivacy">&times;</div></div>
             </div>
         </div>
+        <div v-if="privacySeen" class="privacy-bg" v-on:click="closePrivacy"></div>
     </div>
 </template>
 
 <script>
     import {
         mapGetters,
-        mapActions
+        mapActions,
+mapState
     } from 'vuex'
     import * as apiUrls from './../utils/api-urls'
     import { DatetimePicker,Switch } from 'mint-ui';
@@ -98,16 +102,24 @@
                     birthdate: '',
                     tel: '',
                     name: '',
-                    privacy: '1'
+                    privacy: false
                 },
             }
         },
         computed: {
-            ...mapGetters({
+            ...mapState({
                 cities: 'cities',
                 loading: 'loading',
                 userInfo: 'self',
-                hasRegistered: 'hasRegistered'
+                hasRegistered: 'hasRegistered',
+                privacyContent(state){
+                    if(state.posts.data && state.posts.data[0]){
+                        return state.posts.data[0].body
+                    }
+                    else{
+                        return '';
+                    }
+                }
             }),
             startDate: function(){
                 return new Date('2000-01-01')
@@ -129,14 +141,21 @@
                 this.user.birthdate = d
             },
             showPrivacy: function () {
-                console.log(this.user.birthdate)
                 this.privacySeen = true
+            },
+            closePrivacy: function(){
+                this.privacySeen = false
             },
             register: function () {
                 let vm = this
-                let user = this.user
+                let user = vm.user
+                if(!user.privacy){
+                    //alert('请勾选隐私政策')
+                }
                 if (!vm.hasPosted) {
                     vm.hasPosted = true
+                    //user.is_reading = user.is_reading ? 1 : 0;
+                    //user.privacy = user.privacy ? 1 : 0;
                     axios({
                             method: 'post',
                             url: apiUrls.REGISTER_URL,

@@ -18,6 +18,13 @@ let wxShare = async function (to) {
         jssdk.share({
             link: link
         })
+    }
+    else if(to.name == 'account'){
+        let id = store.state.self.id
+        let link = 'http://readathon.athenaca.com/page/account/' + id
+        jssdk.share({
+            link: link
+        })
     } else {
         jssdk.share()
     }

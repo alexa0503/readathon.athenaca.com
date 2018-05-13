@@ -31,6 +31,7 @@ Route::get('/oauth', function(Request $request){
             $user->nickname = $user_info->nickname;
             $user->sex = $user_info->sex;
             $user->avatar = $user_info->headimgurl;
+            $user->invite_id = session('invite_id');
             //$user->birthdate = null;
             $user->is_activated = 0;
             $user->save();
@@ -48,6 +49,16 @@ Route::get('/oauth', function(Request $request){
     else{
         return response()->view('error');
     }
+});
+Route::get('/invite/{id}', function(Request $request){
+    $user = User::find($id);
+    if( null != $user ){
+        //写入session 授权时候插入
+        session([
+            'invite_id'=>$id
+        ]);
+    }
+    return redirect('/');
 });
 Route::group(['middleware'=>['wx.auth']], function(){
     Route::get('/logout', function(Request $request){

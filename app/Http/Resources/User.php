@@ -29,6 +29,7 @@ class User extends JsonResource
             'is_activated' => $this->is_activated,
             'is_reading' => $this->is_reading,
             'city_id' => $this->city_id,
+            'city_name' => $this->city_id ? $this->city->name : null,
             'ge' => $this->ge,
             'tel' => $this->tel,
             //'has_joined' => 1

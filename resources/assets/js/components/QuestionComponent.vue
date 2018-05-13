@@ -101,7 +101,15 @@
                             data: data
                         })
                         .then(function (response) {
-                            $('#questionModal').modal('show')
+                            let data = response.data
+                            if(data && data.ret == 0){
+                                $('#questionModal').modal('show')
+                            }
+                            else{
+                                $('#questionModal .modal-body h3').html('抱歉，'+ data.errMsg)
+                                $('#questionModal .modal-body p').html('如有疑问，请联系客服人员')
+                                $('#questionModal').modal('show')
+                            }
                             vm.hasPosted = false
                             vm.$store.dispatch('initQuestionPage')
                         })

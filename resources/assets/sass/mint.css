@@ -1420,7 +1420,7 @@ display: inline-block;
 }
 
 .picker-slot {
-  font-size: 32px!important;
+  font-size: 22px!important;
   overflow: hidden;
   position: relative;
   max-height: 100%
@@ -1815,8 +1815,8 @@ display: inline-block;
     display: inline-block;
     width: 50%;
     text-align: center;
-    line-height: 80px;
-    font-size: 32px;
+    line-height: 40px;
+    font-size: 20px;
     color: #666;
 }
 .mint-datetime-cancel {

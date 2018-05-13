@@ -29,6 +29,8 @@ class CreateUsersTable extends Migration
             $table->string('sex', 60);
             $table->boolean('is_activated');
             //$table->string('email')->unique();
+            $table->integer('invite_id')->unsigned();
+            $table->foreign('invite_id')->references('id')->on('users');
             //$table->string('password');
             //$table->rememberToken();
             $table->timestamps();

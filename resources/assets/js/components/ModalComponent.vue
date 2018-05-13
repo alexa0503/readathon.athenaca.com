@@ -33,7 +33,7 @@
                         确定
                     </button>
                 </div>
-                <div class="modal-body text-center">
+                <div class="modal-footer text-center">
                     <button type="button" v-on:click="resetAdd" class="btn btn-info btn-go">继续添加</button>
                 </div>
             </div>
