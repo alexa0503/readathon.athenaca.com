@@ -11,7 +11,10 @@ import * as jssdk from './utils/wx'
 let wxShare = async function (to) {
     //await store.dispatch('loading')
     await store.dispatch('getSelfInfo')
-    if( store.state.self.is_activated == 0 && to.name == 'invite' ){
+    if( store.state.self == undefined ){
+        router.push({path:'/'})
+    }
+    else if( store.state.self.is_activated == 0 && to.name == 'invite' ){
         router.push({name: 'register'})
     }
     jssdk.initConfig()
