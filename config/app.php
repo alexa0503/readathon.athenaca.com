@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'zh-cn',
 
     /*
     |--------------------------------------------------------------------------
@@ -159,6 +159,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Unisharp\Ckeditor\ServiceProvider::class,
 
     ],
 

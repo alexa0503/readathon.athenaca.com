@@ -101,11 +101,13 @@ Route::group(['middleware' => ['role:管理员', 'menu'], 'prefix' => 'admin'], 
     Route::resource('permission', 'Admin\PermissionController');
     Route::get('/user/export', 'Admin\UserController@export')->name('user.export');
     Route::post('/user/activate/{id}', 'Admin\UserController@activate')->name('user.activate');
+    Route::post('/user/disable/{id}', 'Admin\UserController@disable')->name('user.disable');
     Route::resource('user', 'Admin\UserController');
     Route::resource('age', 'Admin\AgeController');
     Route::resource('city', 'Admin\CityController');
     Route::resource('question', 'Admin\QuestionController');
     Route::resource('activity', 'Admin\ActivityController');
+    Route::resource('activityUser', 'Admin\ActivityUserController');
     Route::resource('prize', 'Admin\PrizeController');
     Route::resource('page.block', 'BlockController');
 });

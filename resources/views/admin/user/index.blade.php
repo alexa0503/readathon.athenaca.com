@@ -79,12 +79,14 @@
                         <td>{{ $item->is_reading ? '是' : '否' }}</td>
                         <td>{{ $item->ge }}</td>
                         <td>@if($item->invite_id)<a href="{{ route('user.index').'?id='.$item->id }}" target="_blank">{{ $item->inviter->name }}</a>@else{{ '--' }}@endif</td>
-                        <td>{{ $item->is_activated == 1 ? '是' : '否' }}</td>
+                        <td>@if($item->is_activated == 1){{ '已激活' }}@elseif($item->is_activated == 0){{ '未激活' }}@else{{ '已禁用' }}@endif</td>
                         <td>{{ $item->name != null ? '已注册' : '未注册' }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>{{ $item->administrator_names }}</td>
                         <td>
-                            @if($item->is_activated != 1 && $item->name != null)<a href="{{route('user.activate',['id'=>$item->id])}}" class="btn btn-default btn-xs activate">激活</a>@endif
+                            @if($item->is_activated == 0 && $item->name != null)<a href="{{route('user.activate',['id'=>$item->id])}}" class="btn btn-default btn-xs activate">激活</a>@endif
+                            @if($item->is_activated == 1)<a href="{{route('user.disable',['id'=>$item->id])}}" class="btn btn-default btn-xs activate">禁用</a>@endif
+                            @if($item->is_activated == -1)<a href="{{route('user.activate',['id'=>$item->id])}}" class="btn btn-default btn-xs activate">重新启用</a>@endif
                             <a href="{{route('user.edit',['id'=>$item->id])}}" class="btn btn-default btn-xs">编辑</a>
                         </td>
                     </tr>

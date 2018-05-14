@@ -133,7 +133,7 @@ class CityController extends Controller
     {
         $count = \App\User::where('city_id', $id)->count();
         if ($count > 0) {
-            return reseponse()->json(['ret' => 1001, 'errMsg' => '该城市下有用户无法删除']);
+            return response()->json(['ret' => 1001, 'errMsg' => '该城市下有用户无法删除']);
         }
         $city = \App\City::find($id);
         $city->delete();

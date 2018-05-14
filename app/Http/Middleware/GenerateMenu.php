@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Menu;
 use Auth;
+use App\Activity;
 
 class GenerateMenu
 {
@@ -32,6 +33,12 @@ class GenerateMenu
                 $activity = $menu->add('活动管理', ['url'=>route('activity.index'),'class'=>'openable bg-palette2']);
                 $activity->add('查看', ['url'=>route('activity.index'),'class'=>'bg-palette2']);
                 $activity->add('新增', ['url'=>route('activity.create'),'class'=>'bg-palette2']);
+                $activity_user = $menu->add('活动排名', ['url'=>route('activityUser.index'),'class'=>'openable bg-palette9']);
+                //$activity_user->add('所有', ['url'=>route('activityUser.index'),'class'=>'bg-palette9']);
+                $rows = Activity::orderBy('start_date', 'DESC')->get();
+                foreach($rows as $row){
+                    $activity_user->add($row->name, ['url'=>route('activityUser.index', ['activity'=>$row->id]),'class'=>'bg-palette9']);
+                }
             }
             //奖品管理
             if(($admin->hasPermissionTo('奖品管理') && $admin->hasAnyRole(['管理员'])) || $admin->hasAnyRole(['管理员'])){
@@ -63,7 +70,6 @@ class GenerateMenu
                 $user->add('查看', ['url'=>route('user.index'),'class'=>'bg-palette7']);
                 //$user->add('新增', ['url'=>route('user.create'),'class'=>'bg-palette7']);
             }
-            
             //权限管理
             if(($admin->hasPermissionTo('权限管理') && $admin->hasAnyRole(['管理员'])) || $admin->hasAnyRole(['管理员'])){
                 $permission = $menu->add('权限管理', ['url'=>route('permission.index'),'class'=>'openable bg-palette8']);

@@ -63,12 +63,18 @@ class UserController extends Controller
             'administrators' => $administrators
         ]);
     }
+    public function disable(Request $request, $user_id){
+        $user = User::find($user_id);
+        $user->is_activated = -1;
+        $user->save();
+        return response()->json(['ret'=>0]);
+    }
     public function activate(Request $request, $user_id)
     {
         DB::beginTransaction();
         try{
             $user = User::find($user_id);
-            if( null != $user->invite_id ){
+            if( null != $user->invite_id && $user->is_activated == 0 ){
                 $inviter = $user->inviter;
                 $activity = Helper::getCurrentActivity();
                 if( null != $activity ){
