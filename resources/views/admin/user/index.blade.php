@@ -34,6 +34,7 @@
                     <option value="">是否激活/所有</option>
                     <option value="1" {{ Request::input('is_activated') == '1' ? 'selected="selected"' : '' }}>已激活</option>
                     <option value="0" {{ Request::input('is_activated') == '0' ? 'selected="selected"' : '' }}>未激活</option>
+                    <option value="0" {{ Request::input('is_activated') == '-1' ? 'selected="selected"' : '' }}>禁用</option>
                 </select>
             </div>
             <div class="form-group">
