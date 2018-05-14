@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="tel" class="col-lg-2 col-md-2 control-label">联系电话</label>
+                    <label for="" class="col-lg-2 col-md-2 control-label">联系电话</label>
                     <div class="col-lg-10 col-md-10">
                         <input name="tel" type="text" class="form-control" value="{{ $item->tel }}" id="tel" placeholder="">
                         <label class="help-block" for="" id="help-tel"></label>
@@ -45,7 +45,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="tel" class="col-lg-2 col-md-2 control-label">性别</label>
+                    <label for="" class="col-lg-2 col-md-2 control-label">性别</label>
                     <div class="col-lg-10 col-md-10">
                         <select name="sex" class="form-control">
                         <option value="0" {!! $item->sex == '0' ? 'selected="selected"' : '' !!}>男</option>
@@ -62,6 +62,14 @@
                         <option value="0" {!!$item->is_reading == 0 ? 'selected="selected"' : '' !!}>否</option>
                         </select>
                         <label class="help-block" for="" id="help-tel"></label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="" class="col-lg-2 col-md-2 control-label">GE</label>
+                    <div class="col-lg-10 col-md-10">
+                        <input name="ge" type="text" class="form-control" value="{{ $item->ge }}" id="ge" placeholder="">
+                        <label class="help-block" for="" id="help-ge"></label>
                     </div>
                 </div>
 				<div class="form-group">

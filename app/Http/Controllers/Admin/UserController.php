@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Helpers\Helper;
+use App\ActivityUser;
+use App\User;
+use App\ActivityLog;
+use DB;
 
 class UserController extends Controller
 {
@@ -19,12 +24,26 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $orm = \App\User::orderBy('id', 'ASC');
-        if( $request->has('keywords') ){
+        $orm = \App\User::orderBy('created_at', 'DESC');
+        if( $request->input('keywords') ){
             $orm->where('name', 'LIKE', '%'.$request->keywords.'%');
         }
-        if( $request->city_id ){
-            $orm->where('city_id', $request->city_id);
+        if( $request->input('city_id') ){
+            $orm->where('city_id', $request->input('city_id'));
+        }
+        if( null != $request->input('is_activated') ){
+            $orm->where('is_activated', $request->input('is_activated') );
+        }
+        if( null != $request->input('id') ){
+            $orm->where('id', $request->input('id') );
+        }
+        if( $request->input('status') != null ){
+            if( $request->input('status') == 1){
+                $orm->whereNotNull('name');
+            }
+            elseif(  $request->input('status') == '0' ){
+                $orm->whereNull('name');
+            }
         }
         if( $request->age_id ){
             $age = \App\AgeGroup::find($request->age_id);
@@ -43,6 +62,49 @@ class UserController extends Controller
             'ages' => $ages,
             'administrators' => $administrators
         ]);
+    }
+    public function activate(Request $request, $user_id)
+    {
+        DB::beginTransaction();
+        try{
+            $user = User::find($user_id);
+            if( null != $user->invite_id ){
+                $inviter = $user->inviter;
+                $activity = Helper::getCurrentActivity();
+                if( null != $activity ){
+                    $activity_user = ActivityUser::where('user_id', $user->invite_id)->where('activity_id', $activity->id)->first();
+                    if( null == $activity_user ){
+                        $activity_user = new ActivityUser;
+                        $activity_user->words_number = 500;
+                        $activity_user->user_id = $user->invite_id;
+                        $activity_user->activity_id = $activity->id;
+                        $activity_user->age_group_id = Helper::age($inviter->birthdate);
+                        $activity_user->reading_number = 0;
+                        $activity_user->voted_number = 0;
+                        $activity_user->receive_status = 0;
+                    }
+                    else{
+                        $activity_user->words_number += 500;
+                    }
+                    $activity_user->save();
+                    $activity_log = new ActivityLog;
+                    $activity_log->user_id = $user->invite_id;
+                    $activity_log->activity_id = $activity->id;
+                    $activity_log->words_number = 500;
+                    $activity_log->reason = '被邀请用户激活奖励字数';
+                    $activity_log->save();
+                }
+            }
+            $user->is_activated = 1;
+            $user->save();
+            DB::commit();
+            return response()->json(['ret'=>0]);
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['ret'=>1001,'errMsg'=>$e->getMessage()]);
+        }
+        
     }
 
     public function export(Request $request)
@@ -150,6 +212,7 @@ class UserController extends Controller
             'tel.*' => '电话必须填写~',
             'is_reading.*' => '请选择是否在读学员~',
             'sex.*' => '请选择性别~',
+            'ge.*' => '请输入GE~',
         ];
         $validator = \Validator::make($request->all(), [
             'name' => 'required',
@@ -159,6 +222,7 @@ class UserController extends Controller
             'tel' => 'required',
             'is_reading' => 'required',
             'sex' => 'required',
+            'ge' => 'required',
         ], $messages);
 
         if ($validator->fails()) {
@@ -169,6 +233,7 @@ class UserController extends Controller
         $user->birthdate = $request->input('birthdate');
         $user->city_id = $request->input('city_id');
         $user->tel = $request->input('tel');
+        $user->ge = $request->input('ge');
         $user->is_reading = $request->input('is_reading');
         $user->sex = $request->input('sex');
         $user->save();

@@ -263,7 +263,31 @@ $(function() {
                 $('#help-'+index).html(value);
             });
         }
-    });
+	});
+	
+	$('.activate').click(function () {
+		var url = $(this).attr('href');
+		if (confirm('确认此操作?')) {
+			$.ajax(url, {
+				dataType: 'json',
+				type: 'post',
+				data: {
+					_token: window.Laravel.csrfToken
+				},
+				success: function (json) {
+					if (json.ret == 0) {
+						window.location.reload();
+					} else {
+						alert(json.errMsg);
+					}
+				},
+				error: function () {
+					alert('请求失败~');
+				}
+			});
+		}
+		return false;
+	});
 });
 
 

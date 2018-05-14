@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-
     public function city()
     {
         return $this->belongsTo('App\City');
+    }
+    
+    public function inviter()
+    {
+        return $this->belongsTo('App\User', 'invite_id', 'id');
     }
     public function administrators()
     {
