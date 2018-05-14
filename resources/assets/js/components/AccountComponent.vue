@@ -133,7 +133,7 @@
                 this.$router.go(-1)
             },
             addReadingLog: function(){
-                if( this.user.is_activated == 0 ){
+                if( this.user.is_activated != 1 ){
                      $('#errorModal').modal('show')
                 }
                 else{

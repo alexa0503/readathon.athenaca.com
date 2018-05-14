@@ -14,7 +14,7 @@ let wxShare = async function (to) {
     if( store.state.self == undefined ){
         router.push({path:'/'})
     }
-    else if( store.state.self.is_activated == 0 &&( to.name == 'invite' || to.name == 'account' || to.name == 'profile') ){
+    else if( store.state.self.is_activated != 1 &&( to.name == 'invite' || to.name == 'account' || to.name == 'profile') ){
         router.push({name: 'register'})
     }
     jssdk.initConfig()

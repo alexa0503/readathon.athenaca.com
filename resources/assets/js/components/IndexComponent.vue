@@ -85,16 +85,6 @@
                     more: more,
                     type: type
                 })
-                /*
-                if(this.user.is_activated == 1){
-                    let city = this.user.city_id
-                    let ageGroup = this.user.age_group_id
-                    this.$store.dispatch('getBoardList', {page:page,city:city,ageGroup:ageGroup,more:more,type:type})
-                }
-                else{
-                    this.$store.dispatch('getBoardList', {page:page,more:more,type:type})
-                }
-                */
                 //let more = true;
 
             },
