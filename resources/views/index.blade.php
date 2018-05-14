@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<meta name="format-detection" content="telephone=no" />
@@ -14,8 +15,10 @@
 
 <body>
 	<div class="loading">
-        <div class="main-content"><img src="/images/icon-logo.png" class="img-fluid" width="100" /></div>
-    </div>
+		<div class="main-content">
+			<img src="/images/icon-logo.png" class="img-fluid" width="100" />
+		</div>
+	</div>
 	<div id="app">
 		<router-view name="topper"></router-view>
 		<router-view name="mainContent"></router-view>
@@ -24,6 +27,20 @@
 	</div>
 	<script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 	<script src="{{ mix('js/app.js') }}"></script>
+	<script>
+		var windowInnerHeight = window.innerHeight; //获取当前浏览器窗口高度
+		//console.log(window.orientation)
+		if (window.orientation == 0) {
+			$(window).resize(function () {
+				if (window.innerHeight < windowInnerHeight) {
+					$('#navigation').removeClass('fixed-bottom');
+				} else {
+					$('#navigation').addClass('fixed-bottom');
+				}
+				console.log(window.innerHeight, windowInnerHeight)
+			});
+		}
+	</script>
 </body>
 
 </html>

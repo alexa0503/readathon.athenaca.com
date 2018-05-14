@@ -1372,7 +1372,7 @@ display: inline-block;
   overflow: hidden;
 }
 .picker-toolbar {
-  height: 80px;
+  height: 40px;
 }
 .picker-items {
   display: -webkit-box;

@@ -46,7 +46,7 @@ let wxShare = async function (to) {
 router.beforeEach((to, from, next) => {
     //console.log(store.state.self.id)
     wxShare(to)
-    if (to.name == 'account' || to.name == 'profile' || to.name == 'board') {
+    if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';
     }
     else if(to.name == 'invite'){
