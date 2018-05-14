@@ -103,7 +103,7 @@ mapState
                     birthdate: '',
                     tel: '',
                     name: '',
-                    privacy: false
+                    privacy: true
                 },
             }
         },
