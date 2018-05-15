@@ -9,7 +9,7 @@
             </div>
             <div class="edit-text" @click="chooseImg">点击修改头像</div>
         </div>
-        <form class="row" method="POST" @submit.prevent="update">
+        <form class="row" method="POST" @submit.prevent="update" >
             <div class="form-content">
                 <div class="form-group row" v-bind:class="hasError && errMsg.nickname ? 'has-error' : ''">
                     <label class="col-form-label">昵称</label>
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center fixed-bottom">
+            <div class="text-center fixed-bottom" id="profileBtn">
                 <button type="submit" class="btn btn-lg btn-info">提交</button>
             </div>
         </form>

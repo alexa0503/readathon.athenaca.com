@@ -34,8 +34,10 @@
 			$(window).resize(function () {
 				if (window.innerHeight < windowInnerHeight) {
 					$('#navigation').removeClass('fixed-bottom');
+					$('#profileBtn').removeClass('fixed-bottom');
 				} else {
 					$('#navigation').addClass('fixed-bottom');
+					$('#profileBtn').addClass('fixed-bottom');
 				}
 				console.log(window.innerHeight, windowInnerHeight)
 			});
