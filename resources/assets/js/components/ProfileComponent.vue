@@ -34,13 +34,13 @@
                 <div class="form-group row">
                     <label class="col-form-label">出生日期</label>
                     <div>
-                        <input readonly v-model="userInfo.birthdate" type="text" class="form-control-plaintext">
+                        <input readonly disabled v-model="userInfo.birthdate" type="text" class="form-control-plaintext">
                     </div>
                 </div>
                 <div class="form-group row no-border">
                     <label class="col-form-label" style="width:26rem">Athena Academy知慧学院在读学员</label>
                     <div>
-                        <input class="form-check-input" type="radio" checked disabled>
+                        <input class="form-check-input" type="radio" checked disabled readonly>
                         <label class="form-check-label">
                             {{ is_reading }}
                         </label>
@@ -49,7 +49,7 @@
                 <div class="form-group row no-border">
                     <label class="col-form-label">城市</label>
                     <div>
-                        <input readonly v-model="userInfo.city_name" type="text" class="form-control-plaintext">
+                        <input readonly disabled v-model="userInfo.city_name" type="text" class="form-control-plaintext">
                     </div>
                 </div>
             </div>
