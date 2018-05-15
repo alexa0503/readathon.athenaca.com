@@ -132,7 +132,18 @@
                 return new Date()
             }
         },
+        watch: {
+            hasRegistered(v){
+                if( v ){
+                    document.body.style.background = '#7fe2bf';
+                }
+                else{
+                    document.body.style.background = '#fff';
+                }
+            }
+        },
         created() {
+            
             this.$store.dispatch('initRegisterPage')
         },
         methods: {

@@ -17,6 +17,8 @@
                 {{ errMsg }}
             </div>
         </div>
+        <div class="board-space"></div>
+        
         
         <div class="modal fade" id="questionModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  v-if="status == 0 && question">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -106,8 +108,8 @@
                                 $('#questionModal').modal('show')
                             }
                             else{
-                                $('#questionModal .modal-body h3').html('抱歉，'+ data.errMsg)
-                                $('#questionModal .modal-body p').html('如有疑问，请联系客服人员')
+                                $('#questionModal .modal-body h3').html('Oops，答错了！')
+                                $('#questionModal .modal-body p').html('继续努力吧！')
                                 $('#questionModal').modal('show')
                             }
                             vm.hasPosted = false

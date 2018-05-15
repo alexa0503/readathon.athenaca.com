@@ -44,7 +44,7 @@
                     </a>
                 </div>
                 <div class="star">{{ item.words_number }}</div>
-                <div class="name-text">{{ item.user.name }}</div>
+                <div class="name-text">{{ item.user.name | formatString }}</div>
                 <div class="number">
                     <span>{{ item.rank }}</span>
                 </div>
@@ -54,7 +54,8 @@
             </div>
         </div>
         <div class="row board-more" v-if="showMore" v-on:click="fetchMore(true)">
-            <img src="/images/icon-more-01.png" />
+            <img src="/images/icon-more-01.png" v-if="!singleLoading" />
+            <div v-if="singleLoading">加载中...</div>
         </div>
         <div class="board-space"></div>
     </div>
@@ -83,6 +84,7 @@
                 activities: 'activities',
                 boardList: 'boardList',
                 ageGroups: 'ageGroups',
+                singleLoading: 'singleLoading',
                 showMore(state) {
                     return state.boardList.meta && (state.boardList.meta.current_page != state.boardList.meta.last_page)
                 },
@@ -92,26 +94,38 @@
             })
         },
         created() {
-            this.id =  this.$router.history.current.params.id
+            let vm = this
+            $(window).scroll(function () {
+                var scrollTop = $(this).scrollTop();
+                var scrollHeight = $(document).height();
+                var windowHeight = $(this).height();
+                if (scrollHeight - (scrollTop + windowHeight) < 40) {
+                    vm.fetchMore(true)
+                }
+            });
+            this.id = this.$router.history.current.params.id
             this.$store.dispatch('initBoardPage', this.id)
         },
-        watch:{
+        watch: {
             '$route' (to, from) {
                 this.id = to.params.id
                 this.$store.dispatch('initBoardPage', this.id)
-            // 对路由变化作出响应...
+                // 对路由变化作出响应...
             }
         },
         methods: {
-            getClass: function(item){
-                if(this.id == item.user.id && this.id != undefined){
+            getClass: function (item) {
+                if (this.id == item.user.id && this.id != undefined) {
                     return 'board-list-home'
-                }
-                else{
-                    return item.rank < 4 ? 'board-list-'+item.rank : 'board-list-others'
+                } else {
+                    return item.rank < 4 ? 'board-list-' + item.rank : 'board-list-others'
                 }
             },
             fetchMore: function (more = false) {
+                
+                if( !this.showMore ){
+                    return false;
+                }
                 let page = this.currentPage;
                 let id = this.id
                 if (more == true) {

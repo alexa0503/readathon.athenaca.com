@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="" class="btn btn-info">查询书本字数</a>
+                        <a href="http://www.arbookfind.com/default.aspx" class="btn btn-info">查询书本字数</a>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-info">提交</button>
@@ -28,7 +28,7 @@
             </div>
             <div class="modal-content" v-if="succeeded">
                 <div class="modal-body text-center">
-                    <h3>恭喜！提交成功</h3>
+                    <h3>提交成功</h3>
                      <button type="button" class="btn btn-go btn-info" data-dismiss="modal" aria-label="Close">
                         确定
                     </button>

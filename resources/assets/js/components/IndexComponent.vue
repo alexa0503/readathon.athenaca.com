@@ -39,7 +39,7 @@
                     </a>
                 </div>
                 <div class="star">{{ item.words_number }}</div>
-                <div class="name-text">{{ item.user.name }}</div>
+                <div class="name-text">{{ item.user.name | formatString }}</div>
                 <div class="number">
                     <span>{{ item.rank }}</span>
                 </div>
@@ -49,7 +49,8 @@
             </div>
         </div>
         <div class="board-more" v-if="showMore"  v-on:click="fetchMore(true)">
-            <img src="/images/icon-more-01.png" />
+            <img src="/images/icon-more-01.png" v-if="!singleLoading" />
+            <div v-if="singleLoading">加载中...</div>
         </div>
         <div class="board-space"></div>
     </div>
@@ -66,15 +67,28 @@
             loading: 'loading',
             user: 'self',
             boardList: 'boardList',
+            singleLoading:'singleLoading',
             showMore(state) {
                 return state.boardList.meta && (state.boardList.meta.current_page != state.boardList.meta.last_page)
             }
         }),
         created() {
+             let vm = this
+            $(window).scroll(function () {
+                var scrollTop = $(this).scrollTop();
+                var scrollHeight = $(document).height();
+                var windowHeight = $(this).height();
+                if (scrollHeight - (scrollTop + windowHeight ) < 40) {
+                    vm.fetchMore(true)
+                }
+            });
             this.$store.dispatch('initIndexPage')
         },
         methods: {
             fetchMore: function (more = false) {
+                if( !this.showMore ){
+                    return false;
+                }
                 let page = 1;
                 if (more == true) {
                     page = this.boardList.meta.current_page + 1

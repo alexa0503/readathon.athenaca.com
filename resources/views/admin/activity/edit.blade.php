@@ -62,7 +62,11 @@
 @endsection
 @section('scripts')
 <script>
+@if( $item->image )
+var count = 1;
+@else
 var count = 0;
+@endif
 var maxNumber = 1
 function thumbRemove(obj) {
     if (confirm('确认删除?')) {

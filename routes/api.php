@@ -175,7 +175,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
             'book_name.min' => '不能小于:min个字符~',
             'words_number.required' => '请输入字数~',
             'words_number.numeric' => '字数只能为数字~',
-            'words_number.numeric' => '字数这么多，这是要上天啊~',
+            'words_number.max' => '您已超过上限，请分条记录~',
         ];
         $validator = \Validator::make($request->all(), [
             'book_name' => 'required|string|max:100|min:2',
@@ -256,9 +256,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
                 $log->voter_id = $voter_id;
                 $log->vote_date = $today;
                 $log->save();
-
                 $count = App\VoteLog::where('user_id', $user_id)->where('activity_id', $activity->id)->where('vote_date', $today)->count();
-
                 if ($count < $voted_limit_add_times) {
                     $activity_user->words_number += $voted_add_words_number;
                     $activity_log = new ActivityLog;
@@ -271,7 +269,6 @@ Route::group(['middleware' => ['wx.auth']], function () {
                 $activity_user->voted_number += 1;
                 $activity_user->save();
                 $has_voted = 1;
-
             }
             DB::commit();
             return response()->json(['ret' => 0, 'data' => [
