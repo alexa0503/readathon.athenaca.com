@@ -41,6 +41,8 @@ return $request->user();
 Route::group(['middleware' => ['wx.auth']], function () {
     Route::get('user/{id?}', 'Api\UserController@index');
     Route::get('board', 'Api\UserController@board');
+    Route::post('register', 'Api\UserController@register');
+    Route::post('profile', 'Api\UserController@updateProfile');
 
     Route::get('/cities', function (Request $request) {
         $cities = \App\City::orderBy('sort_id', 'ASC')->get();
@@ -58,169 +60,15 @@ Route::group(['middleware' => ['wx.auth']], function () {
         return AgeGroupResource::collection($aget_groups);
     });
 
-    Route::post('/register', function (Request $request) {
-        $id = session('wx.user.id');
-        $messages = [
-            'name.required' => '请填写姓名~',
-            'name.max' => '不能多于:max个字符~',
-            'name.min' => '不能小于:min个字符~',
-            'birthdate.required' => '请选择出生日期~',
-            'birthdate.date' => '出生日期格式不正确~',
-            'tel.required' => '请输入联系电话~',
-            'is_reading.required' => '请选择是否Athena Academy知慧学院现任成员~',
-            'city.required' => '请选择所在城市~',
-            'privacy.required' => '请勾选阅读马拉松隐私政策~',
-        ];
-        $validator = \Validator::make($request->all(), [
-            'name' => 'required|string|max:40|min:2',
-            'birthdate' => 'required|date',
-            'tel' => 'required',
-            'is_reading' => 'required',
-            'city' => 'required|exists:cities,id',
-            'privacy' => [
-                'required',
-                function($attribute, $value, $fail){
-                    if( $value == false ){
-                        return $fail('请勾选阅读马拉松隐私政策');
-                    }
-                }
-            ],
-        ], $messages);
 
-        $validator->after(function ($validator) use ($id) {
-            if (null == $id) {
-                $validator->errors()->add('name', '用户不存在');
-            }
-            $user = \App\User::find($id);
-            if (null == $user) {
-                $validator->errors()->add('name', '用户不存在');
-            }
-            if ($user->is_activated == 1) {
-                $validator->errors()->add('name', '用户已激活过了');
-            }
-        });
-        try {
-            $user = User::find($id);
-            $user->name = $request->input('name');
-            $user->birthdate = substr($request->input('birthdate'), 0, 10);
-            $user->city_id = $request->input('city');
-            $user->tel = $request->input('tel');
-            $user->is_reading = $request->input('is_reading') == true ? 1 : 0;
-            $user->is_activated = 0;
-            $result = $user->save();
-        } catch (Exception $e) {
-            $validator->errors()->add('name', '用户已激活过了');
-        }
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
-        }
-        return [];
-    });
-
-    Route::post('/profile', function (Request $request) {
-        $id = session('wx.user.id');
-        $messages = [
-            'nickname.required' => '请填写姓名~',
-            'nickname.max' => '不能多于:max个字符~',
-            'nickname.min' => '不能小于:min个字符~',
-            'tel.required' => '请输入联系电话~',
-        ];
-        $validator = \Validator::make($request->all(), [
-            'nickname' => 'required|string|max:40|min:2',
-            'tel' => 'required',
-        ], $messages);
-
-        $validator->after(function ($validator) use ($id, $request) {
-            if ($request->input('id') !== $id) {
-                $validator->errors()->add('name', '没有权限修改');
-            }
-        });
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
-        }
-        $user = User::find($id);
-        $user->nickname = $request->input('nickname');
-        $user->tel = $request->input('tel');
-        $user->save();
-        return [];
-    });
-
-    Route::get('/logs/reading/{user_id?}', function (Request $request, $user_id = null) {
-        if (null == $user_id) {
-            $user_id = session('wx.user.id');
-        }
-        $logs = ReadingLog::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(4);
-        return ReadingLogResource::collection($logs);
-    });
-    Route::get('/logs/activity/{user_id?}', function (Request $request, $user_id = null) {
-        if (null == $user_id) {
-            $user_id = session('wx.user.id');
-        }
-        $logs = ActivityLog::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(4);
-        return ActivityLogResource::collection($logs);
-    });
-    Route::get('/logs/prize/{user_id?}', function (Request $request, $user_id = null) {
-        if (null == $user_id) {
-            $user_id = session('wx.user.id');
-        }
-        $logs = PrizeLog::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(4);
-        return PrizeLogResource::collection($logs);
-    });
-    Route::post('/logs/reading', function (Request $request) {
-        $id = session('wx.user.id');
-        $messages = [
-            'book_name.required' => '请填写姓名~',
-            'book_name.max' => '不能多于:max个字符~',
-            'book_name.min' => '不能小于:min个字符~',
-            'words_number.required' => '请输入字数~',
-            'words_number.numeric' => '字数只能为数字~',
-            'words_number.max' => '您已超过上限，请分条记录~',
-        ];
-        $validator = \Validator::make($request->all(), [
-            'book_name' => 'required|string|max:100|min:2',
-            'words_number' => 'required|numeric|max:10000',
-        ], $messages);
-
-        $activity = Helper::getCurrentActivity();
-        $validator->after(function ($validator) use ($id, $request, $activity) {
-            if (session('wx.user.is_activated') != 1) {
-                $validator->errors()->add('book_name', '您的账户还没有被激活');
-            }
-            if (null == $id) {
-                $validator->errors()->add('book_name', '没有权限修改');
-            }
-            if (null == $activity) {
-                $validator->errors()->add('book_name', '当前没有活动');
-            }
-            //$activity_user = ActivityUser::where('user_id', $id)->where('activity_id', $activity->id)->first();
-
-        });
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
-        }
-
-        DB::beginTransaction();
-        try {
-            $log = new ReadingLog;
-            $log->user_id = $id;
-            $log->book_name = $request->input('book_name');
-            $log->activity_id = $activity->id;
-            $log->words_number = $request->input('words_number');
-            $log->save();
-            //ActivityUser::update()
-            Helper::checkUserActivity($id, $activity);
-            $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $id)->first();
-            $activity_user->words_number += $request->input('words_number');
-            $activity_user->reading_number += 1;
-            $activity_user->save();
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            $validator->errors()->add('book_name', $e->getMessage());
-        }
-        return [];
-    });
+    //日志相关
+    Route::get('/logs/reading/{user_id?}', 'Api\LogsController@reading');
+    Route::get('/logs/activity/{user_id?}', 'Api\LogsController@activity');
+    Route::get('/logs/prize/{user_id?}', 'Api\LogsController@prize');
+    Route::post('/logs/reading', 'Api\LogsController@prize');
+    Route::post('/logs/reading', 'Api\LogsController@postReading');
+    
     Route::any('vote/{activity_user_id}', function (Request $request, $activity_user_id) {
         $voter_id = session('wx.user.id');
         $activity = Helper::getCurrentActivity();
@@ -554,14 +402,6 @@ Route::group(['middleware' => ['wx.auth']], function () {
     });
 
     //微信分享接口
-    Route::get('/wx/share', function (Request $request) {
-        $url = $request->input('url');
-        if (null == $url) {
-            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-            $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        }
-        $wx = new Wx($url);
-        $config = $wx->getSignPackage();
-        return response()->json($config);
-    });
+    Route::get('/wx/share', 'Api\WxController@share');
+    Route::get('/wx/avatar/{media_id}', 'Api\WxController@media');
 });

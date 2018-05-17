@@ -7,7 +7,7 @@ class Wx
     private $appSecret;
     private $url;
 
-    public function __construct($url)
+    public function __construct($url = null)
     {
         $this->appId = env('WX_APPID');
         $this->appSecret = env('WX_SECRET');
@@ -17,7 +17,6 @@ class Wx
     public function getSignPackage()
     {
         $jsapiTicket = $this->getJsApiTicket();
-
         // 注意 URL 一定要动态获取，不能 hardcode.
         $url = $this->url;
         /*
@@ -77,7 +76,7 @@ class Wx
         return $ticket;
     }
 
-    private function getAccessToken()
+    public function getAccessToken()
     {
         // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
         $data = json_decode($this->get_php_file("access_token.php"));

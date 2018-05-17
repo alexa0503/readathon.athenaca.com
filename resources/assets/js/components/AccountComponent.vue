@@ -45,7 +45,7 @@
                                 <td>{{ log.created_at }}</td><td>{{ log.reason }}</td><td>{{ log.words_number }}</td>
                             </tr>
                             <tr v-if="type === 'prize' && isSelf" v-for="log in logs.data" v-bind:key="log.id">
-                                <td>{{ log.activity_name }}</td><td>{{ log.prize_name }}</td><td>{{ log.has_checked == 0 ? '未核销' : '已核销'}}</td>
+                                <td>{{ log.created_at }}</td><td>{{ log.prize_name }}</td><td>{{ log.has_checked == 0 ? '未核销' : '已核销'}}</td>
                             </tr>
                             <tr v-if="logs.data == undefined || logs.data.length == 0 ">
                                 <td colspan="3">没有任何记录</td>

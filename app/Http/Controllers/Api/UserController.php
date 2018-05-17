@@ -112,4 +112,96 @@ class UserController extends Controller
             ],
         ]);
     }
+
+    //用户注册
+    public function register(Request $request)
+    {
+        $id = session('wx.user.id');
+        $messages = [
+            'name.required' => '请填写姓名~',
+            'name.max' => '不能多于:max个字符~',
+            'name.min' => '不能小于:min个字符~',
+            'birthdate.required' => '请选择出生日期~',
+            'birthdate.date' => '出生日期格式不正确~',
+            'tel.required' => '请输入联系电话~',
+            'is_reading.required' => '请选择是否Athena Academy知慧学院现任成员~',
+            'city.required' => '请选择所在城市~',
+            'privacy.required' => '请勾选阅读马拉松隐私政策~',
+        ];
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|string|max:40|min:2',
+            'birthdate' => 'required|date',
+            'tel' => 'required',
+            'is_reading' => 'required',
+            'city' => 'required|exists:cities,id',
+            'privacy' => [
+                'required',
+                function($attribute, $value, $fail){
+                    if( $value == false ){
+                        return $fail('请勾选阅读马拉松隐私政策');
+                    }
+                }
+            ],
+        ], $messages);
+
+        $validator->after(function ($validator) use ($id) {
+            if (null == $id) {
+                $validator->errors()->add('name', '用户不存在');
+            }
+            $user = \App\User::find($id);
+            if (null == $user) {
+                $validator->errors()->add('name', '用户不存在');
+            }
+            if ($user->is_activated == 1) {
+                $validator->errors()->add('name', '用户已激活过了');
+            }
+        });
+        try {
+            $user = User::find($id);
+            $user->name = $request->input('name');
+            $user->birthdate = substr($request->input('birthdate'), 0, 10);
+            $user->city_id = $request->input('city');
+            $user->tel = $request->input('tel');
+            $user->is_reading = $request->input('is_reading') == true ? 1 : 0;
+            $user->is_activated = 0;
+            $result = $user->save();
+        } catch (Exception $e) {
+            $validator->errors()->add('name', '用户已激活过了');
+        }
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 403);
+        }
+        return [];
+    }
+
+    //资料更新
+    public function updateProfile(Request $request)
+    {
+        $id = session('wx.user.id');
+        $messages = [
+            'nickname.required' => '请填写姓名~',
+            'nickname.max' => '不能多于:max个字符~',
+            'nickname.min' => '不能小于:min个字符~',
+            'tel.required' => '请输入联系电话~',
+        ];
+        $validator = \Validator::make($request->all(), [
+            'nickname' => 'required|string|max:40|min:2',
+            'tel' => 'required',
+        ], $messages);
+
+        $validator->after(function ($validator) use ($id, $request) {
+            if ($request->input('id') !== $id) {
+                $validator->errors()->add('name', '没有权限修改');
+            }
+        });
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 403);
+        }
+        $user = User::find($id);
+        $user->nickname = $request->input('nickname');
+        $user->tel = $request->input('tel');
+        $user->save();
+        return [];
+    }
 }

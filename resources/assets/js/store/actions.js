@@ -402,5 +402,13 @@ export default {
                 more: payload.more
             })
         }).catch(function (error) {})
+    },
+    uploadAvatar({commit},serverId){
+        let url = apiUrls.GET_AVATAR_FROM_WX + '/' + serverId
+        axios.get(url).then(function (response) {
+            let data = response.data
+            console.log(data)
+            commit('updateAvatar', data)
+        }).catch(function (error) {})
     }
 }

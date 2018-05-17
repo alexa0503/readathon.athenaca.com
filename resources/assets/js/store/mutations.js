@@ -91,5 +91,8 @@ export default {
     },
     setSlides(state, payload){
         state.slides = payload.data
+    },
+    updateAvatar(state,avatar){
+        state.slef.avatar = avatar
     }
 }
