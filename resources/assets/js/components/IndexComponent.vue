@@ -51,7 +51,7 @@
         <div class="row board-more" v-if="showMore && !fetching" v-on:click="fetchMore(true)">
             <img src="/images/icon-more-01.png" />
         </div>
-        <div class="row board-more" v-if="fetching">
+        <div class="row board-more" v-if="showMore && fetching">
             加载中...
         </div>
         <div class="board-space"></div>
@@ -94,8 +94,10 @@
                     page: page,
                     name: 'home',
                     type: 'withoutme'
-                }).then(() => {
-                    vm.fetching = false
+                }).then((response) => {
+                    if( response.meta.current_page < response.meta.last_page){
+                        vm.fetching = false
+                    }
                 })
             },
             vote: function (user_id, index) {
