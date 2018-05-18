@@ -881,7 +881,15 @@ a:hover {
     margin-top: 4rem;
 }
 .question .question-content .question-answer label {
+    position: relative;
     display: block;
+}
+.question-answer .answered-label {
+    position: absolute;
+    left:-1.6rem;
+    top:0;
+    font-size: 1.2rem;
+    line-height: 2.2rem;
 }
 .question-answer input[type="radio"] {
     margin-right: 0.8rem;
@@ -1288,13 +1296,15 @@ input[type="checkbox"]:focus {
 .privacy-content {
     width: 80%;
     background: #FFF;
-    height: 50rem;
     margin: 0 auto;
     padding: 1rem;
     border-radius: 0.4rem;
     position: relative;
+}
+.privacy-content .privacy-cc {
     overflow-x: hidden;
     overflow-y: auto;
+    height: 48rem;
 }
 .privacy-content .close {
     position: absolute;

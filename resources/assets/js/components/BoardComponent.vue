@@ -122,8 +122,7 @@
                 }
             },
             fetchMore: function (more = false) {
-                
-                if( !this.showMore ){
+                if( !this.showMore && !this.singleLoading ){
                     return false;
                 }
                 let page = this.currentPage;
@@ -134,7 +133,6 @@
                 let ageGroupId = this.ageGroupId
                 let cityId = this.cityId
                 let activityId = this.activityId
-                //let more = true;
                 this.$store.dispatch('getBoardList', {
                     page: page,
                     id: id,

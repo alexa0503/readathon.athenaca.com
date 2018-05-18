@@ -53,7 +53,7 @@
                 <router-link :to="{name:'about'}">关于阅读马拉松</router-link>
             </div>
             <div class="regester-succeeded-link">
-                <a>预约美国权威STAR英语水平测试</a>
+                <a>关于美国权威STAR英文水平测试</a>
             </div>
             <div class="regester-succeeded-link">
                 <router-link :to="{name:'flow'}">关于知慧学院 Athena Academy</router-link>
@@ -63,7 +63,7 @@
         <div class="privacy-container" v-if="privacySeen">
             <div class="privacy-body">
                 <div class="privacy-content">
-                    <div v-html="privacyContent"></div>
+                    <div v-html="privacyContent" class="privacy-cc"></div>
                     <div class="close" v-on:click="closePrivacy">&times;</div>
                 </div>
             </div>

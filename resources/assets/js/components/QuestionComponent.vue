@@ -6,16 +6,17 @@
 <br/>({{ question.rewarded_number }}字数奖励)</p>
                 <div class="question-answer">
                     <label v-for="item in answers" v-bind:key="item.id">
+                         <span class="answered-label" v-if="answered != null && answered == item.id && isRight == 1">✓</span>
+                         <span class="answered-label" v-else-if="answered != null && answered == item.id && isRight == 0">✗</span>
+                         <span class="answered-label" v-if="answered != null && answered != item.id && isRight == 0 && item.is_right == 1">✓</span>
+                         
                         <input type="radio" id=""  v-bind:value="item.id" v-model="answer" v-bind:disabled="status != 0" v-if="answered == null">
                         <input  type="radio" id=""  v-bind:value="item.id" v-model="answered" v-bind:disabled="status != 0" v-else>
                         {{item.title}}
                     </label>
                 </div>
-                <div class="text-center" v-if="status == 1001">
-                    <span class="answer-wrong" v-if="answered != null && isRight == 1">✓</span>回答正确
-                    <span class="answer-right" v-if="answered != null && isRight == 0">✗</span>回答错误
-                </div>
-                <div class="text-center" v-else-if="status == 0"><button type="submit" class="btn btn-warning">提交</button></div>
+                <div class="text-center" v-if="status == 0"><button type="submit" class="btn btn-warning">提交</button></div>
+                <div class="alert alert-warning mt-4" v-else>{{errMsg}}</div>
             </form>
             <div v-if="status == 1001" class="text-center">
                 {{ errMsg }}
@@ -82,7 +83,7 @@
                 }
             },
             errMsg(state){
-                if( state.question.ret == 1001 ){
+                if( state.question.ret != 0 ){
                     return state.question.errMsg
                 }
                 else{
@@ -128,11 +129,10 @@
                         .catch(function (error) {
                             vm.hasPosted = false
                             if (error.response.status == 403) {
-                                $('#questionModal .modal-body h3').html('抱歉，'+ error.response.data.errMsg)
-                                $('#questionModal .modal-body p').html('如有疑问，请联系客服人员')
+                                $('#questionModal .modal-body h3').html('Oops，答错了！')
+                                $('#questionModal .modal-body p').html('继续努力吧！')
                                 $('#questionModal').modal('show')
                                 vm.$store.dispatch('initQuestionPage')
-                                //vm.$router.go(0);
                             } else {
                                 alert('服务器发生错误')
                             }

@@ -86,7 +86,7 @@
         },
         methods: {
             fetchMore: function (more = false) {
-                if( !this.showMore ){
+                if( !this.showMore && !this.singleLoading ){
                     return false;
                 }
                 let page = 1;

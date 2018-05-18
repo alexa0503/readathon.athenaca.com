@@ -70,60 +70,8 @@ Route::group(['middleware' => ['wx.auth']], function () {
     Route::any('/vote/{activity_user_id}', 'Api\LogsController@vote');
     
     Route::get('/question', 'Api\QuestionController@index');
+    Route::post('/answer/{id}', 'Api\QuestionController@answer');
     
-    Route::post('answer/{id}', function (Request $request, $id = null) {
-        if (session('wx.user') && session('wx.user.is_activated') != 1) {
-            return response()->json(['ret' => 1300, 'errMsg' => '只有激活过才能回答问题哦'], 403);
-        }
-        $activity = Helper::getCurrentActivity();
-        if ($activity == null) {
-            return response()->json(['ret' => 1200, 'errMsg' => '活动已过期或者还未开始'], 403);
-        }
-        $user_id = session('wx.user.id');
-        $answer_id = $request->input('answer');
-        $answer = App\QuestionAnswer::where('question_id', $id)->where('id', $answer_id)->first();
-        if ($answer == null) {
-            return response()->json(['ret' => 1001, 'errMsg' => '不存在该问题或者答案'], 403);
-        }
-
-        $question = Question::find($id);
-        if ($question->activity_id != $activity->id) {
-            return response()->json(['ret' => 1003, 'errMsg' => '该问题不属于当前活动'], 403);
-        }
-
-        $log = App\QuestionLog::where(['question_id' => $id, 'user_id' => $user_id])->first();
-        if ($log != null) {
-            return response()->json(['ret' => 1002, 'errMsg' => '您已经回答过该问题了'], 403);
-        }
-        DB::beginTransaction();
-        try {
-            $log = new App\QuestionLog;
-            $log->question_id = $id;
-            $log->user_id = $user_id;
-            $log->is_right = $answer->is_right;
-            $log->save();
-            if ($answer->is_right != '1') {
-                DB::commit();
-                return response()->json(['ret' => 1003, 'errMsg' => '回答错误'], 403);
-            } else {
-                $activity_user = ActivityUser::where('activity_id', $activity->id)
-                    ->where('user_id', $user_id)->first();
-                $activity_user->words_number += $question->rewarded_number;
-                $activity_user->save();
-                $activity_log = new ActivityLog;
-                $activity_log->activity_id = $activity->id;
-                $activity_log->reason = '问题回答正确奖励字数';
-                $activity_log->words_number = $question->rewarded_number;
-                $activity_log->user_id = $user_id;
-                $activity_log->save();
-                DB::commit();
-                return response()->json(['ret' => 0, 'rewarded_number' => $question->rewarded_number]);
-            }
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->json(['ret' => 1100, 'errMsg' => $e->getMessage()]);
-        }
-    });
 
     //奖品列表
     Route::get('/prizes/{id?}', function (Request $request, $id = null) {

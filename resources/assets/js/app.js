@@ -58,7 +58,6 @@ router.beforeEach((to, from, next) => {
     next()
 })
 Vue.filter('formatString', function (value) {
-    console.log(value)
     if (!value) return ''
     if (value.length > 10) {
         return value.slice(0, 10) + '...'
