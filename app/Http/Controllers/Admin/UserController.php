@@ -47,9 +47,9 @@ class UserController extends Controller
         }
         if( $request->age_id ){
             $age = \App\AgeGroup::find($request->age_id);
-            $date1 = Carbon::now()->addYear(-1*$age->min_age);
-            $date2 = Carbon::now()->addYear(-1*$age->max_age);
-            $orm->where('birthdate', '<', $date1);
+            $date1 = Carbon::now()->addYear(-1*$age->min_age)->toDateString();
+            $date2 = Carbon::now()->addYear(-1*$age->max_age-1)->toDateString();
+            $orm->where('birthdate', '<=', $date1);
             $orm->where('birthdate', '>=', $date2);
         }
         $users = $orm->paginate(20);
