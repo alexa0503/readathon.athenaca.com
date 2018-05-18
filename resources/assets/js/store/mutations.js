@@ -5,20 +5,38 @@ export default {
     loading(state, payload){
         state.loading = payload
     },
-    singleLoading(state, payload){
-        state.singleLoading = payload
-    },
     setUserInfo(state, user){
         state.user = user
     },
-    setBoardList(state, payload){
-        if( Object.keys(state.boardList).length == 0 || payload.more != true){
-            state.boardList = payload.boardList
+    clearBoardList(state, name){
+        if( name == 'home' ){
+            state.homeBoardList = {}
         }
         else{
-            state.boardList.data = state.boardList.data.concat(payload.boardList.data)
-            state.boardList.meta = payload.boardList.meta
-            state.boardList.links = payload.boardList.links
+            state.boardList = {}
+        }
+    },
+    setBoardList(state, payload){
+        let boardList = {}
+        if( payload.name == 'home' ){
+            boardList =  state.homeBoardList
+        }
+        else{
+            boardList =  state.boardList
+        }
+        if( Object.keys(boardList).length == 0 || payload.page == 1){
+            boardList  = payload.boardList
+        }
+        else{
+            boardList.data = boardList.data.concat(payload.boardList.data)
+            boardList.meta = payload.boardList.meta
+            boardList.links = payload.boardList.links
+        }
+        if( payload.name == 'home' ){
+            state.homeBoardList =  boardList
+        }
+        else{
+            state.boardList =  boardList
         }
     },
     setAgeGroups(state,ageGroups){

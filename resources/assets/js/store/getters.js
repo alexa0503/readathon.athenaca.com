@@ -6,9 +6,6 @@ export default {
     loading: (state, getters) => {
         return state.loading
     },
-    singleLoading: (state, getters) => {
-        return state.singleLoading
-    },
     user: (state, getters) => {
         return state.user
     },
@@ -17,6 +14,9 @@ export default {
     },
     boardList: (state, getters) => {
        return state.boardList
+    },
+    homeBoardList: (state, getters) => {
+       return state.homeBoardList
     },
     ageGroups: (state, getters) => {
         return state.ageGroups

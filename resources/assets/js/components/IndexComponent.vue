@@ -48,9 +48,11 @@
                 </div>
             </div>
         </div>
-        <div class="board-more" v-if="showMore"  v-on:click="fetchMore(true)">
-            <img src="/images/icon-more-01.png" v-if="!singleLoading" />
-            <div v-if="singleLoading">加载中...</div>
+        <div class="row board-more" v-if="showMore && !fetching" v-on:click="fetchMore(true)">
+            <img src="/images/icon-more-01.png" />
+        </div>
+        <div class="row board-more" v-if="fetching">
+            加载中...
         </div>
         <div class="board-space"></div>
     </div>
@@ -63,51 +65,60 @@
         mapActions
     } from 'vuex'
     export default {
+        data(){
+            return {
+                currentPage: 1,
+                fetching: false,
+            }
+        },
         computed: mapState({
             loading: 'loading',
             user: 'self',
-            boardList: 'boardList',
-            singleLoading:'singleLoading',
+            boardList: 'homeBoardList',
             showMore(state) {
-                return state.boardList.meta && (state.boardList.meta.current_page != state.boardList.meta.last_page)
+                return state.homeBoardList.meta && (state.homeBoardList.meta.current_page != state.homeBoardList.meta.last_page)
             }
         }),
         created() {
-             let vm = this
-            $(window).scroll(function () {
-                var scrollTop = $(this).scrollTop();
-                var scrollHeight = $(document).height();
-                var windowHeight = $(this).height();
-                if (scrollHeight - (scrollTop + windowHeight ) < 40) {
-                    vm.fetchMore(true)
-                }
-            });
             this.$store.dispatch('initIndexPage')
         },
         methods: {
             fetchMore: function (more = false) {
-                if( !this.showMore && !this.singleLoading ){
-                    return false;
-                }
-                let page = 1;
+                let vm = this
+                let page = vm.currentPage;
+                vm.fetching = true
                 if (more == true) {
-                    page = this.boardList.meta.current_page + 1
+                    page = vm.boardList.meta.current_page + 1
                 }
-                let type = 'withoutme'
-                this.$store.dispatch('getBoardList', {
+                vm.$store.dispatch('getBoardList', {
                     page: page,
-                    more: more,
-                    type: type
+                    name: 'home',
+                    type: 'withoutme'
+                }).then(() => {
+                    vm.fetching = false
                 })
-                //let more = true;
-
             },
             vote: function (user_id, index) {
                 this.$store.dispatch('vote', {
                     user_id,
                     index
                 })
+            },
+            handleScroll: function(){
+                let vm = this
+                let scrollTop = $(window).scrollTop();
+                let scrollHeight = $(document).height();
+                let windowHeight = $(window).height();
+                if (scrollTop > 0 && scrollHeight - (scrollTop + windowHeight) < 40 && !vm.fetching) {
+                    vm.fetchMore(true)
+                }
             }
-        }
+        },
+        mounted () {
+            window.addEventListener('scroll', this.handleScroll);//监听页面滚动事件
+        },
+        destroyed(){
+            window.removeEventListener('scroll', this.handleScroll);//监听页面滚动事件
+        },
     }
 </script>

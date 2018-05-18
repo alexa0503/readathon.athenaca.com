@@ -10,10 +10,10 @@ export default new Vuex.Store({
   state: {
     cities:[],
     loading: false,
-    singleLoading:false,
     user: {},
     self: {},
     boardList: {},
+    homeBoardList: {},
     activities: {},
     ageGroups: {},
     readingLogs: {},

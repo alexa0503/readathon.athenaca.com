@@ -53,9 +53,11 @@
                 </div>
             </div>
         </div>
-        <div class="row board-more" v-if="showMore" v-on:click="fetchMore(true)">
-            <img src="/images/icon-more-01.png" v-if="!singleLoading" />
-            <div v-if="singleLoading">加载中...</div>
+        <div class="row board-more" v-if="showMore && !fetching" v-on:click="fetchMore(true)">
+            <img src="/images/icon-more-01.png" />
+        </div>
+        <div class="row board-more" v-if="fetching">
+            加载中...
         </div>
         <div class="board-space"></div>
     </div>
@@ -74,7 +76,8 @@
                 cityId: '',
                 activityId: '',
                 currentPage: 1,
-                id: undefined
+                id: undefined,
+                fetching: false
             }
         },
         computed: {
@@ -84,7 +87,6 @@
                 activities: 'activities',
                 boardList: 'boardList',
                 ageGroups: 'ageGroups',
-                singleLoading: 'singleLoading',
                 showMore(state) {
                     return state.boardList.meta && (state.boardList.meta.current_page != state.boardList.meta.last_page)
                 },
@@ -95,16 +97,8 @@
         },
         created() {
             let vm = this
-            $(window).scroll(function () {
-                var scrollTop = $(this).scrollTop();
-                var scrollHeight = $(document).height();
-                var windowHeight = $(this).height();
-                if (scrollHeight - (scrollTop + windowHeight) < 40) {
-                    vm.fetchMore(true)
-                }
-            });
-            this.id = this.$router.history.current.params.id
-            this.$store.dispatch('initBoardPage', this.id)
+            vm.id = vm.$router.history.current.params.id
+            vm.$store.dispatch('initBoardPage', vm.id)
         },
         watch: {
             '$route' (to, from) {
@@ -122,24 +116,23 @@
                 }
             },
             fetchMore: function (more = false) {
-                if( !this.showMore && !this.singleLoading ){
-                    return false;
-                }
-                let page = this.currentPage;
-                let id = this.id
+                let vm = this
+                let page = vm.currentPage;
+                let id = vm.id
+                vm.fetching = true
                 if (more == true) {
-                    page = this.boardList.meta.current_page + 1
+                    page = vm.boardList.meta.current_page + 1
                 }
-                let ageGroupId = this.ageGroupId
-                let cityId = this.cityId
-                let activityId = this.activityId
-                this.$store.dispatch('getBoardList', {
+
+                let data = {
                     page: page,
                     id: id,
-                    ageGroup: ageGroupId,
-                    city: cityId,
-                    activity: activityId,
-                    more: more
+                    ageGroup: vm.ageGroupId,
+                    city: vm.cityId,
+                    activity: vm.activityId
+                }
+                vm.$store.dispatch('getBoardList', data).then(() => {
+                    vm.fetching = false
                 })
             },
             vote: function (user_id, index) {
@@ -149,7 +142,25 @@
                         index
                     })
                 }
+            },
+            handleScroll: function () {
+                let vm = this
+                let scrollTop = $(window).scrollTop();
+                let scrollHeight = $(document).height();
+                let windowHeight = $(window).height();
+                if (scrollTop > 0 && scrollHeight - (scrollTop + windowHeight) < 40 && !vm.fetching) {
+                    //vm.fetching = true
+                    vm.fetchMore(true)
+                }
             }
-        }
+        },
+        mounted() {
+            window.addEventListener('scroll', this.handleScroll); //监听页面滚动事件
+        },
+        destroyed() {
+            console.log('destroyed')
+            window.removeEventListener('scroll', this.handleScroll); //监听页面滚动事件
+        },
+
     }
 </script>

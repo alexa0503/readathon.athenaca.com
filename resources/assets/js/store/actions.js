@@ -21,10 +21,7 @@ export default {
             await dispatch('getCites');
             await dispatch('getAgeGroups');
             await dispatch('getActivities');
-            dispatch('getBoardList', {
-                id:id,
-                page: 1
-            })
+            dispatch('getBoardList', {page:1, id:id})
         })()
     },
     initProfilePage({
@@ -49,12 +46,10 @@ export default {
         dispatch,
         commit
     }) {
-        dispatch('getSelfInfo', 'withoutme').then(() => {
-            dispatch('getBoardList', {
-                page: 1,
-                type: 'withoutme'
-            })
-        })
+        (async function () {
+            await dispatch('getSelfInfo', 'withoutme')
+            dispatch('getBoardList', {page:1, type: 'withoutme', name:'home'})
+        })()
     },
     initPrizePage({
         dispatch,
@@ -167,38 +162,38 @@ export default {
 
     },
     getBoardList({
-        state,
-        getters,
         commit
     }, payload) {
-        if (!getters.singleLoading) {
-            if (!payload.more) {
-                state.boardList = {}
-            }
-            commit('singleLoading', true)
-            axios.get(apiUrls.BOARD_LIST_URL, {
-                    params: {
-                        id: payload.id,
-                        page: payload.page,
-                        type: payload.type,
-                        city: payload.city,
-                        activity: payload.activity,
-                        agegroup: payload.ageGroup
-                    }
-                })
-                .then(function (response) {
-                    let boardList = response.data
-                    let more = payload.more
-                    commit('setBoardList', {
-                        boardList,
-                        more
-                    })
-                    commit('singleLoading', false)
-                })
-                .catch(function (error) {
-                    commit('singleLoading', false)
-                });
+        let name = payload.name
+        if (payload.page == undefined || payload.page == 1 ) {
+            commit('clearBoardList', name)
         }
+        return new Promise((resolve, reject) => {
+            let url = apiUrls.BOARD_LIST_URL
+            let params =  {
+                id: payload.id,
+                page: payload.page,
+                type: payload.type,
+                city: payload.city,
+                activity: payload.activity,
+                agegroup: payload.ageGroup
+            }
+            axios.get(url, {
+                params:params
+            })
+            .then(function (response) {
+                let boardList = response.data
+                commit('setBoardList', {
+                    boardList,
+                    name
+                })
+               return resolve(boardList)
+            })
+            .catch(function (error) {
+                return reject(error)
+            });
+        })
+        
     },
     getActivities({
         state,
@@ -303,26 +298,22 @@ export default {
         index
     }) {
         let url = apiUrls.VOTE_URL + '/' + user_id
-        return new Promise((resolve, reject) => {
-            if (user_id == undefined) {
-                return reject('no id')
-            }
-            axios.post(url).then(function (response) {
-                if (response.data && response.data.ret == 0) {
-                    let data = response.data.data
-                    if (index == undefined) {
-                        commit('updateSelfVotedNumber', data)
-                    } else if (index != -1) {
-                        data.index = index
-                        commit('updateVotedNumber', data)
-                    } else {
-                        commit('updateUserVotedNumber', data)
-                    }
+        if (user_id == undefined) {
+            return reject('no id')
+        }
+        axios.post(url).then(function (response) {
+            if (response.data && response.data.ret == 0) {
+                let data = response.data.data
+                if (index == undefined) {
+                    commit('updateSelfVotedNumber', data)
+                } else if (index != -1) {
+                    data.index = index
+                    commit('updateVotedNumber', data)
+                } else {
+                    commit('updateUserVotedNumber', data)
                 }
-                resolve();
-            }).catch(function (error) {
-                reject(error.response.data);
-            })
+            }
+        }).catch(function (error) {
         })
     },
     getQuestion({
