@@ -2,11 +2,11 @@
     <div class="container-fluid" v-if="!loading">
         <form class="register-form row" v-if="!succeeded && !hasRegistered" method="POST" @submit.prevent="register">
             <div class="form-content">
-                <div class="form-group row" v-bind:class="hasError && errMsg.name ? 'has-error' : ''">
+                <div class="form-group" v-bind:class="hasError && errMsg.name ? 'has-error' : ''">
                     <input v-model="user.name" type="text" class="form-control form-control-lg" placeholder="姓名">
                     <label class="help-block" for="" v-if="hasError && errMsg.name">{{ errMsg.name[0] }}</label>
                 </div>
-                <div class="form-group row" v-bind:class="hasError && errMsg.birthdate ? 'has-error' : ''">
+                <div class="form-group" v-bind:class="hasError && errMsg.birthdate ? 'has-error' : ''">
                     <input v-model="user.birthdate" type="text" class="form-control form-control-lg" placeholder="出生年月" v-on:click="openPicker"
                         v-on:focus="disableKey">
                     <mt-datetime-picker ref="picker" type="date" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" :startDate="startDate"
@@ -14,24 +14,24 @@
                     </mt-datetime-picker>
                     <label class="help-block" for="" v-if="hasError && errMsg.birthdate">{{ errMsg.birthdate[0] }}</label>
                 </div>
-                <div class="form-group row" v-bind:class="hasError && errMsg.tel ? 'has-error' : ''">
+                <div class="form-group" v-bind:class="hasError && errMsg.tel ? 'has-error' : ''">
                     <input v-model="user.tel" type="tel" class="form-control form-control-lg" placeholder="联系电话">
                     <label class="help-block" for="" v-if="hasError && errMsg.tel">{{ errMsg.tel[0] }}</label>
                 </div>
-                <div class="form-group row" v-bind:class="hasError && errMsg.is_reading ? 'has-error' : ''">
+                <div class="form-group" v-bind:class="hasError && errMsg.is_reading ? 'has-error' : ''">
                     <div class="form-control form-control-lg">知慧学院 Athena Academy现任学员
                         <mt-switch v-model="user.is_reading"></mt-switch>
                     </div>
                     <label class="help-block" for="" v-if="hasError && errMsg.is_reading">{{ errMsg.is_reading[0] }}</label>
                 </div>
-                <div class="form-group row" v-bind:class="hasError && errMsg.city ? 'has-error' : ''">
+                <div class="form-group" v-bind:class="hasError && errMsg.city ? 'has-error' : ''">
                     <select v-model="user.city" class="form-control form-control-lg">
                         <option value="" disabled="disabled">所在城市</option>
                         <option v-for="city in cities" v-bind:key="city.id" v-bind:value="city.id">{{ city.name }}</option>
                     </select>
                     <label class="help-block" for="" v-if="hasError && errMsg.city">{{ errMsg.city[0] }}</label>
                 </div>
-                <div class="form-group row" v-bind:class="hasError && errMsg.privacy ? 'has-error' : ''">
+                <div class="form-group" v-bind:class="hasError && errMsg.privacy ? 'has-error' : ''">
                     <div class="form-control form-control-lg  no-border">
                         <label>
                             <input type="checkbox" class="register-checkbox" v-model="user.privacy" /> 我已经阅读并同意

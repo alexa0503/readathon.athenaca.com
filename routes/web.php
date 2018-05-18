@@ -109,7 +109,7 @@ Route::group(['middleware' => ['role:管理员', 'menu'], 'prefix' => 'admin'], 
     Route::resource('activity', 'Admin\ActivityController');
     Route::resource('activityUser', 'Admin\ActivityUserController');
     Route::resource('prize', 'Admin\PrizeController');
-    Route::resource('page.block', 'BlockController');
+    Route::resource('page.post', 'Admin\PostController');
 });
 //Route::get('/login', 'Auth\LoginController@showLoginForm');
 //Route::post('/login', 'Auth\LoginController@postLogin');
