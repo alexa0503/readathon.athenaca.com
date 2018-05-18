@@ -156,6 +156,9 @@ class UserController extends Controller
                 $validator->errors()->add('name', '用户已激活过了');
             }
         });
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 403);
+        }
         try {
             $user = User::find($id);
             $user->name = $request->input('name');
@@ -165,10 +168,10 @@ class UserController extends Controller
             $user->is_reading = $request->input('is_reading') == true ? 1 : 0;
             $user->is_activated = 0;
             $result = $user->save();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $validator->errors()->add('name', '用户已激活过了');
         }
-
+        
         if ($validator->fails()) {
             return response()->json($validator->errors(), 403);
         }
