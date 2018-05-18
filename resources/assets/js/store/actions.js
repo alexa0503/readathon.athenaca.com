@@ -406,9 +406,10 @@ export default {
     uploadAvatar({commit},serverId){
         let url = apiUrls.GET_AVATAR_FROM_WX + '/' + serverId
         axios.get(url).then(function (response) {
-            let data = response.data
-            console.log(data)
-            commit('updateAvatar', data)
+            if( response && response.data.ret == 0){
+                let avatar = response.data.data.url
+                commit('updateAvatar', avatar)
+            }
         }).catch(function (error) {})
     }
 }

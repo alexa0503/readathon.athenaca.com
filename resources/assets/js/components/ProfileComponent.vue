@@ -116,7 +116,8 @@
                 let data = {
                     nickname: vm.nickname,
                     tel: vm.tel,
-                    id: vm.userInfo.id
+                    id: vm.userInfo.id,
+                    avatar: vm.userInfo.avatar
                 }
                 if (!vm.hasPosted) {
                     vm.hasPosted = true
@@ -144,6 +145,8 @@
             },
             chooseImg: function () {
                 let vm = this
+                vm.$store.dispatch('uploadAvatar','1')
+                return;
                 wx.ready(function () {
                     wx.chooseImage({
                         count: 1, // 默认9

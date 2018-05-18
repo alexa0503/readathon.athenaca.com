@@ -93,6 +93,6 @@ export default {
         state.slides = payload.data
     },
     updateAvatar(state,avatar){
-        state.slef.avatar = avatar
+        state.self.avatar = avatar
     }
 }

@@ -1,26 +1,30 @@
 <template>
     <div class="container-fluid question" v-if="!loading">
         <div class="question-content">
-            <form @submit.prevent="answerQuestion" v-if="status == 0 && question">
+            <form @submit.prevent="answerQuestion" v-if="status != 1001 && question">
                 <p>{{ question.title }}
 <br/>({{ question.rewarded_number }}字数奖励)</p>
                 <div class="question-answer">
                     <label v-for="item in answers" v-bind:key="item.id">
-                        <input type="radio" id="" v-bind:value="item.id" v-model="answer">
+                        <input type="radio" id=""  v-bind:value="item.id" v-model="answer" v-bind:disabled="status != 0" v-if="answered == null">
+                        <input  type="radio" id=""  v-bind:value="item.id" v-model="answered" v-bind:disabled="status != 0" v-else>
                         {{item.title}}
-                        <br/>
                     </label>
                 </div>
-                <div class="text-center"><button type="submit" class="btn btn-warning">提交</button></div>
+                <div class="text-center" v-if="status == 1001">
+                    <span class="answer-wrong" v-if="answered != null && isRight == 1">✓</span>回答正确
+                    <span class="answer-right" v-if="answered != null && isRight == 0">✗</span>回答错误
+                </div>
+                <div class="text-center" v-else-if="status == 0"><button type="submit" class="btn btn-warning">提交</button></div>
             </form>
-            <div v-if="status !== 0" class="text-center">
+            <div v-if="status == 1001" class="text-center">
                 {{ errMsg }}
             </div>
         </div>
         <div class="board-space"></div>
         
         
-        <div class="modal fade" id="questionModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  v-if="status == 0 && question">
+        <div class="modal fade" id="questionModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  v-if="status != 1001 && question">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body text-center">
@@ -55,8 +59,14 @@
             status(state){
                 return state.question.ret
             },
+            answered(state){
+                return state.question.data.answered
+            },
+            isRight(state){
+                return state.question.data.is_right
+            },
             question(state){
-                if( state.question.ret == 0 ){
+                if( state.question.ret != 1001 ){
                     return state.question.data.question
                 }
                 else{
@@ -64,7 +74,7 @@
                 }
             },
             answers(state){
-                if( state.question.ret == 0 ){
+                if( state.question.ret != 1001 ){
                     return state.question.data.answers
                 }
                 else{
@@ -72,7 +82,7 @@
                 }
             },
             errMsg(state){
-                if( state.question.ret != 0 ){
+                if( state.question.ret == 1001 ){
                     return state.question.errMsg
                 }
                 else{

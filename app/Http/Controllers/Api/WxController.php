@@ -5,8 +5,9 @@ use App\Helpers\Wx;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use  Intervention\Image\Facades\Image;
 
-class UserController extends Controller
+class WxController extends Controller
 {
     public function share(Request $request)
     {
@@ -22,12 +23,31 @@ class UserController extends Controller
     //根据media id 获取图片
     public function media(Request $request, $media_id)
     {
-        $user_id = session('wx.user.id');
-        $wx = new Wx();
-        $access_token = $wx->getAccessToken();
-        $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id='.$media_id;
-        $fileContents = file_get_contents($url);
-        $avatar = 'avatars/'.$user_id;
-        Storage::put($avatar, $fileContents);
+        try{
+            $user_id = session('wx.user.id');
+            if( env('APP_ENV') == 'local' ){
+                $avatar = 'avatars/'.$user_id.'.jpg';
+            }
+            else{
+                $wx = new Wx();
+                $access_token = $wx->getAccessToken();
+                $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id='.$media_id;
+                $fileContents = file_get_contents($url);
+                $avatar = 'avatars/'.$user_id.'.jpg';
+                Storage::put($avatar, $fileContents);
+            }
+            //图片处理，居中最大正方形
+            $img = Image::make(public_path('storage/'.$avatar));
+            $img->fit(400, 400);
+            $img->save();
+            return response()->json(['ret'=>0, 'data'=>[
+                'url' =>Storage::url($avatar),
+            ]]);
+        }catch(\Exception $e){
+            return response()->json([
+                'ret'=>1001,
+                 'errMsg'=>$e->getMessage()
+            ]);
+        }
     }
 }

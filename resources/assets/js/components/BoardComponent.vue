@@ -36,7 +36,7 @@
             <div v-for="(item,index) in boardList.data" v-bind:key="item.id" class="board-list " v-bind:class="getClass(item)">
                 <div class="vote">
                     <span>{{ item.voted_number }}</span>
-                    <a href="javascript:;" v-if="item.has_voted == 1">
+                    <a href="javascript:;" v-if="item.has_voted == 1" v-on:click="vote(item.user.id, index)">
                         <img src="/images/icon-voted.png" />
                     </a>
                     <a href="javascript:;" v-on:click="vote(item.user.id, index)" v-else>

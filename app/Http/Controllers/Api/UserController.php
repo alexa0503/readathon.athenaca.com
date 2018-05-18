@@ -201,6 +201,7 @@ class UserController extends Controller
         $user = User::find($id);
         $user->nickname = $request->input('nickname');
         $user->tel = $request->input('tel');
+        $user->avatar = $request->input('avatar');
         $user->save();
         return [];
     }

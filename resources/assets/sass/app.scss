@@ -880,7 +880,9 @@ a:hover {
 .question .question-content .question-answer {
     margin-top: 4rem;
 }
-
+.question .question-content .question-answer label {
+    display: block;
+}
 .question-answer input[type="radio"] {
     margin-right: 0.8rem;
 }

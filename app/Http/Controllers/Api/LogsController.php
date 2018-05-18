@@ -1,15 +1,18 @@
 <?php
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\ActivityLog;
+use App\ActivityUser;
 use App\Helpers\Helper;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ActivityLog as ActivityLogResource;
 use App\Http\Resources\PrizeLog as PrizeLogResource;
 use App\Http\Resources\ReadingLog as ReadingLogResource;
 use App\PrizeLog;
 use App\ReadingLog;
-use App\ActivityUser;
+use App\VoteLog;
 use DB;
+use Illuminate\Http\Request;
 
 class LogsController extends Controller
 {
@@ -26,8 +29,8 @@ class LogsController extends Controller
         if (null == $user_id) {
             $user_id = session('wx.user.id');
         }
-        $logs = ReadingLog::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(4);
-        return ReadingLogResource::collection($logs);
+        $logs = ActivityLog::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(4);
+        return ActivityLogResource::collection($logs);
     }
     public function prize(Request $request, $user_id = null)
     {
@@ -91,5 +94,84 @@ class LogsController extends Controller
             $validator->errors()->add('book_name', $e->getMessage());
         }
         return [];
+    }
+
+    public function vote(Request $request, $activity_user_id)
+    {
+        $voter_id = session('wx.user.id');
+        $activity = Helper::getCurrentActivity();
+        $today = date('Y-m-d');
+        $voted_add_words_number = env('VOTED_ADD_WORDS_NUMBER', 10);
+        $voted_limit_add_times = env('VOTED_LIMIT_ADD_TIMES', 10);
+
+        //判断当前是否有活动
+        if (null == $activity) {
+            return response()->json(['ret' => 1101, 'errMsg' => '当前没有活动'], 403);
+        }
+        //判断用户是否参加活动
+        $activity_user = ActivityUser::where('user_id', $activity_user_id)->where('activity_id', $activity->id)->first();
+        if (null == $activity_user) {
+            return response()->json(['ret' => 1102, 'errMsg' => '该用户还没参加活动哦'], 403);
+        }
+
+        if ($activity_user->activity_id != $activity->id) {
+            return response()->json(['ret' => 1103, 'errMsg' => '活动已结束'], 403);
+        }
+        //被点赞用户
+        $user_id = $activity_user->user_id;
+        DB::beginTransaction();
+        try {
+            $log = VoteLog::where('voter_id', $voter_id)->where('user_id', $user_id)->where('activity_id', $activity->id)->where('vote_date', $today)->first();
+            $count = VoteLog::where('user_id', $user_id)->where('activity_id', $activity->id)->where('vote_date', $today)->count();
+            //取消点赞
+            if (null != $log) {
+                $log->delete();
+                $has_voted = 0;
+                if ($count <= $voted_limit_add_times) {
+                    $activity_user->words_number -= $voted_add_words_number;
+                    /*
+                    $activity_log = new ActivityLog;
+                    $activity_log->activity_id = $activity->id;
+                    $activity_log->reason = '用户取消点赞';
+                    $activity_log->words_number = -1*$voted_add_words_number;
+                    $activity_log->user_id = $user_id;
+                    $activity_log->save();
+                    */
+                }
+                $activity_user->voted_number -= 1;
+                $activity_user->save();
+            } else {
+                $log = new VoteLog;
+                $log->user_id = $user_id;
+                $log->activity_id = $activity->id;
+                $log->voter_id = $voter_id;
+                $log->vote_date = $today;
+                $log->save();
+               
+                if ($count < $voted_limit_add_times) {
+                    $activity_user->words_number += $voted_add_words_number;
+                    /*
+                    $activity_log = new ActivityLog;
+                    $activity_log->activity_id = $activity->id;
+                    $activity_log->reason = '用户点赞赠送字数';
+                    $activity_log->words_number = $voted_add_words_number;
+                    $activity_log->user_id = $user_id;
+                    $activity_log->save();
+                    */
+                }
+                $activity_user->voted_number += 1;
+                $activity_user->save();
+                $has_voted = 1;
+            }
+            DB::commit();
+            return response()->json(['ret' => 0, 'data' => [
+                'words_number' => $activity_user->words_number,
+                'voted_number' => $activity_user->voted_number,
+                'has_voted' => $has_voted,
+            ]]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['ret' => 1002, 'errMsg' => $e->getMessage()], 403);
+        }
     }
 }
