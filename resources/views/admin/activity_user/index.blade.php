@@ -30,6 +30,13 @@
                 </select>
             </div>
             <div class="form-group">
+                <select name="receive_status" class="form-control">
+                    <option value="">选择核销状态/所有</option>
+                    <option value="0" {!! '0' == Request::input('receive_status') ? 'selected="selected"' : '' !!}>未核销</option>
+                    <option value="1" {!! '1' == Request::input('receive_status') ? 'selected="selected"' : '' !!}>已核销</option>
+                    </select>
+            </div>
+            <div class="form-group">
                 <button type="submit" class="btn btn-primary">查询</button>
             </div>
         </form>
@@ -52,13 +59,13 @@
                     @foreach($items as $item)
                     <tr>
                         <td>{{ $item->rank }}</td>
-                        <td><img src="{{ asset($item->user->avatar) }}" class="img-circle" style="max-width:100px;" /></td>
+                        <td><a title="点击查看用户信息" href="{{ route('user.index',['id'=>$item->user_id]) }}" target="_blank"><img src="{{ asset($item->user->avatar) }}" class="img-circle" style="max-width:100px;" /></a></td>
                         <td>{{ $item->user->nickname }} / {{ $item->user->name }}</td>
                         <td>{{ $item->words_number }} / {{ $item->reading_number }} / {{ $item->voted_number }}</td>
                         <td>{{ $item->receive_status == 1 ? '已核销' : '未核销' }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>
-                            <a href="{{route('activityUser.edit',['id'=>$item->id])}}" class="btn btn-default btn-xs">编辑</a>
+                            <a href="{{route('activityUser.edit',['id'=>$item->user_id, 'activity'=>Request::input('activity')])}}" class="btn btn-default btn-xs">编辑</a>
                         </td>
                     </tr>
                     @endforeach

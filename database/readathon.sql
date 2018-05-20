@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2018-05-13 23:31:58
+-- Generation Time: 2018-05-21 00:33:25
 -- 服务器版本： 5.7.22
 -- PHP Version: 7.2.5-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -47,7 +47,8 @@ CREATE TABLE `activities` (
 
 INSERT INTO `activities` (`id`, `name`, `body`, `start_date`, `end_date`, `receive_start_date`, `receive_end_date`, `image`, `created_at`, `updated_at`) VALUES
 (1, '21天阅读习惯养成赛 赛季1', '', '2018-02-01', '2018-04-30', '2018-05-03', '2018-05-20', '/images/kv-01.png', NULL, NULL),
-(2, '21天阅读习惯养成赛 赛季2', '', '2018-04-01', '2018-05-30', '2018-06-10', '2018-06-20', '/images/kv-01.png', NULL, NULL);
+(2, '21天阅读习惯养成赛 第二赛季', '', '2018-04-01', '2018-05-30', '2018-06-10', '2018-06-20', 'http://readathon.dev.com/photos/1/kv-01.png', NULL, '2018-05-14 15:37:44'),
+(3, '阅读习惯养成 第三季', '', '2017-07-01', '2017-08-01', '2018-08-15', '2018-09-15', 'http://readathon.dev.com/photos/1/kv-01.png', '2018-05-14 15:31:57', '2018-05-14 15:31:57');
 
 -- --------------------------------------------------------
 
@@ -127,7 +128,18 @@ INSERT INTO `activity_logs` (`id`, `activity_id`, `user_id`, `words_number`, `re
 (55, 2, 2, 10, '用户点赞赠送字数', '2018-05-10 07:08:03', '2018-05-10 07:08:03'),
 (56, 2, 1, 10, '用户点赞赠送字数', '2018-05-10 07:09:01', '2018-05-10 07:09:01'),
 (57, 2, 3, 10, '用户点赞赠送字数', '2018-05-10 07:16:38', '2018-05-10 07:16:38'),
-(58, 2, 2, 10, '用户点赞赠送字数', '2018-05-11 21:15:12', '2018-05-11 21:15:12');
+(58, 2, 2, 10, '用户点赞赠送字数', '2018-05-11 21:15:12', '2018-05-11 21:15:12'),
+(59, 2, 1, 500, '被邀请用户激活奖励字数', '2018-05-14 05:02:57', '2018-05-14 05:02:57'),
+(60, 2, 9, 10, '用户点赞赠送字数', '2018-05-15 15:40:34', '2018-05-15 15:40:34'),
+(61, 2, 11, 10, '用户点赞赠送字数', '2018-05-15 15:41:26', '2018-05-15 15:41:26'),
+(62, 2, 15, 10, '用户点赞赠送字数', '2018-05-18 03:45:03', '2018-05-18 03:45:03'),
+(63, 2, 1, 10, '用户点赞赠送字数', '2018-05-18 03:45:07', '2018-05-18 03:45:07'),
+(64, 2, 11, 10, '用户点赞赠送字数', '2018-05-18 04:20:40', '2018-05-18 04:20:40'),
+(65, 2, 11, -10, '用户取消点赞', '2018-05-18 04:21:35', '2018-05-18 04:21:35'),
+(66, 2, 11, 10, '用户点赞赠送字数', '2018-05-18 04:21:42', '2018-05-18 04:21:42'),
+(67, 2, 11, -10, '用户取消点赞', '2018-05-18 04:21:43', '2018-05-18 04:21:43'),
+(68, 2, 1, -10, '用户取消点赞', '2018-05-18 04:22:00', '2018-05-18 04:22:00'),
+(69, 2, 1, 10, '用户点赞赠送字数', '2018-05-18 04:22:44', '2018-05-18 04:22:44');
 
 -- --------------------------------------------------------
 
@@ -153,26 +165,46 @@ CREATE TABLE `activity_users` (
 --
 
 INSERT INTO `activity_users` (`activity_id`, `user_id`, `city_id`, `age_group_id`, `reading_number`, `words_number`, `voted_number`, `receive_status`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 2, 5, 3569, 3, 0, NULL, '2018-05-04 10:08:23'),
-(1, 2, 1, 2, 2, 2323, 1, 0, NULL, '2018-05-04 09:54:31'),
-(1, 3, 1, 2, 3003, 2323, 1, 0, NULL, '2018-05-04 09:54:27'),
-(1, 4, 1, 3, 3004, 2323, 1, 0, NULL, '2018-05-04 10:02:32'),
-(1, 5, 1, 2, 3001, 23, 1, 0, NULL, '2018-05-04 09:54:30'),
-(1, 6, 1, 2, 3005, 2323, 1, 0, NULL, '2018-05-04 10:02:31'),
-(1, 7, 1, 3, 3200, 232323, 0, 0, NULL, NULL),
-(1, 8, 1, 2, 3007, 2323, 1, 0, NULL, '2018-05-04 09:54:24'),
-(1, 9, 1, 1, 3008, 2323, 1, 0, NULL, '2018-05-04 10:02:24'),
-(1, 10, 1, 2, 3009, 232323, 1, 0, NULL, '2018-05-04 10:02:23'),
-(1, 20, 1, 1, 0, 0, 0, 0, '2018-05-05 08:27:40', '2018-05-05 08:27:40'),
-(1, 22, 1, 1, 0, 400, 0, 0, '2018-05-05 08:38:35', '2018-05-06 16:47:34'),
-(1, 23, 1, 1, 0, 0, 0, 0, '2018-05-07 01:45:09', '2018-05-07 01:45:09'),
-(1, 25, 1, 1, 0, 0, 0, 0, '2018-05-07 01:45:22', '2018-05-07 01:45:22'),
-(2, 1, 1, 3, 2, 1190, 9, 0, '2018-05-07 16:28:49', '2018-05-13 15:01:43'),
-(2, 2, 1, 1, 1, 823, 10, 0, '2018-05-07 16:32:34', '2018-05-11 21:15:12'),
-(2, 3, 1, 1, 1, 842, 25, 0, '2018-05-07 16:33:07', '2018-05-10 07:16:38'),
-(2, 4, 1, 1, 1, 390, 7, 0, '2018-05-07 16:33:47', '2018-05-10 05:34:56'),
-(2, 6, 1, 1, 1, 70, 5, 0, '2018-05-07 16:36:48', '2018-05-10 05:35:03'),
-(2, 25, 1, 1, 3, 682, 8, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07');
+(1, 1, 1, 2, 5013, 858, 79, 0, NULL, '2018-05-04 10:08:23'),
+(1, 2, 1, 2, 5600, 364, 40, 0, NULL, '2018-05-04 09:54:31'),
+(1, 3, 1, 2, 2963, 9247, 63, 0, NULL, '2018-05-04 09:54:27'),
+(1, 4, 1, 3, 8014, 5144, 95, 0, NULL, '2018-05-04 10:02:32'),
+(1, 5, 1, 2, 1179, 7979, 85, 0, NULL, '2018-05-04 09:54:30'),
+(1, 6, 1, 2, 1855, 4462, 38, 0, NULL, '2018-05-04 10:02:31'),
+(1, 7, 1, 3, 5737, 8371, 39, 0, NULL, NULL),
+(1, 8, 1, 2, 3121, 8472, 78, 0, NULL, '2018-05-04 09:54:24'),
+(1, 9, 1, 1, 8393, 7245, 73, 0, NULL, '2018-05-04 10:02:24'),
+(1, 10, 1, 2, 2602, 810, 31, 0, NULL, '2018-05-04 10:02:23'),
+(1, 20, 1, 1, 7830, 2316, 35, 0, '2018-05-05 08:27:40', '2018-05-05 08:27:40'),
+(1, 22, 1, 1, 1343, 9147, 83, 0, '2018-05-05 08:38:35', '2018-05-06 16:47:34'),
+(1, 23, 1, 1, 3226, 8790, 10, 0, '2018-05-07 01:45:09', '2018-05-07 01:45:09'),
+(1, 25, 1, 1, 2103, 6507, 3, 0, '2018-05-07 01:45:22', '2018-05-07 01:45:22'),
+(2, 1, 1, 2, 5013, 858, 79, 0, NULL, '2018-05-04 10:08:23'),
+(2, 2, 1, 1, 7871, 1301, 3, 0, '2018-05-07 16:32:34', '2018-05-11 21:15:12'),
+(2, 3, 1, 1, 6845, 8011, 69, 0, '2018-05-07 16:33:07', '2018-05-10 07:16:38'),
+(2, 4, 1, 1, 614, 6153, 37, 0, '2018-05-07 16:33:47', '2018-05-10 05:34:56'),
+(2, 5, 1, 1, 2535, 6731, 75, 0, '2018-05-07 16:36:48', '2018-05-10 05:35:03'),
+(2, 6, 1, 1, 834, 5198, 65, 0, '2018-05-07 16:36:48', '2018-05-10 05:35:03'),
+(2, 7, 1, 2, 6564, 5795, 0, 0, NULL, '2018-05-04 09:54:31'),
+(2, 8, 1, 1, 320, 3383, 7, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 9, 1, 1, 1905, 9550, 37, 0, '2018-05-07 15:57:01', '2018-05-18 04:24:58'),
+(2, 10, 1, 1, 8566, 7501, 51, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 11, 1, 1, 7115, 8935, 54, 0, '2018-05-07 15:57:01', '2018-05-18 04:24:59'),
+(2, 12, 1, 1, 9876, 2071, 5, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 13, 1, 1, 8038, 3612, 70, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 14, 1, 1, 559, 1845, 33, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 15, 1, 1, 8682, 8400, 59, 0, '2018-05-07 15:57:01', '2018-05-18 03:45:03'),
+(2, 16, 1, 1, 1733, 6416, 92, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 17, 1, 1, 2621, 6911, 84, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 18, 1, 1, 7905, 5305, 45, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 19, 1, 1, 1661, 5793, 72, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 20, 1, 1, 4591, 3049, 25, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 21, 1, 1, 7970, 7866, 10, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 22, 1, 1, 6076, 184, 75, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 23, 1, 1, 6472, 7320, 44, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 24, 1, 1, 4131, 6047, 95, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 25, 1, 1, 1239, 8278, 42, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07'),
+(2, 26, 1, 1, 3804, 3248, 26, 0, '2018-05-07 15:57:01', '2018-05-10 05:27:07');
 
 -- --------------------------------------------------------
 
@@ -243,7 +275,22 @@ CREATE TABLE `cities` (
 --
 
 INSERT INTO `cities` (`id`, `name`, `sort_id`, `created_at`, `updated_at`) VALUES
-(1, '上海', 1, '2018-04-22 14:08:19', '2018-04-22 14:08:19');
+(1, '上海', 1, '2018-04-22 14:08:19', '2018-04-22 14:08:19'),
+(2, '北京', 2, '2018-05-14 04:02:41', '2018-05-14 04:02:41'),
+(3, '宁波', 3, '2018-05-14 04:02:48', '2018-05-14 04:02:48');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `favourites`
+--
+
+CREATE TABLE `favourites` (
+  `item_id` int(10) UNSIGNED NOT NULL,
+  `uid` mediumint(8) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -396,8 +443,7 @@ CREATE TABLE `posts` (
   `block_type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `body` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `page_id` int(10) UNSIGNED DEFAULT NULL,
-  `pos_x` int(10) UNSIGNED NOT NULL,
-  `pos_y` int(10) UNSIGNED NOT NULL,
+  `sort_id` int(10) UNSIGNED NOT NULL DEFAULT '999',
   `image` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `link` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -408,17 +454,18 @@ CREATE TABLE `posts` (
 -- 转存表中的数据 `posts`
 --
 
-INSERT INTO `posts` (`id`, `title`, `block_type`, `body`, `page_id`, `pos_x`, `pos_y`, `image`, `link`, `created_at`, `updated_at`) VALUES
-(1, '幻灯片1', 'slides', '', NULL, 0, 0, '/images/kv-01.png', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
-(2, '幻灯片2', 'slides', '', 1, 0, 0, '/images/kv-01.png', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
-(3, '幻灯片3', 'slides', '', 1, 0, 0, '/images/kv-01.png', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
-(4, 'The Square Enix E3 Showcase 2018', 'article', 'オプションアイテムのラインナップに新たなアイテムが追加されます！\r\n<img src=\"https://pbs.twimg.com/media/DcpzFQwUQAEHGFm.jpg\" />\r\nSave the Date!\r\nThe Square Enix E3 Showcase 2018 – Monday June 11 at 10 AM PDT/1PM EDT/6pm BST\r\nJoin us for a special video presentation to discover the exciting future of Square Enix!', 2, 0, 0, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
-(5, 'FREE download ', 'article', 'New eBook: Understanding big data technologies & architectures for successful data-intensive apps | FREE download ↓\r\n<img src=\"https://pbs.twimg.com/ad_img/988492426263252992/DseiJiY9?format=jpg&name=orig\" />', 2, 0, 0, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
-(6, 'Life is Strange', 'article', 'The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates \r\n<img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />', 2, 0, 0, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
-(7, '幻灯片1', 'slides', '', 2, 0, 0, '/images/kv-01.png', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
-(8, '幻灯片1', 'slides', '', 2, 0, 0, '/images/kv-01.png', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
-(9, '阅读马拉松隐私政策', 'article', 'The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates  <img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />', 3, 0, 0, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
-(10, '关于阅读马拉松', 'article', 'The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates  <img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />', 4, 0, 0, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00');
+INSERT INTO `posts` (`id`, `title`, `block_type`, `body`, `page_id`, `sort_id`, `image`, `link`, `created_at`, `updated_at`) VALUES
+(1, '幻灯片', 'slides', '', NULL, 999, '/images/kv-01.png', '', '2018-05-08 16:00:00', '2018-05-20 14:43:26'),
+(2, '幻灯片2', 'slides', '', 1, 999, '/images/kv-01.png', 'http://readathon.dev.com/admin/page/1/post/2/edit', '2018-05-08 16:00:00', '2018-05-20 16:17:18'),
+(3, '幻灯片3', 'slides', '', 1, 999, '/images/kv-01.png', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
+(4, 'The Square Enix E3 Showcase 2018', 'article', 'オプションアイテムのラインナップに新たなアイテムが追加されます！\r\n<img src=\"https://pbs.twimg.com/media/DcpzFQwUQAEHGFm.jpg\" />\r\nSave the Date!\r\nThe Square Enix E3 Showcase 2018 – Monday June 11 at 10 AM PDT/1PM EDT/6pm BST\r\nJoin us for a special video presentation to discover the exciting future of Square Enix!', 2, 999, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
+(5, 'FREE download ', 'article', 'New eBook: Understanding big data technologies & architectures for successful data-intensive apps | FREE download ↓\r\n<img src=\"https://pbs.twimg.com/ad_img/988492426263252992/DseiJiY9?format=jpg&name=orig\" />', 2, 999, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
+(6, 'Life is Strange', 'article', 'The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates \r\n<img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />', 2, 999, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
+(7, '幻灯片1', 'slides', '', 2, 999, '/images/kv-01.png', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
+(8, '幻灯片1', 'slides', '', 2, 999, '/images/kv-01.png', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
+(9, '阅读马拉松隐私政策', 'article', 'The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates  <img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates  <img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates  <img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates  <img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates  <img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates  <img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />', 3, 999, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
+(10, '关于阅读马拉松', 'article', 'The final commissioned artwork by @Afterlaughs is here! Find out more about our collaboration via our blog: https://sqex.link/FarewellPirates  <img src= \"https://pbs.twimg.com/media/DcruOVTX0AAtaVA.jpg\" />', 4, 999, '', '', '2018-05-08 16:00:00', '2018-05-08 16:00:00'),
+(11, '阅读马拉松', 'slides', '', 2, 1, '/photos/1/kv-01.png', '', '2018-05-20 16:25:02', '2018-05-20 16:25:02');
 
 -- --------------------------------------------------------
 
@@ -527,6 +574,7 @@ INSERT INTO `question_answers` (`id`, `title`, `question_id`, `is_right`, `sort_
 
 CREATE TABLE `question_logs` (
   `question_id` int(10) UNSIGNED NOT NULL,
+  `answered_id` int(10) UNSIGNED DEFAULT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `is_right` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -537,8 +585,8 @@ CREATE TABLE `question_logs` (
 -- 转存表中的数据 `question_logs`
 --
 
-INSERT INTO `question_logs` (`question_id`, `user_id`, `is_right`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2018-05-07 19:25:30', '2018-05-07 19:25:30');
+INSERT INTO `question_logs` (`question_id`, `answered_id`, `user_id`, `is_right`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 0, '2018-05-18 07:51:48', '2018-05-18 07:51:48');
 
 -- --------------------------------------------------------
 
@@ -597,7 +645,8 @@ INSERT INTO `reading_logs` (`id`, `book_name`, `activity_id`, `user_id`, `words_
 (37, '动态路由匹配', 2, 3, 592, '2018-05-07 16:33:07', '2018-05-07 16:33:07'),
 (38, 'laravel', 2, 4, 320, '2018-05-07 16:33:47', '2018-05-07 16:33:47'),
 (39, 'Think PHP', 2, 6, 20, '2018-05-07 16:36:48', '2018-05-07 16:36:48'),
-(40, 'offcloud', 2, 1, 200, '2018-05-13 15:01:43', '2018-05-13 15:01:43');
+(40, 'offcloud', 2, 1, 200, '2018-05-13 15:01:43', '2018-05-13 15:01:43'),
+(42, 'goos', 2, 1, 3, '2018-05-17 07:47:03', '2018-05-17 07:47:03');
 
 -- --------------------------------------------------------
 
@@ -690,8 +739,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `birthdate`, `openid`, `nickname`, `avatar`, `city_id`, `tel`, `is_reading`, `sex`, `ge`, `invite_id`, `is_activated`, `created_at`, `updated_at`) VALUES
-(1, '小A', '2010-01-01', 'oJ_0JwkVa8mHBSQ1CDeCTkVqncwE', '小A', 'http://wx.qlogo.cn/mmopen/vi_32/Va2CgZbPaKHeZLqk5VOyAscvSQ5CGWicNTQ5icwicb53v1Lk5LLfibk1682pGt30VJTwl6jsuVwDqBdtGdR1arc8xw/0', 1, '15618892632', 1, '1', NULL, NULL, 1, '2018-04-22 15:20:22', '2018-05-03 20:04:42'),
-(2, 'AA', NULL, 'oHfDAwRL_X6nVuFYTlxi2LDz-Nm0', 'AA', 'http://wx.qlogo.cn/mmopen/vi_32/libqCibQpwWXxz29xpicgs3Oibm1qyiaEPJrUpe1tFRnbyFBD3c4VJDibia0SnNpPY7nVH8OrPBs8ltib3cq0xibsicxln8w/0', 1, '', 0, '0', NULL, NULL, 1, NULL, NULL),
+(1, '小A', '2010-01-01', 'oJ_0JwkVa8mHBSQ1CDeCTkVqncwE', '小A', 'http://readathon.dev.com/storage/avatars/1.jpg', 1, '15618892632', 1, '1', '2.6', NULL, 1, '2018-04-22 15:20:22', '2018-05-18 03:33:38'),
+(2, NULL, NULL, 'oHfDAwRL_X6nVuFYTlxi2LDz-Nm0', 'AA', 'http://wx.qlogo.cn/mmopen/vi_32/libqCibQpwWXxz29xpicgs3Oibm1qyiaEPJrUpe1tFRnbyFBD3c4VJDibia0SnNpPY7nVH8OrPBs8ltib3cq0xibsicxln8w/0', 1, '', 0, '0', NULL, NULL, 0, NULL, NULL),
 (3, '大A', NULL, 'oHfDAwRI9lv_vsW_xeZSBa_PKM7A', '大A', 'http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKG0SkhqIsVeXk457v96DZSHpmIzRYtQLU7rrXEb4FfiauOqALvHeFpUgEYl4vLIAic9c31vbnQA5nA/0', 1, '', 0, '1', NULL, NULL, 1, NULL, NULL),
 (4, 'costa', NULL, 'oHfDAwdQoFvNFt4KISTds-sLTeJ8', 'costa', 'http://wx.qlogo.cn/mmopen/EjB59MCR1Bz2CCrIBqhkX7ibUnibz0W72QW6zO5zmFwIv6VA3kkqe2ibYXpzRDGI0S5pSngY94CbiauHAE8y62jutQv7o2wsnFf6/0', 1, '', 0, '1', NULL, NULL, 1, NULL, NULL),
 (5, NULL, '2011-01-01', 'oHfDAwRT2E95o-w2XfSFgIqa1fzU', '喜喜Xu', 'http://wx.qlogo.cn/mmopen/4TmuRQAgN552jT95sXI548pJiclHXYGtMdHEvg457DJhQzeGmyMQiaUGicyfIYhnSmzOd4fU0RePiajCcQG8SIpw7XFK22FyyZ03/0', NULL, NULL, 0, '2', NULL, NULL, 0, NULL, '2018-05-13 06:29:48'),
@@ -762,8 +811,8 @@ INSERT INTO `users` (`id`, `name`, `birthdate`, `openid`, `nickname`, `avatar`, 
 (70, '夏夜馨空', NULL, 'oHfDAwaqZ1QZDH-IZEKLy4jk0LWc', '夏夜馨空', 'http://wx.qlogo.cn/mmopen/EjB59MCR1Bz2CCrIBqhkX9X9kuxjVxzTcPNZ6hLMMaJNI3kwO9MlZCeHlxuIhP2LMLicpgZ1deDWiaALhqaDrIUPq2a1tm2cMm/0', 1, '', 0, '2', NULL, NULL, 1, NULL, NULL),
 (71, '中华田园猫王 💸', NULL, 'oHfDAwRg1q-4Wc6BmueY-rrhNGXM', '中华田园猫王 💸', 'http://wx.qlogo.cn/mmopen/g9RQicMD01M1VESVz7UU4ulYar24Kd01sBbmfUagIReslibYBotZ6hz8Sp9e0ZzoJgmdOb8jclibBhMakicp9Lm4g3pyteNRDicpr/0', 1, '', 0, '1', NULL, NULL, 1, NULL, NULL),
 (72, '^_^', NULL, 'oHfDAwTTwYL-PN6ZswJjoDfQ0DUM', '^_^', 'http://wx.qlogo.cn/mmopen/cKlFibcBtx6khpEUtXAyIfVLFic9yfhFlo5DjlHEGlVdxRcgVsRh0EGoicDl5IJRvZn4qGoDGPiaiaD7h2BaZsj2RnlLgM5t8V9Qr/0', 1, '', 0, '1', NULL, NULL, 1, NULL, NULL),
-(73, '李宇', NULL, 'oHfDAwUFRlmhHBpmLcnQkNGsYHBY', '李宇', 'http://wx.qlogo.cn/mmopen/EjB59MCR1Bz1DCPB1iaMIOnia3L7SwZibwv4Qt4kfBxP4fs9PX4I47ltLuHia8QM3xWMrnLL4tpIXzWMiaqibW59PibAGERYEkWYKeF/0', 1, '', 0, '1', NULL, NULL, 1, NULL, NULL),
-(74, NULL, '1993-05-13', 'opyuV0xteKR1g4mRGrqyi7Iw9rRs', '小A23', 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCkVv1aibMd2ZW0YISZMbUh7XeK65WCvzj9TpZ7DOTFtvsicGw3RSHJWwuaavsx8GCpAYJWTQXCaNQ/132', 1, '18116267513', 1, '1', NULL, NULL, 0, '2018-05-07 10:12:30', '2018-05-07 18:33:39');
+(73, '李宇', '2007-11-11', 'oHfDAwUFRlmhHBpmLcnQkNGsYHBY', '李宇', 'http://wx.qlogo.cn/mmopen/EjB59MCR1Bz1DCPB1iaMIOnia3L7SwZibwv4Qt4kfBxP4fs9PX4I47ltLuHia8QM3xWMrnLL4tpIXzWMiaqibW59PibAGERYEkWYKeF/0', 1, '', 0, '1', NULL, NULL, 1, NULL, NULL),
+(74, '许鸣', '2013-04-03', 'opyuV0xteKR1g4mRGrqyi7Iw9rRs', '小A23', 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCkVv1aibMd2ZW0YISZMbUh7XeK65WCvzj9TpZ7DOTFtvsicGw3RSHJWwuaavsx8GCpAYJWTQXCaNQ/132', 1, '13310030509', 0, '0', '2.5', 1, 1, '2018-05-07 10:12:30', '2018-05-14 05:19:11');
 
 -- --------------------------------------------------------
 
@@ -803,12 +852,14 @@ CREATE TABLE `vote_logs` (
 --
 
 INSERT INTO `vote_logs` (`user_id`, `voter_id`, `activity_id`, `vote_date`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, '2018-05-09', '2018-05-10 07:08:01', '2018-05-10 07:08:01'),
-(1, 1, 2, '2018-05-10', '2018-05-10 07:09:01', '2018-05-10 07:09:01'),
+(1, 1, 2, '2018-05-18', '2018-05-18 04:24:58', '2018-05-18 04:24:58'),
 (2, 1, 2, '2018-05-09', '2018-05-10 07:08:03', '2018-05-10 07:08:03'),
 (2, 1, 2, '2018-05-12', '2018-05-11 21:15:12', '2018-05-11 21:15:12'),
 (3, 1, 2, '2018-05-09', '2018-05-10 07:07:59', '2018-05-10 07:07:59'),
-(3, 1, 2, '2018-05-10', '2018-05-10 07:16:38', '2018-05-10 07:16:38');
+(3, 1, 2, '2018-05-10', '2018-05-10 07:16:38', '2018-05-10 07:16:38'),
+(9, 1, 2, '2018-05-18', '2018-05-18 04:24:58', '2018-05-18 04:24:58'),
+(11, 1, 2, '2018-05-18', '2018-05-18 04:24:59', '2018-05-18 04:24:59'),
+(15, 1, 2, '2018-05-18', '2018-05-18 03:45:03', '2018-05-18 03:45:03');
 
 --
 -- Indexes for dumped tables
@@ -862,6 +913,14 @@ ALTER TABLE `cities`
   ADD KEY `sort_id` (`sort_id`);
 
 --
+-- Indexes for table `favourites`
+--
+ALTER TABLE `favourites`
+  ADD PRIMARY KEY (`item_id`,`uid`),
+  ADD KEY `item_id` (`item_id`),
+  ADD KEY `uid` (`uid`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -907,7 +966,8 @@ ALTER TABLE `permissions`
 ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `posts_page_id_foreign` (`page_id`),
-  ADD KEY `block_type` (`block_type`);
+  ADD KEY `block_type` (`block_type`),
+  ADD KEY `sort_id` (`sort_id`);
 
 --
 -- Indexes for table `prizes`
@@ -944,7 +1004,8 @@ ALTER TABLE `question_answers`
 --
 ALTER TABLE `question_logs`
   ADD PRIMARY KEY (`question_id`,`user_id`),
-  ADD KEY `question_logs_user_id_foreign` (`user_id`);
+  ADD KEY `question_logs_user_id_foreign` (`user_id`),
+  ADD KEY `question_logs_answered_id_foreign` (`answered_id`);
 
 --
 -- Indexes for table `reading_logs`
@@ -980,7 +1041,10 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_openid_unique` (`openid`),
   ADD KEY `users_city_id_foreign` (`city_id`),
-  ADD KEY `users_invite_id_foreign` (`invite_id`);
+  ADD KEY `users_invite_id_foreign` (`invite_id`),
+  ADD KEY `is_reading` (`is_reading`),
+  ADD KEY `sex` (`sex`),
+  ADD KEY `is_activated` (`is_activated`);
 
 --
 -- Indexes for table `user_administrators`
@@ -1005,13 +1069,13 @@ ALTER TABLE `vote_logs`
 -- 使用表AUTO_INCREMENT `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- 使用表AUTO_INCREMENT `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- 使用表AUTO_INCREMENT `administrators`
@@ -1029,7 +1093,7 @@ ALTER TABLE `age_groups`
 -- 使用表AUTO_INCREMENT `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- 使用表AUTO_INCREMENT `migrations`
@@ -1053,7 +1117,7 @@ ALTER TABLE `permissions`
 -- 使用表AUTO_INCREMENT `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- 使用表AUTO_INCREMENT `prizes`
@@ -1083,7 +1147,7 @@ ALTER TABLE `question_answers`
 -- 使用表AUTO_INCREMENT `reading_logs`
 --
 ALTER TABLE `reading_logs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- 使用表AUTO_INCREMENT `roles`
@@ -1165,6 +1229,7 @@ ALTER TABLE `question_answers`
 -- 限制表 `question_logs`
 --
 ALTER TABLE `question_logs`
+  ADD CONSTRAINT `question_logs_answered_id_foreign` FOREIGN KEY (`answered_id`) REFERENCES `question_answers` (`id`),
   ADD CONSTRAINT `question_logs_question_id_foreign` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`),
   ADD CONSTRAINT `question_logs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 

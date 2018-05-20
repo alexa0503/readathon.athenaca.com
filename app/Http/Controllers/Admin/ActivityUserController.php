@@ -8,6 +8,8 @@ use Validator;
 use App\User;
 use App\Activity;
 use App\ActivityUser;
+use App\City;
+use App\AgeGroup;
 
 class ActivityUserController extends Controller
 {
@@ -39,6 +41,10 @@ class ActivityUserController extends Controller
             $orm->where('age_id', $request->input('age_id'));
         }
 
+        if( null != $request->input('receive_status') ){
+            $orm->where('receive_status', $request->input('receive_status'));
+        }
+
         if( null != $request->input('keywords') ){
             $orm->whereHas('user', function ($query) use($request) {
                 $query->where('name', 'LIKE', '%'.$request->keywords.'%');
@@ -57,9 +63,9 @@ class ActivityUserController extends Controller
             $item->rank = $count + 1;
             return $item;
         });
-        $cities = \App\City::all();
-        $ages = \App\AgeGroup::all();
-        $activities = \App\Activity::all();
+        $cities = City::all();
+        $ages = AgeGroup::all();
+        $activities = Activity::all();
         return view('admin.activity_user.index', [
             'items' => $items,
             'activity' => $activity,
@@ -77,8 +83,6 @@ class ActivityUserController extends Controller
      */
     public function create()
     {
-        return view('admin.activity_user.create', [
-        ]);
     }
 
     /**
@@ -89,36 +93,6 @@ class ActivityUserController extends Controller
      */
     public function store(Request $request)
     {
-        $messages = [
-            'name.*' => '请输入活动名称~',
-            'start_date.*' => '请选择活动开始日期~',
-            'end_date.*' => '请选择活动结束如期~',
-            'receive_start_date.*' => '请选择活动礼品开始领取日期~',
-            'receive_end_date.*' => '请选择活动礼品结束领取日期~',
-            'image.*' => '请上传图片~',
-        ];
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-            'receive_start_date' => 'required|date',
-            'receive_end_date' => 'required|date',
-            'image' => 'required',
-        ], $messages);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
-        }
-        $activity_user = new \App\ActivityUser;
-        $activity_user->name = $request->input('name');
-        $activity_user->start_date = $request->input('start_date');
-        $activity_user->end_date = $request->input('end_date');
-        $activity_user->body = $request->input('body') ? : '';
-        $activity_user->receive_start_date = $request->input('receive_start_date');
-        $activity_user->receive_end_date = $request->input('receive_end_date');
-        $activity_user->image = $request->input('image') ? : '';
-        $activity_user->save();
-        return response()->json(['ret' => 0, 'url' => route('activity_user.index')]);
     }
 
     /**
@@ -138,11 +112,18 @@ class ActivityUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$user_id)
     {
-        $activity_user = \App\ActivityUser::find($id);
+        
+        $cities = City::all();
+        $age_groups = AgeGroup::all();
+        $activity_user = ActivityUser::where('user_id', $user_id)
+            ->where('activity_id', $request->input('activity'))
+            ->first();
         return view('admin.activity_user.edit', [
             'item' => $activity_user,
+            'age_groups' => $age_groups,
+            'cities' => $cities,
         ]);
     }
 
@@ -153,38 +134,41 @@ class ActivityUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $user_id)
     {
-        $activity_user = \App\ActivityUser::find($id);
+        
         $messages = [
-            'name.*' => '请输入活动名称~',
-            'start_date.*' => '请选择活动开始日期~',
-            'end_date.*' => '请选择活动结束如期~',
-            'receive_start_date.*' => '请选择活动礼品开始领取日期~',
-            'receive_end_date.*' => '请选择活动礼品结束领取日期~',
-            'image.*' => '请上传图片~',
+            'reading_number.*' => '请输入阅读数，且为数字~',
+            'words_number.*' => '请输入阅读字数，且为数字~',
+            'voted_number.*' => '请输入点赞数，且为数字~',
+            'age_group_id.*' => '请选择年龄组~',
+            'city_id.*' => '请选择城市~',
+            'receive_status.*' => '请选择核销状态~',
         ];
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-            'receive_start_date' => 'required|date',
-            'receive_end_date' => 'required|date',
-            'image' => 'required',
+            'reading_number' => 'required|numeric',
+            'words_number' => 'required|numeric',
+            'voted_number' => 'required|numeric',
+            'age_group_id' => 'required|numeric',
+            'city_id' => 'required|numeric',
+            'receive_status' => 'required|numeric',
         ], $messages);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 403);
         }
-        $activity_user->name = $request->input('name');
-        $activity_user->start_date = $request->input('start_date');
-        $activity_user->end_date = $request->input('end_date');
-        $activity_user->body = $request->input('body') ? : '';
-        $activity_user->receive_start_date = $request->input('receive_start_date');
-        $activity_user->receive_end_date = $request->input('receive_end_date');
-        $activity_user->image = $request->input('image') ? : '';
+        
+        $activity_user = ActivityUser::where('user_id', $user_id)
+            ->where('activity_id', $request->input('activity'))
+            ->first();
+        $activity_user->reading_number = $request->input('reading_number');
+        $activity_user->words_number = $request->input('words_number');
+        $activity_user->voted_number = $request->input('voted_number');
+        $activity_user->age_group_id = $request->input('age_group_id');
+        $activity_user->city_id = $request->input('city_id');
+        $activity_user->receive_status = $request->input('receive_status');
         $activity_user->save();
-        return response()->json(['ret' => 0, 'url' => route('activity_user.index')]);
+        return response()->json(['ret' => 0, 'url' => route('activityUser.index',['activity'=>$request->input('activity')])]);
     }
 
     /**
@@ -195,12 +179,6 @@ class ActivityUserController extends Controller
      */
     public function destroy($id)
     {
-        $activity_user = \App\ActivityUser::find($id);
-        if( strtotime($activity_user->start_date) < time() ){
-            return response()->json(['ret' => 1001, 'errMsg' => '活动已开始，无法删除']);
-        }
-        $activity_user->delete();
-        return response()->json(['ret' => 0]);
     }
 
 }
