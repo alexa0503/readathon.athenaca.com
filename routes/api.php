@@ -218,16 +218,17 @@ Route::group(['middleware' => ['wx.auth']], function () {
     });
     Route::get('/posts/{name}/{block_type?}', function (Request $request, $name = null, $block_type) {
         $page = App\Page::where('name', $name)->first();
+        $orm = App\Post::orderBy('sort_id', 'ASC');
         if (null == $page) {
-            $orm = App\Post::where('page_id', null)->where('block_type', $block_type);
+            $orm->where('page_id', null)->where('block_type', $block_type);
         } else {
-            $orm = App\Post::where('page_id', $page->id)->where('block_type', $block_type);
+            $orm->where('page_id', $page->id)->where('block_type', $block_type);
         }
         if ($block_type == 'slides') {
             //如果该页面没用幻灯片内容 则取默认
             $count = $orm->count();
             if( $count == 0 ){
-                $orm = App\Post::where('page_id', null)->where('block_type', $block_type);
+                $orm->where('page_id', null)->where('block_type', $block_type);
             }
             $posts = $orm->get();
         } else {
