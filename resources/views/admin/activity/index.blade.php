@@ -1,7 +1,7 @@
 @extends('layouts.admin') @section('content')
 <div class="smart-widget">
     <div class="smart-widget-header">
-        <form class="form-inline" action="{{ route('city.index') }}">
+        <form class="form-inline" action="{{ route('activity.index') }}">
             <div class="form-group">
                 <input class="form-control" name="keywords" placeholder="输入关键词" value="{{Request::input('keywords')}}" />
             </div>

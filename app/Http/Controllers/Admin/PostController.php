@@ -84,7 +84,11 @@ class PostController extends Controller
         $post->image = $request->input('image') ?: '';
         $post->body = $request->input('body') ?: '';
         $post->save();
-        return response()->json(['ret' => 0, 'url' => route('page.post.index', ['page'=>$page])]);
+        
+        return response()->json([
+            'ret' => 0, 
+            'url' => route('page.post.index', ['page'=>$page, 'block_type'=>$request->input('block_type')]
+        )]);
     }
 
     /**
@@ -144,7 +148,10 @@ class PostController extends Controller
         $post->sort_id = $request->input('sort_id') ?: 999;
         $post->body = $request->input('body') ?: '';
         $post->save();
-        return response()->json(['ret' => 0, 'url' => route('page.post.index', ['page'=>$page])]);
+        return response()->json([
+            'ret' => 0, 
+            'url' => route('page.post.index', ['page'=>$page, 'block_type'=>$post->block_type]
+        )]);
     }
 
     /**

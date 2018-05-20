@@ -74,13 +74,15 @@
 	</div>
 @endsection @section('scripts')
 <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
+<script src="/vendor/unisharp/laravel-ckeditor/adapters/jquery.js"></script>
+
 <script>
 @if(Request::input('block_type') == 'article')
-    CKEDITOR.replace('body', {
+    $('#body').ckeditor({
         filebrowserImageBrowseUrl: '/filemanager?type=Images',
         filebrowserBrowseUrl: '/filemanager?type=Files',
         height: 600
-    });
+    })
 @endif
     var imagesCount = 0;
 </script>

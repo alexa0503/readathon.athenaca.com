@@ -200,6 +200,8 @@ Route::group(['middleware' => ['wx.auth']], function () {
             return response()->json(['ret' => 1006, 'errMsg' => '您没有中到此奖品'], 403);
         }
 
+        $prize->winned_number += 1;
+        $prize->save();
         $prize_log = new PrizeLog;
         $prize_log->activity_id = $activity->id;
         $prize_log->user_id = $user_id;
