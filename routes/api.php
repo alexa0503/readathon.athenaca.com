@@ -96,7 +96,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
             $rank = $activity_user->getRank();
         }
 
-        $prizes = App\Prize::where('activity_id', $activity->id)->paginate(2);
+        $prizes = App\Prize::orderBy('sort_id','ASC')->where('activity_id', $activity->id)->paginate(2);
         $collection = $prizes->getCollection()->map(function ($item) use ($user_id, $rank, $activity) {
             $prize_log = PrizeLog::where('user_id', $user_id)->where('activity_id', $item->activity_id)->first();
             if (null == $prize_log) {
