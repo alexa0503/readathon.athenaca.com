@@ -63,43 +63,10 @@
 @section('scripts')
 <script>
 @if( $item->image )
-var count = 1;
+var imagesCount  = 1;
 @else
-var count = 0;
+var imagesCount  = 0;
 @endif
-var maxNumber = 1
-function thumbRemove(obj) {
-    if (confirm('确认删除?')) {
-        obj.parent('.col-md-3').remove();
-        count--;
-        if( count < maxNumber){
-            $('#imageAdd').show();
-        }
-    }
-}
-function addImage()
-{
-    if( count >= maxNumber ){
-        alert('最多只能添加一张图片')
-        return false;
-    }
-    window.open('{{url("/filemanager?type=Images")}}','upload','fullscreen=no,width=1000,height=600',true);
-}
-function SetUrl(url1, url2) {
-    if( count >= maxNumber ){
-        alert('最多只能添加一张图片')
-        return false;
-    }
-    var url = '{{url("/")}}' + url2.replace('//', '/');
-    var html = '';
-    html +=
-        '<div class="col-md-3"><a href="javascript:;" title="点击删除" onclick="thumbRemove($(this))" class="thumbnail"><img src="' +
-        url + '" /></a><input type="hidden" name="image" value="' + url + '"></div>';
-    $('#image-add').before(html);
-    count++ ;
-    if( count >= maxNumber ){
-        $('#imageAdd').hide();
-    }
-}
 </script>
+<script src="{{ asset('/js/admin.image.js') }}"></script>
 @endsection

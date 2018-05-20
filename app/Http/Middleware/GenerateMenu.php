@@ -24,9 +24,9 @@ class GenerateMenu
 
             //页面管理
             if(($admin->hasPermissionTo('页面管理') && $admin->hasAnyRole(['管理员'])) || $admin->hasAnyRole(['管理员'])){
-                $menu1 = $menu->add('页面管理', ['url'=>route('page.post.index',['page'=>1]),'class'=>'openable bg-palette1']);
+                $menu1 = $menu->add('页面管理', ['url'=> url('/admin/page'),'class'=>'openable bg-palette1']);
                 $pages = \App\Page::all();
-                $menu1->add('通用设置', ['url'=>route('page.post.index',['page'=>'common']),'class'=>'bg-palette1']);
+                $menu1->add('通用区块', ['url'=>route('page.post.index',['page'=>'common']),'class'=>'bg-palette1']);
                 foreach($pages as $page){
                     $menu1->add($page->title, ['url'=>route('page.post.index',['page'=>$page->id]),'class'=>'bg-palette1']);
                 }

@@ -18,11 +18,11 @@
                         Select Project <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu pull-right" role="menu">
-                        <li><a href="index.html#">Project1</a></li>
-                        <li><a href="index.html#">Project2</a></li>
-                        <li><a href="index.html#">Project3</a></li>
+                        <li><a href="#">Project1</a></li>
+                        <li><a href="#">Project2</a></li>
+                        <li><a href="#">Project3</a></li>
                         <li class="divider"></li>
-                        <li><a href="index.html#">Setting</a></li>
+                        <li><a href="#">Setting</a></li>
                     </ul>
                 </div>
                 <a class="btn btn-default"><i class="fa fa-cog"></i></a>

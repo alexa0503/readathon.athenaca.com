@@ -17,7 +17,7 @@
                             <div class="user-content">
                                 <h5 class="no-m-bottom">{{ Auth::guard('admin')->user()->name }}</h5>
                                 <div class="m-top-xs">
-                                    <a href="{{url('/bbs/home.php?mod=spacecp')}}" class="m-right-sm">资料</a>
+                                    <!--<a href="#" class="m-right-sm">资料</a>-->
                                     <a href="{{ url('/admin/logout') }}">退出</a>
                                 </div>
                             </div>

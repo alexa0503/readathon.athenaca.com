@@ -52,9 +52,8 @@
         <div class="main-container">
             <div class="padding-md">
                 <ul class="breadcrumb">
-    				<li><span class="primary-font"><i class="icon-home"></i></span><a href="/admin"> Home</a></li>
-    				<!--<li>Table</li>
-    				<li>Static Table</li>-->
+    				<li><span class="primary-font"><i class="icon-home"></i></span><a href="/admin"> 首页</a></li>
+                    @stack('breadcrump')
     			</ul>
                 @yield('content')
             </div><!-- ./padding-md -->

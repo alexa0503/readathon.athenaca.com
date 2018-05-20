@@ -1,4 +1,18 @@
 $(function() {
+	var url = window.location.href;
+	$('.openable').each(function(){
+		var url1 = $(this).find("a").eq(0).attr('href') + '/'
+		console.log(url1,url,url.indexOf(url1))
+		if( url.indexOf(url1) !== -1 ){
+			$(this).addClass('open')
+			$(this).find('.submenu').find('li').each(function(){
+				var url2 =  $(this).find("a").eq(0).attr('href')
+				if( url.indexOf(url2) !== -1 ){
+					$(this).addClass('active')
+				}
+			})
+		}
+	})
 
 	//scrollable sidebar
 	$('.scrollable-sidebar').slimScroll({
@@ -8,7 +22,6 @@ $(function() {
 
 	//Collapsible Sidebar Menu
 	$('.sidebar-menu .openable > a').click(function() {
-
 		if (!$('aside').hasClass('sidebar-mini') || Modernizr.mq('(max-width: 991px)')) {
 			if ($(this).parent().children('.submenu').is(':hidden')) {
 				$(this).parent().siblings().removeClass('open').children('.submenu').slideUp(200);
