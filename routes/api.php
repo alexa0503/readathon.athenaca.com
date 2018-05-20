@@ -107,27 +107,30 @@ Route::group(['middleware' => ['wx.auth']], function () {
                 $received_status = 6; //已领取其他奖品
             }
 
-            $now = time();
-            $ts1 = strtotime($activity->start_date);
-            $ts2 = strtotime($activity->end_date);
+            if( $received_status == 0 ){
 
-            $ts3 = strtotime($activity->receive_start_date);
-            $ts4 = strtotime($activity->receive_end_date);
-
-            //dd($ts2,$now);
-            if ($now < $ts2) {
-                $received_status = 2;
-            } elseif ($now < $ts3) {
-                $received_status = 3;
-            } elseif ($now > $ts4) {
-                $received_status = 4;
-            }
-            if ($rank == null) {
-                $received_status = 7; //没有排名
-            }
-            //dd($rank,$item->winning_min_rank,$item->winning_max_rank);
-            elseif ($rank < $item->winning_min_rank || $rank > $item->winning_max_rank) {
-                $received_status = 5;
+                $now = time();
+                $ts1 = strtotime($activity->start_date);
+                $ts2 = strtotime($activity->end_date);
+    
+                $ts3 = strtotime($activity->receive_start_date);
+                $ts4 = strtotime($activity->receive_end_date);
+    
+                //dd($ts2,$now);
+                if ($now < $ts2) {
+                    $received_status = 2;
+                } elseif ($now < $ts3) {
+                    $received_status = 3;
+                } elseif ($now > $ts4) {
+                    $received_status = 4;
+                }
+                if ($rank == null) {
+                    $received_status = 7; //没有排名
+                }
+                //dd($rank,$item->winning_min_rank,$item->winning_max_rank);
+                elseif ($rank < $item->winning_min_rank || $rank > $item->winning_max_rank) {
+                    $received_status = 5;
+                }
             }
 
             return [

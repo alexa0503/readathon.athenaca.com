@@ -29,7 +29,7 @@
                 <!--未激活或未参加活动-->
                 <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 3">不可领取</button>
                 <!--未到领奖日期-->
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 4">已过领不可领取奖期限</button>
+                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 4">已过领取奖期限</button>
                 <!--已过领奖期限-->
                 <button type="button" v-on:click="receivePrize(prize.id)" class="btn btn-warning btn-lg" v-else-if="prize.received_status == 0">领取奖品</button>
                 <button type="button" class="btn btn-warning btn-lg disabled" v-else>不可领取</button>
