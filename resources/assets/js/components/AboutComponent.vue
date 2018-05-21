@@ -28,8 +28,12 @@
             }
         }),
         created() {
+            let name = this.$router.history.current.params.page
+            if( name == undefined ){
+                name = 'about'
+            }
             this.$store.dispatch('getPosts', {
-                name: 'about',
+                name: name,
                 type: 'article',
                 page: 1,
                 more: false

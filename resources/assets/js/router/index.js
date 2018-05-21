@@ -114,7 +114,7 @@ const router = new VueRouter({
             }
         },
         {
-            path: '/page/about',
+            path: '/page/about/:page?',
             name: 'about',
             components: {
                 'topper': SlidesComponent,

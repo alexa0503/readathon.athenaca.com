@@ -53,10 +53,10 @@
                 <router-link :to="{name:'about'}">关于阅读马拉松</router-link>
             </div>
             <div class="regester-succeeded-link">
-                <a>关于美国权威STAR英文水平测试</a>
+                <router-link :to="{name:'about', params:{page:'test'}}">关于美国权威STAR英文水平测试</router-link>
             </div>
             <div class="regester-succeeded-link">
-                <router-link :to="{name:'flow'}">关于知慧学院 Athena Academy</router-link>
+                <router-link :to="{name:'about', params:{page:'athena'}}">关于知慧学院 Athena Academy</router-link>
             </div>
         </div>
         <div class="board-space container-fluid"></div>
