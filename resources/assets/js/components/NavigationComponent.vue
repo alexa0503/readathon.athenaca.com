@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed-bottom" id="navigation" v-if="!loading">
+    <div class="fixed-bottom" id="navigation">
         <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
                 <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'home' }" exact="exact">
