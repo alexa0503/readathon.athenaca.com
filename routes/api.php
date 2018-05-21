@@ -237,6 +237,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
             $count = $orm->count();
             if( $count == 0 ){
                 $orm->where('page_id', null)->where('block_type', $block_type);
+                $orm =  App\Post::orderBy('sort_id', 'ASC')->where('page_id', null)->where('block_type', $block_type);
             }
             $posts = $orm->get();
         } else {
