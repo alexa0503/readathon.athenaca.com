@@ -79,7 +79,10 @@ Route::group(['middleware' => ['wx.auth']], function () {
         //获取最近一次可以领取奖品的活动
         if ($id == null) {
             $dt = Carbon::now();
-            $activity = Activity::where('start_date', '<=', $dt)->orderBy('start_date', 'ASC')->first();
+            $activity = Activity::where('start_date', '<=', $dt)->where('receive_end_date', '>=', $dt)->orderBy('start_date', 'DESC')->first();
+            if( null == $activity ){
+                $activity = Activity::where('start_date', '<=', $dt)->orderBy('start_date', 'ASC')->first();
+            }
         } else {
             $activity = Activity::find($id);
         }

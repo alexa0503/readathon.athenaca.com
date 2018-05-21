@@ -56,7 +56,6 @@ export default {
         state,
         commit
     }, id) {
-        dispatch('getActivities', 2)
         dispatch('getPrizes', {
             id: id
         })

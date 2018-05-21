@@ -50,21 +50,6 @@
                         <label class="help-block" for="" id="body"></label>
                     </div>
                 </div>
-
-                
-                <div class="form-group">
-                    <label for="name" class="col-lg-2 control-label">幻灯片/头图</label>
-                    <div class="col-lg-10">
-                        <div class="row">
-                            <div class="col-md-3" id="image-add">
-                                <a href="javascript:;" class="image" onclick="addImage()" style="text-align:center">
-                                    <img src="{{ asset('images/material-icon-plus.png') }}" title="点击添加" width="100" id="imageAdd" />
-                                </a>
-                            </div>
-                        </div>
-                        <label class="help-block" for="" id="help-image"></label>
-                    </div>
-                </div>
                 
 				<div class="form-group">
 					<div class="col-lg-offset-2 col-md-offset-2 col-lg-10 col-md-10">
@@ -85,7 +70,5 @@ $('#body').ckeditor({
     filebrowserBrowseUrl: '/filemanager?type=Files',
     height: 600
 })
-    var imagesCount = 0;
 </script>
-<script src="{{ asset('/js/admin.image.js') }}"></script>
 @endsection

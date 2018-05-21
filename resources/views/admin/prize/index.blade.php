@@ -26,7 +26,6 @@
                     <tr>
                         <th>名称</th>
                         <th>活动</th>
-                        <th>幻灯片/头图</th>
                         <th>中奖最高排名</th>
                         <th>中奖最低排名</th>
                         <th>已中</th>
@@ -41,7 +40,6 @@
                     <tr>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->activity->name }}</td>
-                        <td>@if($item->image)<a href="{{ asset($item->image) }}" title="点击查看大图" target="_blank"><img src="{{ asset($item->image) }}" style="max-width:100px;" /></a>@else{{ '' }}@endif</td>
                         <td>{{ $item->winning_min_rank }}</td>
                         <td>{{ $item->winning_max_rank }}</td>
                         <td>{{ $item->winned_number }}</td>

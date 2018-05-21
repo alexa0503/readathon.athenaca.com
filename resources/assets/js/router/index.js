@@ -108,7 +108,7 @@ const router = new VueRouter({
             path: '/page/prize/:id?',
             name: 'prize',
             components: {
-                //'topper': SlidesComponent,
+                'topper': SlidesComponent,
                 'mainContent': PrizeComponent,
                 'navigation': NavigationComponent
             }

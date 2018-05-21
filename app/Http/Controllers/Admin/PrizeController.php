@@ -78,7 +78,6 @@ class PrizeController extends Controller
         $prize->winning_max_rank = $request->input('winning_max_rank');
         $prize->body = $request->input('body') ?: '';
         $prize->sort_id = $request->input('sort_id');
-        $prize->image = $request->input('image') ?: '';
         $prize->save();
         return response()->json(['ret' => 0, 'url' => route('prize.index')]);
     }
@@ -141,7 +140,6 @@ class PrizeController extends Controller
         $prize->winning_max_rank = $request->input('winning_max_rank');
         $prize->body = $request->input('body') ?: '';
         $prize->sort_id = $request->input('sort_id');
-        $prize->image = $request->input('image') ?: '';
         $prize->save();
         return response()->json(['ret' => 0, 'url' => route('prize.index')]);
     }

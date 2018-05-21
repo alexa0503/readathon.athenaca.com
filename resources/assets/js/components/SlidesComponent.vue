@@ -38,9 +38,22 @@
         watch: {
             slides(val) {
                 this.reInit();
+            },
+            $route(to, from) {
+                let name = to.name
+                this.$store.dispatch('getPosts', {
+                    name: name,
+                    type: 'slides'
+                })
             }
         },
         created() {
+            let vm = this
+            let name = vm.$route.name
+            vm.$store.dispatch('getPosts', {
+                name: name,
+                type: 'slides'
+            })
         },
         methods: {
             next() {
@@ -90,16 +103,6 @@
             handleLazeLoadError(event, slick, image, imageSource) {
                 //console.log('handleLazeLoadError', event, slick, image, imageSource);
             },
-        },
-        beforeRouteEnter (to, from, next) {
-            next(vm => {
-                let name = vm.$route.name
-                vm.$store.dispatch('getPosts', {
-                    name: name,
-                    type: 'slides'
-                })
-                // 通过 `vm` 访问组件实例
-            })
         }
     }
 </script>
