@@ -106,6 +106,7 @@ Route::group(['middleware' => ['role:管理员', 'menu'], 'prefix' => 'admin'], 
     Route::resource('age', 'Admin\AgeController');
     Route::resource('city', 'Admin\CityController');
     Route::resource('question', 'Admin\QuestionController');
+    Route::resource('question.answer', 'Admin\AnswerController');
     Route::resource('activity', 'Admin\ActivityController');
     Route::resource('activityUser', 'Admin\ActivityUserController');
     Route::resource('prize', 'Admin\PrizeController');

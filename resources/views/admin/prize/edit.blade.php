@@ -16,7 +16,7 @@
                     <label for="activity_id" class="col-lg-2 col-md-2 control-label">活动</label>
                     <div class="col-lg-10 col-md-10">
                         <select name="activity_id" class="form-control" id="activity_id">
-                            <option value="" >选择活动/所有</option>
+                            <option value="" >选择活动</option>
                             @foreach($activities as $activity)
                             <option value="{{ $activity->id }}" {!! $activity->id == $item->activity_id ? 'selected="selected"' : '' !!}>{{ $activity->name }}</option>
                             @endforeach

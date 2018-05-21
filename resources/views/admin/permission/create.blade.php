@@ -26,13 +26,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="text" class="col-lg-2 col-md-2 control-label">角色/供应商</label>
+                    <label for="text" class="col-lg-2 col-md-2 control-label">角色</label>
                     <div class="col-lg-10 col-md-10">
                         <select class="form-control select2" name="role[]" id="role" multiple="multiple">
                             <option value="管理员">管理员</option>
-                            @foreach($dealers as $dealer)
-                            <option value="{{ $dealer->name }}">{{ $dealer->name }}</option>
-                            @endforeach
+                            <option value="超级管理员">超级管理员</option>
                         </select>
                         <label class="help-block" for="" id="help-role"></label>
                     </div>

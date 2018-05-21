@@ -30,17 +30,15 @@ class PermissionController extends Controller
     }
     public function create()
     {
-        $dealers = \App\Dealer::all();
         return view('admin.permission.create', [
-            'dealers' => $dealers,
             'permissions' => Permission::all(),
         ]);
     }
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:admins|max:255',
-            'email' => 'required|email|unique:admins',
+            'name' => 'required|unique:administrators|max:255',
+            'email' => 'required|email|unique:administrators',
             'password' => 'required',
             'role' => 'required',
             'permission' => 'required',
@@ -68,7 +66,6 @@ class PermissionController extends Controller
     }
     public function edit($id)
     {
-        $dealers = \App\Dealer::all();
         $admin = \App\Administrator::find($id);
 
         $permission_names = [];
@@ -77,7 +74,6 @@ class PermissionController extends Controller
         }
         return view('admin.permission.edit',[
             'admin' => $admin,
-            'dealers' => $dealers,
             'permissions' => Permission::all(),
             'role_names' => $admin->getRoleNames()->toArray(),
             'permission_names' => $permission_names,
@@ -86,8 +82,8 @@ class PermissionController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:admins,name,'.$id.'|max:255',
-            'email' => 'required|email|unique:admins,email,'.$id,
+            'name' => 'required|unique:administrators,name,'.$id.'|max:255',
+            'email' => 'required|email|unique:administrators,email,'.$id,
             'role' => 'required',
             'permission' => 'required',
         ]);

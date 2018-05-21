@@ -54,7 +54,7 @@ class PrizeController extends Controller
     public function store(Request $request)
     {
         $messages = [
-            'name.*' => '城市名必须填写且唯一~',
+            'name.*' => '名称必须填写且唯一~',
             'activity_id.*' => '请选择活动~',
             'winning_min_rank.*' => '请输入中奖所需最高排名，且为数字~',
             'winning_max_rank.*' => '请输入中奖所需最低排名，且为数字~',
@@ -117,7 +117,7 @@ class PrizeController extends Controller
     {
         $prize = Prize::find($id);
         $messages = [
-            'name.*' => '城市名必须填写且唯一~',
+            'name.*' => '名称必须填写且唯一~',
             'activity_id.*' => '请选择活动~',
             'winning_min_rank.*' => '请输入中奖所需最高排名，且为数字~',
             'winning_max_rank.*' => '请输入中奖所需最低排名，且为数字~',

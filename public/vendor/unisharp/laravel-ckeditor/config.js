@@ -14,18 +14,17 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'links' },
 		{ name: 'insert' },
-		{ name: 'forms' },
 		{ name: 'tools' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'others' },
+		{ name: 'about' },		
 		'/',
-		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi','basicstyles' ] },
+		'/',
 		{ name: 'styles' },
-		{ name: 'colors' },
-		{ name: 'about' }
+		{ name: 'colors' }
 	];
-
+	config.extraPlugins="bidi,colordialog,font,colorbutton,div,justify,find,indentblock"
 
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.

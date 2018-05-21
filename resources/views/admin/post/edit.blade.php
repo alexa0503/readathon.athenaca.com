@@ -7,8 +7,7 @@
 <div class="smart-widget widget-purple">
     <div class="smart-widget-inner">
         <div class="smart-widget-body">
-            {{ Form::open(array('route' => ['page.post.update',Request::segment(3),$item->id], 'class'=>'form-horizontal', 'method'=>'PUT',
-            'id'=>'post-form')) }}
+            {{ Form::open(array('route' => ['page.post.update',Request::segment(3),$item->id], 'class'=>'form-horizontal', 'method'=>'PUT', 'id'=>'post-form')) }}
             <div class="form-group">
                 <label for="title" class="col-lg-2 col-md-2 control-label">标题</label>
                 <div class="col-lg-10 col-md-10">
