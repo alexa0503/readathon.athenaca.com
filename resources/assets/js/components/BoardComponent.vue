@@ -8,19 +8,19 @@
                 <div class=" d-flex justify-content-around">
                     <div class="form-group">
                         <select class="form-control" v-model="ageGroupId" v-on:change="fetchMore(false)">
-                            <option value="">年龄组/所有</option>
+                            <option value="">年龄/全部</option>
                             <option v-for="ageGroup in ageGroups" v-bind:key="ageGroup.id" v-bind:value="ageGroup.id">{{ ageGroup.title }}</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <select class="form-control" v-model="cityId" v-on:change="fetchMore(false)">
-                            <option value="">城市/所有</option>
+                            <option value="">城市/全国</option>
                             <option v-for="city in cities" v-bind:key="city.id" v-bind:value="city.id">{{ city.name }}</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <select class="form-control" v-model="activityId" v-on:change="fetchMore(false)">
-                            <option value="" disabled="disabled">选择赛季/当前</option>
+                            <option value="" disabled="disabled">赛季/当前</option>
                             <option v-for="activity in activities" v-bind:key="activity.id" v-bind:value="activity.id">{{ activity.name }}</option>
                         </select>
                     </div>
@@ -44,12 +44,12 @@
                     </a>
                 </div>
                 <div class="star">{{ item.words_number }}</div>
-                <div class="name-text">{{ item.user.name | formatString }}</div>
+                <div class="name-text"><router-link :to="{ name: 'account', params: {id: item.user.id} }">{{ item.user.name | formatString }}</router-link></div>
                 <div class="number">
                     <span>{{ item.rank }}</span>
                 </div>
                 <div class="avatar">
-                    <img :src="item.user.avatar" class="rounded-circle" />
+                    <router-link :to="{ name: 'account', params: {id: item.user.id} }"><img :src="item.user.avatar" class="rounded-circle" /></router-link>
                 </div>
             </div>
         </div>

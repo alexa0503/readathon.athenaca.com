@@ -10,12 +10,12 @@
                     </a>
                 </div>
                 <div class="star">{{ user.activity_info.words_number }}</div>
-                <div class="name-text">{{ user.name }}</div>
+                <div class="name-text"><router-link :to="{ name: 'account', params: {id: user.id} }">{{ user.name | formatString }}</router-link></div>
                 <div class="number">
                     <span>{{ user.activity_info.rank }}</span>
                 </div>
                 <div class="avatar">
-                    <img :src="user.avatar" class="rounded-circle" />
+                    <router-link :to="{ name: 'account', params: {id: user.id} }"><img :src="user.avatar" class="rounded-circle" /></router-link>
                 </div>
             </div>
             <div class="board-list board-list-home" v-else-if="user.is_activated == 1 && user.has_joined == 0">
@@ -39,12 +39,12 @@
                     </a>
                 </div>
                 <div class="star">{{ item.words_number }}</div>
-                <div class="name-text">{{ item.user.name | formatString }}</div>
+                <div class="name-text"><router-link :to="{ name: 'account', params: {id: item.user.id} }">{{ item.user.name | formatString }}</router-link></div>
                 <div class="number">
                     <span>{{ item.rank }}</span>
                 </div>
                 <div class="avatar">
-                    <img :src="item.user.avatar" class="rounded-circle" />
+                    <router-link :to="{ name: 'account', params: {id: item.user.id} }"><img :src="item.user.avatar" class="rounded-circle" /></router-link>
                 </div>
             </div>
         </div>
