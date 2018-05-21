@@ -11,6 +11,7 @@ use App\Http\Resources\ReadingLog as ReadingLogResource;
 use App\PrizeLog;
 use App\ReadingLog;
 use App\VoteLog;
+use App\User;
 use DB;
 use Illuminate\Http\Request;
 
@@ -57,8 +58,10 @@ class LogsController extends Controller
         ], $messages);
 
         $activity = Helper::getCurrentActivity();
-        $validator->after(function ($validator) use ($id, $request, $activity) {
-            if (session('wx.user.is_activated') != 1) {
+        $user_id = session('wx.user.id');
+        $user = User::find($user_id);
+        $validator->after(function ($validator) use ($id, $request, $activity, $user) {
+            if ( null == $user || $user->is_activated != 1) {
                 $validator->errors()->add('book_name', '您的账户还没有被激活');
             }
             if (null == $id) {

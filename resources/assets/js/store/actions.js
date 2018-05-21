@@ -139,7 +139,8 @@ export default {
         commit
     }, type) {
         return new Promise((resolve, reject) => {
-            if (typeof state.self === "object" && !(state.self instanceof Array)) {
+            if ( state.self.is_activated == undefined || state.self.is_activated == 0) {
+                console.log(state.self.is_activated)
                 axios.get(apiUrls.USER_URL, {
                         params: {
                             type: type,

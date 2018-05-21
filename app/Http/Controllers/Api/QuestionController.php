@@ -10,6 +10,7 @@ use App\Question;
 use App\QuestionLog;
 use App\QuestionAnswer;
 use App\ActivityLog;
+use App\User;
 use DB;
 
 class QuestionController extends Controller
@@ -68,14 +69,17 @@ class QuestionController extends Controller
 
     public function answer(Request $request, $id)
     {
-        if (session('wx.user') && session('wx.user.is_activated') != 1) {
+        
+        $user_id = session('wx.user.id');
+        $user = User::find($user_id);
+        
+        if ( null == $user || $user->is_activated != 1) {
             return response()->json(['ret' => 1300, 'errMsg' => '只有激活过才能回答问题哦'], 403);
         }
         $activity = Helper::getCurrentActivity();
         if ($activity == null) {
             return response()->json(['ret' => 1200, 'errMsg' => '活动已过期或者还未开始'], 403);
         }
-        $user_id = session('wx.user.id');
         $answer_id = $request->input('answer');
         $answer = QuestionAnswer::where('question_id', $id)->where('id', $answer_id)->first();
         if ($answer == null) {
