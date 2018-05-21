@@ -143,6 +143,12 @@
             }
         },
         created() {
+            if( this.hasRegistered == false ){
+                    document.body.style.background = '#7fe2bf';
+            }
+            else{
+                    document.body.style.background = '#fff';
+            }
             
             this.$store.dispatch('initRegisterPage')
         },

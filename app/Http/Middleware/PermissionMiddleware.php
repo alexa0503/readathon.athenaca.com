@@ -14,6 +14,10 @@ class PermissionMiddleware
             throw UnauthorizedException::notLoggedIn();
         }
 
+        if( Auth::guard('admin')->user()->hasAnyRole(['超级管理员']) ){
+            return $next($request);
+        }
+
         $permissions = is_array($permission)
             ? $permission
             : explode('|', $permission);

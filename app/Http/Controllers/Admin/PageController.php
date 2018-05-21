@@ -7,6 +7,11 @@ use App\Http\Controllers\Controller;
 
 class PageController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware(['permission:页面管理']);
+    }
     /**
      * Display a listing of the resource.
      *

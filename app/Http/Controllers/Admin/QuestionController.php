@@ -11,6 +11,10 @@ use App\Activity;
 
 class QuestionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:问答管理']);
+    }
     /**
      * Display a listing of the resource.
      *

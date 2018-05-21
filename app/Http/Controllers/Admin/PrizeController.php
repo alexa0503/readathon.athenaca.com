@@ -12,6 +12,11 @@ use App\PrizeLog;
 
 class PrizeController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware(['permission:奖品管理']);
+    }
     /**
      * Display a listing of the resource.
      *

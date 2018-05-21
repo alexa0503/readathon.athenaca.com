@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -11,11 +12,12 @@ use App\User;
 use App\ActivityLog;
 use DB;
 
+
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['role:管理员','permission:用户管理']) || $this->middleware(['role:超级管理员']);
+        $this->middleware(['permission:用户管理']);
     }
     /**
      * Display a listing of the resource.

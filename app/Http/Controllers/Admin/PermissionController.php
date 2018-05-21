@@ -10,9 +10,10 @@ use Validator;
 
 class PermissionController extends Controller
 {
+    
     public function __construct()
     {
-        $this->middleware(['role:管理员','permission:权限管理']) || $this->middleware(['role:超级管理员']);
+        $this->middleware(['permission:权限管理']);
     }
     public function index()
     {

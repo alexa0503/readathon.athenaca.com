@@ -11,10 +11,10 @@ class RoleMiddleware
     public function handle($request, Closure $next, $role)
     {
         if (Auth::guard('admin')->guest()) {
-            if($request->path() == 'admin'){
+            if($request->path() != 'admin/login'){
                 return redirect('admin/login');
             }
-            return redirect('admin/login');
+            //return redirect('admin/login');
             //throw UnauthorizedException::notLoggedIn();
         }
         if ($role != '*') {
@@ -23,8 +23,9 @@ class RoleMiddleware
             : explode('|', $role);
 
             if (!Auth::guard('admin')->user()->hasAnyRole($roles)) {
-                return redirect('admin/login');
-                //throw UnauthorizedException::forRoles($roles);
+                //Auth::guard('admin')->logout();
+                //return redirect('admin/login');
+                throw UnauthorizedException::forRoles($roles);
             }
         }
         return $next($request);

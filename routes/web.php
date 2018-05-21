@@ -92,7 +92,7 @@ Route::group(['middleware'=>['wx.auth']], function(){
     });
 });
 
-Route::group(['middleware' => ['role:管理员', 'menu'], 'prefix' => 'admin'], function () {
+Route::group(['middleware' => ['role:管理员|超级管理员', 'menu'], 'prefix' => 'admin'], function () {
     
     Route::get('/', function () {
         return redirect('/admin/dashboard');
