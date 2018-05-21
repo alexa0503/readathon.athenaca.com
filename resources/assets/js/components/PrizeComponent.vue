@@ -25,8 +25,11 @@
                 <!--未获得该奖品-->
             </div>
         </div>
-        <div class="row board-more" v-if="status && morePrizes" v-on:click="fetchMore(true)">
-            <img src="/images/icon-more-01.png">
+        <div class="row board-more" v-if="status && morePrizes && !fetching" v-on:click="fetchMore(true)">
+            <img src="/images/icon-more-01.png" />
+        </div>
+        <div class="row board-more" v-if="status && morePrizes && fetching">
+            加载中...
         </div>
         <div class="board-space"></div>
 
@@ -62,6 +65,7 @@
             return {
                 hasError: false,
                 hasPosted: false,
+                fetching: false,
                 slickOptions: {
                     slidesToShow: 1,
                     dots: true,
@@ -118,70 +122,29 @@
             }
         },
         methods: {
-            next() {
-                this.$refs.slick.next();
-            },
-            prev() {
-                this.$refs.slick.prev();
-            },
-            reInit() {
-                // Helpful if you have to deal with v-for to update dynamic lists
-                this.$refs.slick.destroy()
-                this.$nextTick(() => {
-                    this.$refs.slick.create();
-                });
-            },
-            
-            // Events listeners
-            handleAfterChange(event, slick, currentSlide) {
-                //console.log('handleAfterChange', event, slick, currentSlide);
-            },
-            handleBeforeChange(event, slick, currentSlide, nextSlide) {
-                //console.log('handleBeforeChange', event, slick, currentSlide, nextSlide);
-            },
-            handleBreakpoint(event, slick, breakpoint) {
-                //console.log('handleBreakpoint', event, slick, breakpoint);
-            },
-            handleDestroy(event, slick) {
-                //console.log('handleDestroy', event, slick);
-            },
-            handleEdge(event, slick, direction) {
-                //console.log('handleEdge', event, slick, direction);
-            },
-            handleInit(event, slick) {
-                //console.log('handleInit', event, slick);
-            },
-            handleReInit(event, slick) {
-                //console.log('handleReInit', event, slick);
-            },
-            handleSetPosition(event, slick) {
-                //console.log('handleSetPosition', event, slick);
-            },
-            handleSwipe(event, slick, direction) {
-                //console.log('handleSwipe', event, slick, direction);
-            },
-            handleLazyLoaded(event, slick, image, imageSource) {
-                //console.log('handleLazyLoaded', event, slick, image, imageSource);
-            },
-            handleLazeLoadError(event, slick, image, imageSource) {
-                //console.log('handleLazeLoadError', event, slick, image, imageSource);
-            },
             fetchMore: function (more = false) {
-                let page = this.current_page + 1
-                let id = this.$route.params.id
-                let has_requested = false
-                let request = async function (vm) {
-                    await
-                    vm.$store.dispatch('getPrizes', {
-                        id: id,
-                        more: more,
-                        page: page
-                    })
-                }
-                if (!has_requested) {
-                    has_requested = true
-                    request(this)
-                    has_requested = false
+                let vm = this
+                vm.fetching = true
+                let page = vm.current_page + 1
+                let id = vm.$route.params.id
+               vm.$store.dispatch('getPrizes', {
+                    id: id,
+                    more: more,
+                    page: page
+                }).then((response)=>{
+                    if(response.data.prizes.current_page < response.data.prizes.current_page.last_page){
+                        vm.fetching = false
+                    }
+                })
+               
+            },
+            handleScroll: function () {
+                let vm = this
+                let scrollTop = $(window).scrollTop();
+                let scrollHeight = $(document).height();
+                let windowHeight = $(window).height();
+                if (scrollTop > 0 && scrollHeight - (scrollTop + windowHeight) < 40 && !vm.fetching) {
+                    vm.fetchMore(true)
                 }
             },
             receivePrize: function (id) {
@@ -209,6 +172,12 @@
                         })
                 }
             }
-        }
+        },
+        mounted() {
+            window.addEventListener('scroll', this.handleScroll); //监听页面滚动事件
+        },
+        destroyed() {
+            window.removeEventListener('scroll', this.handleScroll); //监听页面滚动事件
+        },
     }
 </script>

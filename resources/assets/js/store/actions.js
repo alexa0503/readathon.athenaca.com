@@ -351,17 +351,23 @@ export default {
         } else {
             url = apiUrls.PRIZES_URL
         }
-        axios.get(url, {
-            params: {
-                page: page,
-            }
-        }).then(function (response) {
-            let prizes = response.data
-            commit('setPrizes', {
-                prizes,
-                more
+        
+        return new Promise((resolve, reject) => {
+            axios.get(url, {
+                params: {
+                    page: page,
+                }
+            }).then(function (response) {
+                let prizes = response.data
+                commit('setPrizes', {
+                    prizes,
+                    more
+                })
+                return resolve(prizes);
+            }).catch(function (error) {
+                return reject(error)
             })
-        }).catch(function (error) {})
+        });
     },
     getPosts({
         commit

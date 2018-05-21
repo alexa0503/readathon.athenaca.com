@@ -151,7 +151,6 @@
                 let scrollHeight = $(document).height();
                 let windowHeight = $(window).height();
                 if (scrollTop > 0 && scrollHeight - (scrollTop + windowHeight) < 40 && !vm.fetching) {
-                    //vm.fetching = true
                     vm.fetchMore(true)
                 }
             }
@@ -160,7 +159,6 @@
             window.addEventListener('scroll', this.handleScroll); //监听页面滚动事件
         },
         destroyed() {
-            console.log('destroyed')
             window.removeEventListener('scroll', this.handleScroll); //监听页面滚动事件
         },
 
