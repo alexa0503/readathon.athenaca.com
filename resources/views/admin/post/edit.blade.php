@@ -34,12 +34,14 @@
                 <label for="image" class="col-lg-2 control-label">图片</label>
                 <div class="col-lg-10">
                     <div class="row">
+                    @if($item->image)
                         <div class="col-md-3">
                             <a href="javascript:;" title="点击删除" onclick="thumbRemove($(this))" class="thumbnail">
                                 <img src="{{ asset($item->image) }}">
                             </a>
                             <input type="hidden" name="image" value="{{ $item->image }}">
                         </div>
+                    @endif
                         <div class="col-md-3" id="image-add">
                             <a href="javascript:;" class="image" onclick="addImage()" style="text-align:center">
                                 <img src="{{ asset('images/material-icon-plus.png') }}" title="点击添加" width="100" id="imageAdd" />
@@ -89,7 +91,12 @@
         height: 600
     })
 @endif
-    var imagesCount = 0;
+
+@if( $item->image )
+var imagesCount  = 1;
+@else
+var imagesCount  = 0;
+@endif
 </script>
 <script src="{{ asset('/js/admin.image.js') }}"></script>
 @endsection

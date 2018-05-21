@@ -1,14 +1,14 @@
 <template>
     <div class="container-fluid prize-page" v-if="!loading">
         <div class="slick-content">
-        <slick ref="slick" :options="slickOptions" @afterChange="handleAfterChange" @beforeChange="handleBeforeChange" @breakpoint="handleBreakpoint"
-            @destroy="handleDestroy" @edge="handleEdge" @init="handleInit" @reInit="handleReInit" @setPosition="handleSetPosition"
-            @swipe="handleSwipe" @lazyLoaded="handleLazyLoaded" @lazyLoadError="handleLazeLoadError" v-if="activities">
-            <router-link :to="{ name: 'prize',params: { id: item.id } }" v-for="(item,index) in activities" v-if="activities"
-                v-bind:key="index">
-                <img :src="item.image" :alt="item.name" class="img-fluid">
-            </router-link>
-        </slick>
+            <slick ref="slick" :options="slickOptions" @afterChange="handleAfterChange" @beforeChange="handleBeforeChange" @breakpoint="handleBreakpoint"
+                @destroy="handleDestroy" @edge="handleEdge" @init="handleInit" @reInit="handleReInit" @setPosition="handleSetPosition"
+                @swipe="handleSwipe" @lazyLoaded="handleLazyLoaded" @lazyLoadError="handleLazeLoadError" v-if="activities">
+                <router-link :to="{ name: 'prize',params: { id: item.id } }" v-for="(item,index) in activities" v-if="activities"
+                    v-bind:key="index">
+                    <img :src="item.image" :alt="item.name" class="img-fluid">
+                </router-link>
+            </slick>
         </div>
         <div class="text-center activity-content" v-if="status">{{ activity.name }}</div>
 
