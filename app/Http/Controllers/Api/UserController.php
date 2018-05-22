@@ -105,6 +105,13 @@ class UserController extends Controller
                 }
             }
         }
+        //获取排名99的用户
+        $_orm = Clone $orm;
+        $_orm->groupBy('words_number')->limit(1)->offset(98);
+        $row = $_orm->select('words_number')->get();
+        if( count($row) > 0 ){
+            $orm->where('words_number', '>', $row[0]->words_number);
+        }
         $activity_users = $orm->paginate(4);
         return ActivityUserResource::collection($activity_users)->additional([
             'meta' => [
