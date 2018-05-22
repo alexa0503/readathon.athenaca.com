@@ -46,7 +46,6 @@ let wxShare = async function (to) {
 //根据路由切换背景
 router.beforeEach((to, from, next) => {
     store.dispatch('loading')
-    //console.log(store.state.self.id)
     wxShare(to)
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';

@@ -101,9 +101,11 @@
                 })
             },
             vote: function (user_id, index) {
+                let name = 'home'
                 this.$store.dispatch('vote', {
                     user_id,
-                    index
+                    index,
+                    name
                 })
             },
             handleScroll: function(){

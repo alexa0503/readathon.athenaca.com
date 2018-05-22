@@ -63,7 +63,15 @@ export default {
     updateTel(state, tel){
         state.self.tel = tel
     },
+    updateHomeVotedNumber(state, payload){
+        if( state.homeBoardList.data[payload.index] ){
+            state.homeBoardList.data[payload.index].voted_number = payload.voted_number
+            state.homeBoardList.data[payload.index].has_voted = payload.has_voted
+            state.homeBoardList.data[payload.index].words_number = payload.words_number
+        }
+    },
     updateVotedNumber(state, payload){
+        
         if( state.boardList.data[payload.index] ){
             state.boardList.data[payload.index].voted_number = payload.voted_number
             state.boardList.data[payload.index].has_voted = payload.has_voted

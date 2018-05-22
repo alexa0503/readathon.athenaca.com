@@ -29,7 +29,6 @@
 	<script src="{{ mix('js/app.js') }}"></script>
 	<script>
 		var windowInnerHeight = window.innerHeight; //获取当前浏览器窗口高度
-		//console.log(window.orientation)
 		if (window.orientation == 0) {
 			$(window).resize(function () {
 				if (window.innerHeight < windowInnerHeight) {
@@ -39,7 +38,6 @@
 					$('#navigation').addClass('fixed-bottom');
 					$('#profileBtn').addClass('fixed-bottom');
 				}
-				console.log(window.innerHeight, windowInnerHeight)
 			});
 		}
 	</script>

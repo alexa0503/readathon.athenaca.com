@@ -140,7 +140,6 @@ export default {
     }, type) {
         return new Promise((resolve, reject) => {
             if ( state.self.is_activated == undefined || state.self.is_activated == 0) {
-                console.log(state.self.is_activated)
                 axios.get(apiUrls.USER_URL, {
                         params: {
                             type: type,
@@ -295,7 +294,8 @@ export default {
         commit
     }, {
         user_id,
-        index
+        index,
+        name
     }) {
         let url = apiUrls.VOTE_URL + '/' + user_id
         if (user_id == undefined) {
@@ -304,11 +304,17 @@ export default {
         axios.post(url).then(function (response) {
             if (response.data && response.data.ret == 0) {
                 let data = response.data.data
-                if (index == undefined) {
+                
+                if ( index == undefined ) {
                     commit('updateSelfVotedNumber', data)
                 } else if (index != -1) {
                     data.index = index
-                    commit('updateVotedNumber', data)
+                    if( name == 'home' ){
+                        commit('updateHomeVotedNumber', data)
+                    }
+                    else{
+                        commit('updateVotedNumber', data)
+                    }
                 } else {
                     commit('updateUserVotedNumber', data)
                 }

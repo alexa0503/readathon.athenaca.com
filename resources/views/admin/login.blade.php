@@ -101,7 +101,6 @@
                     }
                     var json = jQuery.parseJSON(xhr.responseText);
                     var keys = Object.keys(json.errors);
-                    console.log(json,keys)
                     $('#login-form .form-group .help-block').empty();
                     $('#login-form .form-group').removeClass('has-error');
                     $('#login-form .form-group').each(function(){
