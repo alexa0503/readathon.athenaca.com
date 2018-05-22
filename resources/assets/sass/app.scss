@@ -1048,6 +1048,10 @@ a:hover {
     line-height: 1.7;
     font-size: 1.3rem;
 }
+.prize-content a {
+    color: $blue;
+    text-decoration: underline;
+}
 
 .prize-page .prize-content img {
     max-width: 100%;

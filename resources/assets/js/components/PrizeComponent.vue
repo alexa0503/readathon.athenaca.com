@@ -132,7 +132,7 @@
                     more: more,
                     page: page
                 }).then((response)=>{
-                    if(response.data.prizes.current_page < response.data.prizes.current_page.last_page){
+                    if(response.data.prizes.current_page < response.data.prizes.last_page){
                         vm.fetching = false
                     }
                 })
