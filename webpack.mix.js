@@ -14,5 +14,5 @@ mix.autoload({
     'moment': ['moment', 'window.moment'],
 })
 mix.js('resources/assets/js/app.js', 'public/js')
-    .sass('resources/assets/sass/app.scss', 'public/css')
+    .sass('resources/assets/sass/app.scss', 'public/css').version();
 //   .copy('resources/assets/js/wx.js', 'public/js/wx.js')
