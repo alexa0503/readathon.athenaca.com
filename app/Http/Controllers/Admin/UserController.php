@@ -26,7 +26,21 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $admin = Auth::guard('admin')->user();
+        
         $orm = \App\User::orderBy('created_at', 'DESC');
+
+        if( !$admin->hasAnyRole(['超级管理员']) ){
+            $super_administrator = false;
+            //$user_administrator = DB::table('user_administrators')->where('administrator_id', $id)->where('user_id', $user)->first();
+            
+            $orm->whereHas('administrators',  function($query) use($admin){
+                $query->where('administrator_id', $admin->id);
+            });
+        }
+        else{
+            $super_administrator = true;
+        }
         if( $request->input('keywords') ){
             $orm->where('name', 'LIKE', '%'.$request->keywords.'%');
         }
@@ -62,7 +76,8 @@ class UserController extends Controller
             'items' => $users,
             'cities' => $cities,
             'ages' => $ages,
-            'administrators' => $administrators
+            'administrators' => $administrators,
+            'super_administrator' => $super_administrator
         ]);
     }
     public function disable(Request $request, $user_id){
@@ -246,6 +261,31 @@ class UserController extends Controller
         $user->sex = $request->input('sex');
         $user->save();
         return response()->json(['ret' => 0, 'url' => route('user.index')]);
+    }
+
+    public function dispatchUser(Request $request, $id)
+    {
+        $users = $request->input('users');
+        if( null == $users || empty($users) ){
+            return response()->json([
+                'ret' => 1001,
+                'errMsg' => '请勾选需要分配的用户'
+            ]);
+        }
+        if( !is_array($users) ){
+            $users = [$users];
+        }
+        //DB::table('user_administrators')->where('administrator_id', $id)->delete();
+        foreach($users as $user){
+            $user_administrator = DB::table('user_administrators')->where('administrator_id', $id)->where('user_id', $user)->first();
+            if( null == $user_administrator){
+                DB::table('user_administrators')->insert([
+                    'user_id'=>$user,
+                    'administrator_id' => $id
+                ]);
+            }
+        }
+        return response()->json(['ret' => 0]);
     }
 
     /**

@@ -93,25 +93,59 @@
                     </tr>
                     @endforeach
                 </tbody>
+                @if($super_administrator)
                 <tfoot>
                     <tr>
-                        <td colspan="13">
+                        <td colspan="16">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                     将所选分配给<span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right" role="menu">
                                     @foreach($administrators as $administrator)
-                                    <li><a href="#" data-id="{{ $administrator->id }}">{{ $administrator->name }}</a></li>
+                                    <li><a href="{{ route('user.dispatch',$administrator->id) }}" class="dispatch" data-id="{{ $administrator->id }}">{{ $administrator->name }}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
                         </td>
                     </tr>
                 </tfoot>
+                @endif
             </table>
             {!! $items->appends(Request::except('page'))->links() !!}
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+$(function() {
+    $('.dispatch').on('click', function(){
+        var url = $(this).attr('href')
+        var users = []
+        $('input[name="id[]"]:checked').each(function(){
+            users.push($(this).val())
+        })
+        //var users = $('input[name="id[]"]').val();
+        $.post(url, {users: users}, function(data){
+            if(data.ret == 0){
+                alert('提交成功')
+                window.location.reload();
+            }
+            else{
+                alert(data.errMsg)
+            }
+        },"JSON")
+        return false;
+    })
+    $('input[name="all"]').on('click', function(){
+        if( $(this).is(':checked') ){
+            $('input[name="id[]"]').prop('checked', true)
+        }
+        else{
+            $('input[name="id[]"]').prop('checked', false)
+        }
+    })
+});
+</script>
 @endsection
