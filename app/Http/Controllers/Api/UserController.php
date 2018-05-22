@@ -48,26 +48,18 @@ class UserController extends Controller
         $orm = ActivityUser::with('user');
         $activity = Helper::getLatestActivity();
 
-        if ($request->input('type') == 'withoutme') {
-            $wx_activity_user = ActivityUser::where('user_id', session('wx.user.id'))
-                ->where('activity_id', $activity->id)
-                ->first();
-            if ($wx_activity_user != null) {
-                $orm->where('user_id', '!=', $id);
-                //所有城市年龄组
-                //$orm->where('age_group_id', $wx_activity_user->age_group_id);
-                //$orm->where('city_id', $wx_activity_user->city_id);
-            }
-        } else {
-            if ($request->input('agegroup')) {
-                $orm->where('age_group_id', $request->input('agegroup'));
-            }
+        $wx_activity_user = ActivityUser::where('user_id', session('wx.user.id'))
+            ->where('activity_id', $activity->id)
+            ->first();
+        
+        if ($request->input('agegroup')) {
+            $orm->where('age_group_id', $request->input('agegroup'));
+        }
 
-            if ($request->input('city')) {
-                $orm->whereHas('user', function ($query) use ($request) {
-                    $query->where('city_id', $request->input('city'));
-                });
-            }
+        if ($request->input('city')) {
+            $orm->whereHas('user', function ($query) use ($request) {
+                $query->where('city_id', $request->input('city'));
+            });
         }
 
         $current_activity = Helper::getCurrentActivity();
@@ -107,11 +99,14 @@ class UserController extends Controller
         }
         //获取排名99的用户
         $_orm = Clone $orm;
-        $_orm->groupBy('words_number')->limit(1)->offset(98);
-        $row = $_orm->select('words_number')->get();
-
+        if ($request->input('type') == 'withoutme') {
+            if ($wx_activity_user != null) {
+                $orm->where('user_id', '!=', $id);
+            }
+        }
+        $row = $_orm->select('words_number')->limit(1)->offset(99)->get();
         if( count($row) > 0 ){
-            $orm->where('words_number', '>=', $row[0]->words_number);
+            $orm->where('words_number', '>', $row[0]->words_number);
         }
         $activity_users = $orm->paginate(4);
         return ActivityUserResource::collection($activity_users)->additional([

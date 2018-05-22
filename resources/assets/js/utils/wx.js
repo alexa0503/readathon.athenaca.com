@@ -64,8 +64,10 @@ export const share = function(data) {
         });
     });
 }
-export const initConfig = function(){
-    let url = window.location.href
+export const initConfig = function(url){
+    if( url == undefined ){
+        let url = window.location.href
+    }
     axios.get(apiUrls.WX_CONFIG_URL, {
         params: {
             url: url
@@ -82,10 +84,10 @@ export const initConfig = function(){
             jsApiList: [
                 'onMenuShareAppMessage',
                 'onMenuShareTimeline',
+                'chooseImage',
                 'uploadImage',
                 'previewImage',
                 'getLocalImgData',
-                'chooseImage'
             ]
         });
     })

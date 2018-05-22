@@ -11,7 +11,7 @@ class WxController extends Controller
 {
     public function share(Request $request)
     {
-        $url = $request->input('url');
+        $url = urldecode($request->input('url'));
         if (null == $url) {
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
             $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -41,7 +41,7 @@ class WxController extends Controller
             $img->fit(400, 400);
             $img->save();
             return response()->json(['ret'=>0, 'data'=>[
-                'url' =>Storage::url($avatar),
+                'url' =>Storage::url($avatar).'?_='.time(),
             ]]);
         }catch(\Exception $e){
             return response()->json([

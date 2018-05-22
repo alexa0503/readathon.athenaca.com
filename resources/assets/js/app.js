@@ -10,6 +10,9 @@ import * as jssdk from './utils/wx'
 
 let wxShare = async function (to) {
     //await store.dispatch('loading')
+    let url = 'http://readathon.athenaca.com'+to.fullPath
+    //console.log(window.location.href, url)
+    //let url = window.location.href;
     await store.dispatch('getSelfInfo')
     if (store.state.self == undefined) {
         router.push({
@@ -20,7 +23,7 @@ let wxShare = async function (to) {
             name: 'register'
         })
     }
-    jssdk.initConfig()
+    jssdk.initConfig(url)
     if (to.name == 'invite') {
         let id = store.state.self.id
         let link = 'http://readathon.athenaca.com/invite/' + id

@@ -4,7 +4,7 @@
             <div class="return">
                 <img src="/images/icon-quit.png" v-on:click="quit" />
             </div>
-            <div class="avatar">
+            <div class="avatar"  @click="chooseImg">
                 <img :src="userInfo.avatar" class="rounded-circle" />
             </div>
             <div class="edit-text" @click="chooseImg">点击修改头像</div>
@@ -146,20 +146,38 @@
             chooseImg: function () {
                 let vm = this
                 wx.ready(function () {
+                    /*
+                    wx.checkJsApi({
+                        jsApiList: ['chooseImage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                        success: function(res) {
+                            console.log(res)
+                        // 以键值对的形式返回，可用的api值true，不可用为false
+                        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                        },
+                        fail: function(res){
+                            console.log(res)
+                        }
+                    });
+                    */
                     wx.chooseImage({
                         count: 1, // 默认9
                         sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
                         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
                         success: function (res) {
                             let localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-                            wx.uploadImage({
-                                localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
-                                isShowProgressTips: 1, // 默认为1，显示进度提示
-                                success: function (res) {
-                                    let serverId = res.serverId; // 返回图片的服务器端ID
-                                    vm.$store.dispatch('uploadAvatar',serverId)
-                                }
-                            });
+                            setTimeout(function(){
+                                wx.uploadImage({
+                                    localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                                    success: function (res) {
+                                        let serverId = res.serverId; // 返回图片的服务器端ID
+                                        vm.$store.dispatch('uploadAvatar',serverId)
+                                    }
+                                });
+                            },100)
+                        },
+                        fail: function(res){
+                            console.log(res)
                         }
                     });
                 })
