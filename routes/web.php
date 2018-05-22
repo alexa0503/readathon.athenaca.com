@@ -60,6 +60,32 @@ Route::get('/invite/{id}', function(Request $request){
     }
     return redirect('/');
 });
+Route::get('/random', function(Request $request){
+    $i = 0;
+    while(true){
+        $i++;
+        $user_id = rand(1,102);
+        $activity_id = 2;
+        $activity_user = App\ActivityUser::where('user_id', $user_id)->where('activity_id', $activity_id)->first();
+        if( App\User::find($user_id) == null ){
+            continue;
+        }
+        if( $activity_user == null ){
+            $activity_user = new App\ActivityUser;
+            $activity_user->user_id = $user_id;
+            $activity_user->activity_id = $activity_id;
+            $activity_user->city_id = 1;
+            $activity_user->age_group_id = 2;
+            $activity_user->reading_number = rand(1000, 99999);
+            $activity_user->words_number = rand(1000, 99999);
+            $activity_user->voted_number = rand(1000, 99999);
+            $activity_user->save();
+        }
+        if($i > 1000){
+            break;
+        }
+    }
+});
 Route::group(['middleware'=>['wx.auth']], function(){
     Route::get('/logout', function(Request $request){
         //session(['wx.user'=>null]);

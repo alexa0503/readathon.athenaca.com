@@ -12,14 +12,26 @@ export const share = function(data) {
     if( data == undefined || data.title == undefined ){
         title = defaultInfo.title
     }
+    else{
+        title = data.title
+    }
     if( data == undefined || data.desc == undefined ){
         desc = defaultInfo.desc
+    }
+    else{
+        desc = data.desc
     }
     if( data == undefined || data.imgUrl == undefined ){
         imgUrl = defaultInfo.imgUrl
     }
+    else{
+        imgUrl = data.imgUrl
+    }
     if( data == undefined || data.link == undefined ){
         link = defaultInfo.link
+    }
+    else{
+        link = data.link
     }
     wx.ready(function () {
         wx.onMenuShareAppMessage({
@@ -52,7 +64,7 @@ export const share = function(data) {
         });
     });
 }
-export const initConfig = function(debug=false){
+export const initConfig = function(){
     let url = window.location.href
     axios.get(apiUrls.WX_CONFIG_URL, {
         params: {
@@ -62,7 +74,7 @@ export const initConfig = function(debug=false){
     .then(function (response) {
         let data = response.data
         wx.config({
-            debug: debug,
+            debug: false,
             appId: data.appId,
             timestamp: data.timestamp,
             nonceStr: data.nonceStr,

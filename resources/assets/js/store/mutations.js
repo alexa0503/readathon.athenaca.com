@@ -71,7 +71,6 @@ export default {
         }
     },
     updateVotedNumber(state, payload){
-        
         if( state.boardList.data[payload.index] ){
             state.boardList.data[payload.index].voted_number = payload.voted_number
             state.boardList.data[payload.index].has_voted = payload.has_voted
