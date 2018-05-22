@@ -113,7 +113,7 @@ class QuestionController extends Controller
                 $activity_user->save();
                 $activity_log = new ActivityLog;
                 $activity_log->activity_id = $activity->id;
-                $activity_log->reason = '问题回答正确奖励字数';
+                $activity_log->reason = '有奖问答奖励';
                 $activity_log->words_number = $question->rewarded_number;
                 $activity_log->user_id = $user_id;
                 $activity_log->save();
