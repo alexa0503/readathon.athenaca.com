@@ -13,6 +13,14 @@
                     @endforeach
                 </select>
             </div>
+            <div class="form-group">
+                <select name="school_district_id" class="form-control" id="school_district_id">
+                        <option value="" >选择校区/所有</option>
+                        @foreach($districts as $district)
+                        <option value="{{ $district->id }}" {!! $district->id == Request::input('school_district_id') ? 'selected="selected"' : '' !!}>{{ $district->name }}</option>
+                        @endforeach
+                    </select>
+            </div>
              <div class="form-group">
                 <select name="age_id" class="form-control">
                     <option value="">请选择年龄组/所有</option>

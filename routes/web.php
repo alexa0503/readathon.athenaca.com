@@ -143,6 +143,8 @@ Route::group(['middleware' => ['role:管理员|超级管理员', 'menu'], 'prefi
     Route::resource('log', 'Admin\LogController');
     Route::resource('prize', 'Admin\PrizeController');
     Route::resource('page.post', 'Admin\PostController');
+    Route::resource('district', 'Admin\SchoolDistrictController');
+    
 });
 //Route::get('/login', 'Auth\LoginController@showLoginForm');
 //Route::post('/login', 'Auth\LoginController@postLogin');

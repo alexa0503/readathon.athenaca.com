@@ -25,9 +25,9 @@ class AgeController extends Controller
         if( $request->has('keywords') ){
             $orm->where('title', 'LIKE', '%'.$request->keywords.'%');
         }
-        $cities = $orm->paginate(20);
+        $age_groups = $orm->paginate(20);
         return view('admin.age.index', [
-            'items' => $cities,
+            'items' => $age_groups,
         ]);
     }
 

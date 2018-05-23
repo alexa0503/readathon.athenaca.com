@@ -36,6 +36,19 @@
                         <label class="help-block" for="" id="help-city_id"></label>
                     </div>
                 </div>
+                
+                <div class="form-group">
+                    <label for="school_district_id" class="col-lg-2 col-md-2 control-label">校区</label>
+                    <div class="col-lg-10 col-md-10">
+                        <select name="school_district_id" class="form-control" id="school_district_id">
+                            <option value="" >选择校区/所有</option>
+                            @foreach($districts as $district)
+                            <option value="{{ $district->id }}" {!! $district->id == $item->school_district_id ? 'selected="selected"' : '' !!}>{{ $district->name }}</option>
+                            @endforeach
+                        </select>
+                        <label class="help-block" for="" id="help-school_district_id"></label>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="" class="col-lg-2 col-md-2 control-label">联系电话</label>
                     <div class="col-lg-10 col-md-10">

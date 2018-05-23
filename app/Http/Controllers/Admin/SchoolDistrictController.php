@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
+use App\City;
+use App\SchoolDistrict as District;
 
-class CityController extends Controller
+class SchoolDistrictController extends Controller
 {
     
     public function __construct()
@@ -20,14 +22,9 @@ class CityController extends Controller
      */
     public function index(Request $request)
     {
-        
-        $orm = \App\City::orderBy('sort_id', 'ASC');
-        if( $request->has('keywords') ){
-            $orm->where('title', 'LIKE', '%'.$request->keywords.'%');
-        }
-        $cities = $orm->paginate(20);
-        return view('admin.city.index', [
-            'items' => $cities,
+        $items = District::paginate(20);
+        return view('admin.district.index', [
+            'items' => $items,
         ]);
     }
 
@@ -38,9 +35,8 @@ class CityController extends Controller
      */
     public function create()
     {
-        $sort_id = \App\City::max('sort_id') + 1;
-        return view('admin.city.create', [
-            'sort_id' => $sort_id ?: 1,
+        return view('admin.district.create', [
+            'cities' => City::all(),
         ]);
     }
 
@@ -53,22 +49,22 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $messages = [
-            'name.*' => '城市名必须填写且唯一~',
-            'sort_id.*' => '排序ID必须为数字~',
+            'name.*' => '城市名必须填写~',
+            'city_id.*' => '请选择城市~',
         ];
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:cities',
-            'sort_id' => 'required|numeric',
+            'name' => 'required',
+            'city_id' => 'required',
         ], $messages);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 403);
         }
-        $city = new \App\City;
-        $city->name = $request->input('name');
-        $city->sort_id = $request->input('sort_id');
-        $city->save();
-        return response()->json(['ret' => 0, 'url' => route('city.index')]);
+        $district = new District;
+        $district->name = $request->input('name');
+        $district->city_id = $request->input('city_id');
+        $district->save();
+        return response()->json(['ret' => 0, 'url' => route('district.index')]);
     }
 
     /**
@@ -90,9 +86,11 @@ class CityController extends Controller
      */
     public function edit($id)
     {
-        $city = \App\City::find($id);
-        return view('admin.city.edit', [
-            'item' => $city,
+        $item = District::find($id);
+        return view('admin.district.edit', [
+            'item' => $item,
+            'cities' => City::all(),
+            
         ]);
     }
 
@@ -105,23 +103,23 @@ class CityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $city = \App\City::find($id);
         $messages = [
-            'name.*' => '城市名必须填写且唯一~',
-            'sort_id.*' => '排序ID必须为数字~',
+            'name.*' => '城市名必须填写~',
+            'city_id.*' => '请选择城市~',
         ];
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:cities,name,' . $city->id . ',id',
-            'sort_id' => 'required|numeric',
+            'name' => 'required',
+            'city_id' => 'required',
         ], $messages);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 403);
         }
-        $city->name = $request->input('name');
-        $city->sort_id = $request->input('sort_id');
-        $city->save();
-        return response()->json(['ret' => 0, 'url' => route('city.index')]);
+        $district = District::find($id);
+        $district->name = $request->input('name');
+        $district->city_id = $request->input('city_id');
+        $district->save();
+        return response()->json(['ret' => 0, 'url' => route('district.index')]);
     }
 
     /**
@@ -132,12 +130,8 @@ class CityController extends Controller
      */
     public function destroy($id)
     {
-        $count = \App\User::where('city_id', $id)->count();
-        if ($count > 0) {
-            return response()->json(['ret' => 1001, 'errMsg' => '该城市下有用户无法删除']);
-        }
-        $city = \App\City::find($id);
-        $city->delete();
+        $item = District::find($id);
+        $item->delete();
         return response()->json(['ret' => 0]);
     }
 }

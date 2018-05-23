@@ -63,6 +63,10 @@ class GenerateMenu
                 $city = $menu->add('城市管理', ['url' => route('city.index'), 'class' => 'openable bg-palette5']);
                 $city->add('查看', ['url' => route('city.index'), 'class' => 'bg-palette5']);
                 $city->add('新增', ['url' => route('city.create'), 'class' => 'bg-palette5']);
+                $city = $menu->add('校区管理', ['url' => route('district.index'), 'class' => 'openable bg-palette5']);
+                $city->add('查看', ['url' => route('district.index'), 'class' => 'bg-palette5']);
+                $city->add('新增', ['url' => route('district.create'), 'class' => 'bg-palette5']);
+                
             }
             //年龄组管理
             if (($admin->hasPermissionTo('年龄组管理') && $admin->hasAnyRole(['管理员'])) || $admin->hasAnyRole(['超级管理员'])) {
