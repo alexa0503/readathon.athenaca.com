@@ -171,7 +171,7 @@ class ActivityUserController extends Controller
         }
         $activity_user->age_group_id = $request->input('age_group_id');
         $activity_user->city_id = $request->input('city_id');
-        $activity_user->receive_status = $request->input('receive_status');
+        //$activity_user->receive_status = $request->input('receive_status');
         $activity_user->save();
         return response()->json(['ret' => 0, 'url' => route('activityUser.index',['activity'=>$request->input('activity')])]);
     }

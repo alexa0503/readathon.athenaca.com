@@ -52,19 +52,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="receive_status" class="col-lg-2 col-md-2 control-label">奖品领取状态</label>
-                    <div class="col-lg-10 col-md-10">
-                        <select name="receive_status" id="receive_status" class="form-control">
-                            <option value="0" {!! 0 == $item->receive_status ? 'selected="selected"' : '' !!}>未核销</option>
-                            <option value="1" {!! 1 == $item->receive_status ? 'selected="selected"' : '' !!}>已核销</option>
-                        </select>
-                        <label class="help-block" for="" id="help-receive_status"></label>
-                    </div>
-                </div>
-                
-
-
 				<div class="form-group">
 					<div class="col-lg-offset-2 col-md-offset-2 col-lg-10 col-md-10">
 						<button type="submit" class="btn btn-success btn-sm">提交</button>

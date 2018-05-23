@@ -50,7 +50,6 @@
                         <th>头像</th>
                         <th>昵称/姓名</th>
                         <th>阅读字数/阅读数/赞</th>
-                        <th>奖品领取状态</th>
                         <th>创建时间</th>
                         <th>操作</th>
                     </tr>
@@ -62,7 +61,6 @@
                         <td><a title="点击查看用户信息" href="{{ route('user.index',['id'=>$item->user_id]) }}" target="_blank"><img src="{{ asset($item->user->avatar) }}" class="img-circle" style="max-width:100px;" /></a></td>
                         <td>{{ $item->user->nickname }} / {{ $item->user->name }}</td>
                         <td>{{ $item->words_number }} / {{ $item->reading_number }} / {{ $item->voted_number }}</td>
-                        <td>{{ $item->receive_status == 1 ? '已核销' : '未核销' }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>
                              <div class="btn-group">
