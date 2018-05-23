@@ -14,4 +14,9 @@ class PrizeLog extends Model
     {
         return $this->belongsTo('App\Prize');
     }
+    
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

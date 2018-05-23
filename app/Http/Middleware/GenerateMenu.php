@@ -32,16 +32,19 @@ class GenerateMenu
             }
 
             //活动管理
-            if (($admin->hasPermissionTo('活动管理') && $admin->hasAnyRole(['管理员'])) || $admin->hasAnyRole(['超级管理员'])) {
-                $activity = $menu->add('活动管理', ['url' => route('activity.index'), 'class' => 'openable bg-palette2']);
+            if (($admin->hasPermissionTo('比赛管理') && $admin->hasAnyRole(['管理员'])) || $admin->hasAnyRole(['超级管理员'])) {
+                $activity = $menu->add('比赛管理', ['url' => route('activity.index'), 'class' => 'openable bg-palette2']);
                 $activity->add('查看', ['url' => route('activity.index'), 'class' => 'bg-palette2']);
                 $activity->add('新增', ['url' => route('activity.create'), 'class' => 'bg-palette2']);
-                $activity_user = $menu->add('活动排名', ['url' => route('activityUser.index'), 'class' => 'openable bg-palette9']);
-                //$activity_user->add('所有', ['url'=>route('activityUser.index'),'class'=>'bg-palette9']);
+                $activity_user = $menu->add('比赛排名', ['url' => route('activityUser.index'), 'class' => 'openable bg-palette9']);
                 $rows = Activity::orderBy('start_date', 'DESC')->get();
                 foreach ($rows as $row) {
                     $activity_user->add($row->name, ['url' => route('activityUser.index', ['activity' => $row->id]), 'class' => 'bg-palette9']);
                 }
+                $log = $menu->add('记录管理', ['url' => route('log.index'), 'class' => 'openable bg-palette10']);
+                $log->add('查看', ['url' => route('log.index'), 'class' => 'bg-palette2']);
+                $log->add('新增', ['url' => route('log.create'), 'class' => 'bg-palette2']);
+                
             }
             //奖品管理
             if (($admin->hasPermissionTo('奖品管理') && $admin->hasAnyRole(['管理员'])) || $admin->hasAnyRole(['超级管理员'])) {

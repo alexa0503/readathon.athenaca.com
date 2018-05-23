@@ -10,4 +10,9 @@ class ReadingLog extends Model
     {
         return $this->belongsTo('App\Activity');
     }
+    
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

@@ -10,6 +10,7 @@ use App\Activity;
 use App\ActivityUser;
 use App\City;
 use App\AgeGroup;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityUserController extends Controller
 {
@@ -120,10 +121,12 @@ class ActivityUserController extends Controller
         $activity_user = ActivityUser::where('user_id', $user_id)
             ->where('activity_id', $request->input('activity'))
             ->first();
+        $has_permission = Auth::guard('admin')->user()->hasAnyRole(['超级管理员']);
         return view('admin.activity_user.edit', [
             'item' => $activity_user,
             'age_groups' => $age_groups,
             'cities' => $cities,
+            'has_permission' => $has_permission
         ]);
     }
 
@@ -161,9 +164,11 @@ class ActivityUserController extends Controller
         $activity_user = ActivityUser::where('user_id', $user_id)
             ->where('activity_id', $request->input('activity'))
             ->first();
-        $activity_user->reading_number = $request->input('reading_number');
-        $activity_user->words_number = $request->input('words_number');
-        $activity_user->voted_number = $request->input('voted_number');
+        if( Auth::guard('admin')->user()->hasAnyRole(['超级管理员']) ){
+            $activity_user->reading_number = $request->input('reading_number');
+            $activity_user->words_number = $request->input('words_number');
+            $activity_user->voted_number = $request->input('voted_number');
+        }
         $activity_user->age_group_id = $request->input('age_group_id');
         $activity_user->city_id = $request->input('city_id');
         $activity_user->receive_status = $request->input('receive_status');

@@ -50,6 +50,7 @@
                     <tr>
                         <th><input name="all" type="checkbox" value="1" /></th>
                         <th>头像</th>
+                        <th>ID</th>
                         <th>姓名</th>
                         <th>昵称</th>
                         <th>城市</th>
@@ -71,6 +72,7 @@
                     <tr>
                         <td><input name="id[]" type="checkbox" value="{{ $item->id }}" /></td>
                         <td><img src="{{ asset($item->avatar) }}" class="img-circle" style="max-width:100px;" /></td>
+                        <td>{{ $item->id }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->nickname }}</td>
                         <td>{{ $item->city_id ? $item->city->name : '-' }}</td>
@@ -96,10 +98,20 @@
                 @if($super_administrator)
                 <tfoot>
                     <tr>
-                        <td colspan="16">
+                        <td colspan="17">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                     将所选分配给<span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right" role="menu">
+                                    @foreach($administrators as $administrator)
+                                    <li><a href="{{ route('user.dispatch',$administrator->id) }}" class="dispatch" data-id="{{ $administrator->id }}">{{ $administrator->name }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    将所选取消权限<span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right" role="menu">
                                     @foreach($administrators as $administrator)

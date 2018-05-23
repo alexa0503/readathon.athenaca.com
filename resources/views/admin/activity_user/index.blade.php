@@ -65,7 +65,21 @@
                         <td>{{ $item->receive_status == 1 ? '已核销' : '未核销' }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>
-                            <a href="{{route('activityUser.edit',['id'=>$item->user_id, 'activity'=>Request::input('activity')])}}" class="btn btn-default btn-xs">编辑</a>
+                             <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    操作 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right" role="menu">
+                                    <li><a href="{{route('activityUser.edit',['id'=>$item->user_id, 'activity'=>Request::input('activity')])}}" >编辑基础信息</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{{route('log.index',['user_id'=>$item->user_id, 'activity'=>Request::input('activity'), 'type'=>'reading'])}}" >查看阅读记录</a></li>
+                                    <li><a href="{{route('log.index',['user_id'=>$item->user_id, 'activity'=>Request::input('activity'), 'type'=>'activity'])}}" >查看活动记录</a></li>
+                                    <li><a href="{{route('log.index',['user_id'=>$item->user_id, 'activity'=>Request::input('activity'), 'type'=>'prize'])}}" >查看奖品记录</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{{route('log.create',['user_id'=>$item->user_id, 'activity'=>Request::input('activity')])}}" >添加活动记录</a></li>
+                                </ul>
+                            </div>
+
                         </td>
                     </tr>
                     @endforeach
