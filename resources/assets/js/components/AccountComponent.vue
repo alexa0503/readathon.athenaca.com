@@ -28,13 +28,13 @@
                     <table class="table borderless">
                         <thead>
                             <tr v-if="type === 'reading'">
-                                <th>日期</th><th>书名</th><th>字数</th>
+                                <th>日期</th><th>书名</th><th class="mw-td">字数</th>
                             </tr>
                             <tr v-if="type === 'activity'">
-                                <th>日期</th><th>活动</th><th>字数</th>
+                                <th>日期</th><th>活动</th><th class="mw-td">字数</th>
                             </tr>
                             <tr v-if="type === 'prize' && isSelf">
-                                <th>日期</th><th>奖品</th><th>状态</th>
+                                <th>日期</th><th>奖品</th><th class="mw-td">状态</th>
                             </tr>
                         </thead>
                         <tbody>

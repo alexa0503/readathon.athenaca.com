@@ -53,7 +53,7 @@
                 <router-link :to="{name:'about'}">关于阅读马拉松</router-link>
             </div>
             <div class="regester-succeeded-link">
-                <router-link :to="{name:'about', params:{page:'test'}}">关于美国权威STAR英文水平测试</router-link>
+                <router-link :to="{name:'about', params:{page:'test'}}">预约STAR英文阅读水平测试</router-link>
             </div>
             <div class="regester-succeeded-link">
                 <router-link :to="{name:'about', params:{page:'athena'}}">关于知慧学院 Athena Academy</router-link>

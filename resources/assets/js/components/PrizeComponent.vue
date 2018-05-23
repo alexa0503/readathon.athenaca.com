@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid prize-page" v-if="!loading">
-        <div class="text-center activity-content" v-if="status">{{ activity.name }}</div>
+        <div class="text-center activity-title" v-if="status">{{ activity.name }}</div>
         <div class="prize-content" v-if="!status">
             <h3>敬请期待</h3>
             <div>目前还没有奖品可以领取</div>
