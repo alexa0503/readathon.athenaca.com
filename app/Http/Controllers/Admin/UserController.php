@@ -287,6 +287,24 @@ class UserController extends Controller
         }
         return response()->json(['ret' => 0]);
     }
+    public function revokeUser(Request $request, $id)
+    {
+        $users = $request->input('users');
+        if( null == $users || empty($users) ){
+            return response()->json([
+                'ret' => 1001,
+                'errMsg' => '请勾选需要取消的用户'
+            ]);
+        }
+        if( !is_array($users) ){
+            $users = [$users];
+        }
+        //DB::table('user_administrators')->where('administrator_id', $id)->delete();
+        foreach($users as $user){
+            DB::table('user_administrators')->where('administrator_id', $id)->where('user_id', $user)->delete();
+        }
+        return response()->json(['ret' => 0]);
+    }
 
     /**
      * Remove the specified resource from storage.

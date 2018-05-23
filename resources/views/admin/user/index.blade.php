@@ -115,7 +115,7 @@
                                 </button>
                                 <ul class="dropdown-menu pull-right" role="menu">
                                     @foreach($administrators as $administrator)
-                                    <li><a href="{{ route('user.dispatch',$administrator->id) }}" class="dispatch" data-id="{{ $administrator->id }}">{{ $administrator->name }}</a></li>
+                                    <li><a href="{{ route('user.revoke',$administrator->id) }}" class="dispatch" data-id="{{ $administrator->id }}">{{ $administrator->name }}</a></li>
                                     @endforeach
                                 </ul>
                             </div>

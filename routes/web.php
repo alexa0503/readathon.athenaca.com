@@ -129,6 +129,7 @@ Route::group(['middleware' => ['role:管理员|超级管理员', 'menu'], 'prefi
     Route::post('/user/activate/{id}', 'Admin\UserController@activate')->name('user.activate');
     Route::post('/user/disable/{id}', 'Admin\UserController@disable')->name('user.disable');
     Route::post('/user/dispatch/{id}', 'Admin\UserController@dispatchUser')->name('user.dispatch');
+    Route::post('/user/revoke/{id}', 'Admin\UserController@revokeUser')->name('user.revoke');
     Route::resource('user', 'Admin\UserController');
     Route::resource('age', 'Admin\AgeController');
     Route::resource('city', 'Admin\CityController');
