@@ -198,8 +198,17 @@ a:hover {
 .board-list .board-no-activated {
     line-height: 6.25rem;
     text-align: center;
+    font-size: 1.3rem;
 }
 
+.board-list .board-no-activated-02 {
+    line-height: 2.25rem;
+    text-align: center;
+    padding-top: .8rem;
+    font-size: 1.3rem;
+    padding-left:1.5rem;
+    padding-right: 1.5rem;
+}
 .board-list .number {
     height: 6.25rem;
     line-height: 6.25;

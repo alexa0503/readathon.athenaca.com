@@ -63,7 +63,7 @@ class UserController extends Controller
         }
 
         $current_activity = Helper::getCurrentActivity();
-        if ($request->input('activity')) {
+        if ( $request->input('activity') ) {
             $orm->where('activity_id', $request->input('activity'));
             $activity_id = $request->input('activity');
             if (null == $current_activity) {
@@ -73,8 +73,8 @@ class UserController extends Controller
             }
         } else {
             //没有活动
-            if (null == $current_activity) {
-                return response()->json(['ret' => 1001, 'errMsg' => '当前没有活动'], 433);
+            if (null == $current_activity && $request->input('type') == 'withoutme') {
+                return response()->json(['ret' => 1001, 'errMsg' => '当前没有活动', 'latest'=>$activity]);
             }
             $is_current_activity = null == $current_activity ? 0 : 1;
             $activity_id = $activity->id;
@@ -112,6 +112,7 @@ class UserController extends Controller
         return ActivityUserResource::collection($activity_users)->additional([
             'meta' => [
                 'is_current_activity' => $is_current_activity,
+                'current_activity' => $current_activity
             ],
         ]);
     }

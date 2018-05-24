@@ -18,9 +18,14 @@
                     <router-link :to="{ name: 'account', params: {id: user.id} }"><img :src="user.avatar" class="rounded-circle" /></router-link>
                 </div>
             </div>
-            <div class="board-list board-list-home" v-else-if="user.is_activated == 1 && user.has_joined == 0">
+            <div class="board-list board-list-home" v-else-if="!hasCurrent">
                 <div class="board-no-activated">
-                    <router-link :to="{ name: 'account' }">我也参加阅读马拉松</router-link>
+                    <router-link :to="{ name: 'account' }">抱歉，当前没有可以参加的活动</router-link>
+                </div>
+            </div>
+            <div class="board-list board-list-home" v-else-if="user.is_activated == 1 && user.has_joined == 0">
+                <div class="board-no-activated-02">
+                    <router-link :to="{ name: 'account' }">当前是{{ currentActivityName }}，您还没有加入比赛。请添加阅读记录，正式成为参赛者！</router-link>
                 </div>
             </div>
             <div class="board-list board-list-home" v-else>
@@ -77,6 +82,19 @@
             boardList: 'homeBoardList',
             showMore(state) {
                 return state.homeBoardList.meta && (state.homeBoardList.meta.current_page != state.homeBoardList.meta.last_page)
+            },
+            hasCurrent(state){
+                if( state.homeBoardList && state.homeBoardList.ret == 1001 ){
+                    return false
+                }
+                else{
+                    return true
+                }
+            },
+            currentActivityName(state){
+                if( state.homeBoardList.meta && state.homeBoardList.meta.current_activity ){
+                    return state.homeBoardList.meta.current_activity.name
+                }
             }
         }),
         created() {
