@@ -17,7 +17,7 @@ class ActivityUserController extends Controller
     
     public function __construct()
     {
-        $this->middleware(['permission:活动管理']);
+        $this->middleware(['permission:比赛管理']);
     }
     /**
      * Display a listing of the resource.
