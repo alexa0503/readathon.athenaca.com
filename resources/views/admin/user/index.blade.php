@@ -95,10 +95,24 @@
                         <td>{{ $item->created_at }}</td>
                         <td>{{ $item->administrator_names }}</td>
                         <td>
-                            @if($item->is_activated == 0 && $item->name != null)<a href="{{route('user.activate',['id'=>$item->id])}}" class="btn btn-default btn-xs activate">激活</a>@endif
-                            @if($item->is_activated == 1)<a href="{{route('user.disable',['id'=>$item->id])}}" class="btn btn-default btn-xs activate">禁用</a>@endif
-                            @if($item->is_activated == -1)<a href="{{route('user.activate',['id'=>$item->id])}}" class="btn btn-default btn-xs activate">重新启用</a>@endif
-                            <a href="{{route('user.edit',['id'=>$item->id])}}" class="btn btn-default btn-xs">编辑</a>
+
+                            
+                             <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    操作 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right" role="menu">
+                                     @if($item->is_activated == 0 && $item->name != null)<li><a href="{{route('user.activate',['id'=>$item->id])}}" class="activate">激活</a></li>@endif
+                                    @if($item->is_activated == 1)<li><a href="{{route('user.disable',['id'=>$item->id])}}" class="activate">禁用</a></li>@endif
+                                    @if($item->is_activated == -1)<li><a href="{{route('user.activate',['id'=>$item->id])}}" class="activate">重新启用</a></li>@endif
+                                    <li><a href="{{route('user.edit',['id'=>$item->id])}}" class="">编辑</a></li>
+
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'reading'])}}" >查看阅读记录</a></li>
+                                    <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'activity'])}}" >查看活动记录</a></li>
+                                    <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'prize'])}}" >查看奖品记录</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
