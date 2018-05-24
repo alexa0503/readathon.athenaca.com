@@ -169,8 +169,10 @@ class LogController extends Controller
         $activity_user = ActivityUser::where('user_id', $log->user_id)
             ->where('activity_id', $log->activity_id)
             ->first();
-        $activity_user->words_number = $activity_user->words_number - $log->words_number;
-        $activity_user->save();
+        if( null != $activity_user){
+            $activity_user->words_number = $activity_user->words_number - $log->words_number;
+            $activity_user->save();
+        }
         $log->delete();
         return ['ret'=>0];
     }
