@@ -121,8 +121,8 @@
                 <tfoot>
                     <tr>
                         <td colspan="17">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <div class="btn-group dropup">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     将所选分配给<span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right" role="menu">
@@ -131,8 +131,8 @@
                                     @endforeach
                                 </ul>
                             </div>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <div class="btn-group dropup">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     将所选取消权限<span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right" role="menu">
