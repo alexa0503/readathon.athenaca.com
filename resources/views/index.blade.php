@@ -44,6 +44,16 @@
 	@if(env('APP_ENV') != 'production')
 	<script src="/js/isconsole.min.js"></script>
 	@endif
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-117289831-2"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-117289831-2');
+	</script>
+
 </body>
 
 </html>
