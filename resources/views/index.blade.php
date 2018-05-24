@@ -25,6 +25,14 @@
 		<router-view name="navigation"></router-view>
 		<router-view name="modal"></router-view>
 	</div>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-117289831-2"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-117289831-2');
+	</script>
 	<script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 	<script src="{{ mix('js/app.js') }}"></script>
 	<script>
@@ -44,15 +52,6 @@
 	@if(env('APP_ENV') != 'production')
 	<script src="/js/isconsole.min.js"></script>
 	@endif
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-117289831-2"></script>
-	<script>
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-
-	gtag('config', 'UA-117289831-2');
-	</script>
 
 </body>
 

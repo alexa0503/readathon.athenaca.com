@@ -58,6 +58,10 @@ router.beforeEach((to, from, next) => {
         document.body.style.background = '#7fe2bf';
         //document.body.style.background = "#7fe2bf url('/images/bkg-01.png') 0 0 no-repeat";
     }
+    gtag('config', 'UA-117289831-2', {
+        'page_title' : to.name,
+        'page_path': to.fullPath
+    });
     next()
 })
 router.afterEach((to, from)=>{
