@@ -24,6 +24,15 @@ let wxShare = async function (to) {
         })
     }
     jssdk.initConfig(url)
+    //书中也有万里路！ xx已经在阅读马拉松记录了xxx字数。Let's read together!
+    //书中也有万里路！ xx已经加入阅读马拉松。Let's read together!
+    var share_desc
+    if( store.state.self.has_joined == 1 ){
+        share_desc = "书中也有万里路！ "+store.state.self.name+"已经在阅读马拉松记录了"+store.state.self.activity_info.words_number+"字数。Let's read together!"
+    }
+    else{
+        share_desc = "书中也有万里路！ "+store.state.self.name+"已经加入阅读马拉松。Let's read together!"
+    }
     if (to.name == 'invite') {
         let id = store.state.self.id
         let link = 'http://readathon.athenaca.com/invite/' + id
