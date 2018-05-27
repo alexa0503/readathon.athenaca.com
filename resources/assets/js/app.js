@@ -37,22 +37,27 @@ let wxShare = async function (to) {
         let id = store.state.self.id
         let link = 'http://readathon.athenaca.com/invite/' + id
         jssdk.share({
-            link: link
+            link: link,
+            desc: share_desc
         })
     } else if (to.name == 'board') {
         let id = store.state.self.id
         let link = 'http://readathon.athenaca.com/page/board/' + id
         jssdk.share({
-            link: link
+            link: link,
+            desc: share_desc
         })
     } else if (to.name == 'account') {
         let id = store.state.self.id
         let link = 'http://readathon.athenaca.com/page/account/' + id
         jssdk.share({
-            link: link
+            link: link,
+            desc: share_desc
         })
     } else {
-        jssdk.share()
+        jssdk.share({
+            desc: share_desc
+        })
     }
 }
 //根据路由切换背景
