@@ -20,7 +20,6 @@
                     </div>
                     <div class="form-group">
                         <select class="form-control" v-model="activityId" v-on:change="fetchMore(false)">
-                            <option value="" disabled="disabled">赛季/当季</option>
                             <option v-for="activity in activities" v-bind:key="activity.id" v-bind:value="activity.id">{{ activity.name }}</option>
                         </select>
                     </div>
@@ -74,7 +73,6 @@
             return {
                 ageGroupId: '',
                 cityId: '',
-                activityId: '',
                 currentPage: 1,
                 id: undefined,
                 fetching: false
@@ -93,7 +91,16 @@
                 isCurrentActivity(state) {
                     return state.boardList.meta.is_current_activity
                 }
-            })
+            }),
+            activityId: {
+                get () {
+                    return this.$store.state.activityId
+                },
+                set (value) {
+                    console.log(value)
+                    this.$store.commit('updateActivityId', value)
+                }
+            }
         },
         created() {
             let vm = this

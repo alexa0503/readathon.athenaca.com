@@ -94,12 +94,25 @@ Route::group(['middleware'=>['wx.auth']], function(){
     });
     //首页根据用户状态自动跳转
     Route::get('/', function(Request $request){
+        $data = $request->all();
         //如果已激活跳转到首页 未激活跳转到注册页面
         if( session('wx.user.is_activated') == 0 ){
-            return redirect('/page/register');
+            if( empty($query) ){
+                return redirect('/page/register');
+            }
+            else{
+                return redirect('/page/register?'.http_build_query($data));
+                
+            }
         }
         else{
-            return redirect('/page/home');
+            if( empty($query) ){
+                return redirect('/page/home');
+            }
+            else{
+                return redirect('/page/home?'.http_build_query($data));
+                
+            }
         }
     });
     //vue页面 需要判断用户状态然后进行跳转，排行榜页面 账户查看页面等

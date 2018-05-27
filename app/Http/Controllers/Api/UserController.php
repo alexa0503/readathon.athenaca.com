@@ -97,6 +97,15 @@ class UserController extends Controller
                 }
             }
         }
+        
+        if ($request->input('type') == 'withoutme') {
+            if ($wx_activity_user != null) {
+                $orm->where('age_group_id', $wx_activity_user->age_group_id);
+                $orm->whereHas('user', function ($query) use ($wx_activity_user) {
+                    $query->where('city_id', $wx_activity_user->city_id);
+                });
+            }
+        }
         //获取排名99的用户
         $_orm = Clone $orm;
         if ($request->input('type') == 'withoutme') {
@@ -108,11 +117,12 @@ class UserController extends Controller
         if( count($row) > 0 ){
             $orm->where('words_number', '>', $row[0]->words_number);
         }
-        $activity_users = $orm->paginate(4);
+        $activity_users = $orm->paginate(4)->appends(request()->query());
         return ActivityUserResource::collection($activity_users)->additional([
             'meta' => [
                 'is_current_activity' => $is_current_activity,
-                'current_activity' => $current_activity
+                'current_activity' => $current_activity,
+                'activity_id' => $activity_id
             ],
         ]);
     }

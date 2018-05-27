@@ -37,6 +37,7 @@ export default {
         }
         else{
             state.boardList =  boardList
+            state.activityId = boardList.meta.activity_id
         }
     },
     setAgeGroups(state,ageGroups){
@@ -119,5 +120,8 @@ export default {
     },
     updateAvatar(state,avatar){
         state.self.avatar = avatar
+    },
+    updateActivityId(state, v){
+        state.activityId = v
     }
 }
