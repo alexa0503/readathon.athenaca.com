@@ -31,7 +31,7 @@ let wxShare = async function (to) {
         share_desc = "书中也有万里路！ "+store.state.self.name+"已经在阅读马拉松记录了"+store.state.self.activity_info.words_number+"字数。Let's read together!"
     }
     else{
-        share_desc = "书中也有万里路！ "+store.state.self.name+"已经加入阅读马拉松。Let's read together!"
+        share_desc = "书中也有万里路！ "+store.state.self.nickname+"已经加入阅读马拉松。Let's read together!"
     }
     if (to.name == 'invite') {
         let id = store.state.self.id
