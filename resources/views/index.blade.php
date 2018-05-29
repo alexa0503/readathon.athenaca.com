@@ -39,7 +39,7 @@
 		var windowInnerHeight = window.innerHeight; //获取当前浏览器窗口高度
 		if (window.orientation == 0) {
 			$(window).resize(function () {
-				if (window.innerHeight < windowInnerHeight) {
+				if (window.innerHeight < windowInnerHeight - 100) {
 					$('#navigation').removeClass('fixed-bottom');
 					$('#profileBtn').removeClass('fixed-bottom');
 				} else {

@@ -32,11 +32,14 @@ class UserController extends Controller
             }
         }
         //dd($data);
-
+        $total_reading_number =  ActivityUser::where('user_id', $id)->sum('reading_number');
+        $total_words_number = ActivityUser::where('user_id', $id)->sum('words_number');
         return (new UserResource(User::find($id)))->additional([
             'data' => [
                 'has_joined' => $has_joined,
                 'activity_info' => $activity_info,
+                'total_reading_number' => $total_reading_number,
+                'total_words_number' => $total_words_number,
             ],
         ]);
     }
