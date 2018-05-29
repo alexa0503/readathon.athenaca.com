@@ -1,7 +1,7 @@
 @extends('layouts.admin') @section('content')
 <div class="smart-widget">
     <div class="smart-widget-header">
-        <form class="form-inline" action="{{ route('log.index') }}">
+        <form class="form-inline" action="{{ route('log.index') }}" id="form-search">
             <div class="form-group">
                 <input class="form-control" name="keywords" placeholder="输入用户名" value="{{Request::input('keywords')}}" />
             </div>
@@ -23,6 +23,7 @@
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">查询</button>
+                <a href="{{ route('log.export') }}" class="btn btn-info btn-export">导出</a>
             </div>
         </form>
     </div>

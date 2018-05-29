@@ -301,6 +301,15 @@ $(function() {
 		}
 		return false;
 	});
+
+	$('.btn-export').click(function(){
+		//var formData = new FormData('#form-search');
+		var url = $(this).attr('href');
+		var formData = $('#form-search').serialize()
+		window.location.href = url + '/?' + formData
+		//console.log(formData)
+		return false;
+	})
 });
 
 

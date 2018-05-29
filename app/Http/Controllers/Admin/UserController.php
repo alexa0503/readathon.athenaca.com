@@ -34,8 +34,6 @@ class UserController extends Controller
 
         if( !$admin->hasAnyRole(['超级管理员']) ){
             $super_administrator = false;
-            //$user_administrator = DB::table('user_administrators')->where('administrator_id', $id)->where('user_id', $user)->first();
-            
             $orm->whereHas('administrators',  function($query) use($admin){
                 $query->where('administrator_id', $admin->id);
             });
@@ -138,18 +136,47 @@ class UserController extends Controller
 
     public function export(Request $request)
     {
-        $orm = \App\User::orderBy('id', 'ASC');
-        if( $request->has('keywords') ){
+        $admin = Auth::guard('admin')->user();
+        
+        $orm = \App\User::orderBy('created_at', 'DESC');
+
+        if( !$admin->hasAnyRole(['超级管理员']) ){
+            $super_administrator = false;
+            $orm->whereHas('administrators',  function($query) use($admin){
+                $query->where('administrator_id', $admin->id);
+            });
+        }
+        else{
+            $super_administrator = true;
+        }
+        if( $request->input('keywords') ){
             $orm->where('name', 'LIKE', '%'.$request->keywords.'%');
         }
-        if( $request->city_id ){
-            $orm->where('city_id', $request->city_id);
+        if( $request->input('city_id') ){
+            $orm->where('city_id', $request->input('city_id'));
+        }
+        if( $request->input('school_district_id') ){
+            $orm->where('school_district_id', $request->input('school_district_id'));
+        }
+        if( null != $request->input('is_activated') ){
+            $orm->where('is_activated', $request->input('is_activated') );
+        }
+        if( null != $request->input('id') ){
+            $orm->where('id', $request->input('id') );
+        }
+        if( $request->input('status') != null ){
+            if( $request->input('status') == 1){
+                $orm->whereNotNull('name');
+            }
+            elseif(  $request->input('status') == '0' ){
+                $orm->whereNull('name');
+            }
         }
         if( $request->age_id ){
             $age = \App\AgeGroup::find($request->age_id);
-            $date1 = Carbon::now()->addYear(-1*$age->min_age);
-            $date2 = Carbon::now()->addYear(-1*$age->max_age);
-            $orm->where('birthdate', '<', $date1);
+            $date1 = Carbon::now()->addYear(-1*$age->min_age)->toDateString();
+            $date2 = Carbon::now()->addYear(-1*$age->max_age-1)->toDateString();
+            $orm->where('birthdate', '<=', $date1);
             $orm->where('birthdate', '>=', $date2);
         }
         $filename = date('YmdHis').'.csv';

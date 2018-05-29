@@ -57,6 +57,78 @@ class LogController extends Controller
         ]);
     }
 
+    //导出功能
+    public function export(Request $request)
+    {
+        
+        $class_name = $this->class_name;
+        $orm = $class_name::orderBy('created_at', 'DESC');
+
+        if( null != $request->input('user_id') ){
+            $orm->where('user_id', $request->input('user_id'));
+        }
+        
+        if( null != $request->input('activity') ){
+            $orm->where('activity_id', $request->input('activity'));
+        }
+        
+        if( null != $request->input('keywords') ){
+            $orm->whereHas('user', function ($query) use($request) {
+                $query->where('name', 'LIKE', '%'.$request->keywords.'%');
+            });
+        }
+        $filename = date('YmdHis').'.csv';
+        $fp = fopen(public_path("downloads/".$filename), 'w');
+        fwrite($fp, chr(0xEF).chr(0xBB).chr(0xBF));
+        if( $request->input('type') == 'reading' ){
+            $titles = ["活动","用户","字数","书名","创建时间"];
+        }
+        elseif( $request->input('type') == 'prize' ){
+            $titles = ["活动","用户","排名","奖品","状态","创建时间"];
+        }
+        else{
+            $titles = ["活动","用户","字数","原因","创建时间"];
+        }
+        fputcsv($fp, $titles);
+        $orm->chunk(30000, function($items) use ($fp, $request){
+            foreach ($items as $k => $v) {
+                if( $request->input('type') == 'reading' ){
+                    $array = [
+                        $v->activity->name,
+                        $v->user->name,
+                        $v->words_number,
+                        $v->book_name,
+                        $v->created_at
+                    ];
+                }
+                elseif( $request->input('type') == 'prize' ){
+                    
+                    $array = [
+                        $v->activity->name,
+                        $v->user->name,
+                        $v->rank,
+                        $v->prize->name,
+                        $item->has_checked == 0 ? '未核销' : '已核销' ,
+                        $v->created_at
+                    ];
+                }
+                else{
+                    
+                    $array = [
+                        $v->activity->name,
+                        $v->user->name,
+                        $v->words_number,
+                        $v->reason,
+                        $v->created_at
+                    ];
+                }
+                fputcsv($fp, $array);
+            }
+        });
+        fclose($fp);
+        return response()->download("downloads/".$filename);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
