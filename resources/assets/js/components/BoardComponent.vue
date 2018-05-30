@@ -29,7 +29,7 @@
         <div class="board-content">
             <div class="board-list board-list-home" v-if="currentPage == 1 && id != undefined && boardList.data && boardList.data.length > 0">
                 <div class="board-no-activated">
-                    <router-link :to="{ name: 'board' }">查看所有</router-link>
+                    <router-link :to="{ name: 'board' }">查看完整排名</router-link>
                 </div>
             </div>
             <div v-for="(item,index) in boardList.data" v-bind:key="item.id" class="board-list " v-bind:class="getClass(item)">
