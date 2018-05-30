@@ -5,6 +5,7 @@ export const share = function(data) {
     let defaultInfo = {
         title: '坚持阅读，人生处处有惊喜！',
         desc: '邀请好友一起参加阅读马拉松，就能获得500字数奖励！',
+        timeline_desc: '邀请好友一起参加阅读马拉松，就能获得500字数奖励！',
         imgUrl: 'http://readathon.athenaca.com/images/share.png',
         link: 'http://readathon.athenaca.com/'
     }
@@ -21,6 +22,14 @@ export const share = function(data) {
     else{
         desc = data.desc
     }
+    
+    if( data == undefined || data.timeline_desc == undefined ){
+        timeline_desc = defaultInfo.timeline_desc
+    }
+    else{
+        timeline_desc = data.timeline_desc
+    }
+
     if( data == undefined || data.imgUrl == undefined ){
         imgUrl = defaultInfo.imgUrl
     }
@@ -49,7 +58,7 @@ export const share = function(data) {
             }
         });
         wx.onMenuShareTimeline({
-            title: desc, // 分享标题
+            title: timeline_desc, // 分享标题
             link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             imgUrl: imgUrl, // 分享图标
             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
