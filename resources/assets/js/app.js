@@ -26,16 +26,15 @@ let wxShare = async function (to) {
     jssdk.initConfig(url)
     //书中也有万里路！ xx已经在阅读马拉松记录了xxx字数。Let's read together!
     //书中也有万里路！ xx已经加入阅读马拉松。Let's read together!
-    var share_desc
-    var share_timeline_desc 
+    var share_desc,shareTimelineDesc 
     if( store.state.self.has_joined == 1 ){
         share_desc = store.state.self.name+"已经在阅读马拉松记录了"+store.state.self.activity_info.words_number+"个字数。Let's read together!"
-        share_timeline_desc = "书中也有万里路！ "+store.state.self.name+"已经在阅读马拉松记录了"+store.state.self.activity_info.words_number+"个字数。Let's read together!"
+        shareTimelineDesc = "书中也有万里路！ "+store.state.self.name+"已经在阅读马拉松记录了"+store.state.self.activity_info.words_number+"个字数。Let's read together!"
         
     }
     else{
         share_desc = store.state.self.nickname+"已经加入阅读马拉松。Let's read together!"
-        share_timeline_desc = "书中也有万里路！ "+store.state.self.nickname+"已经加入阅读马拉松。Let's read together!"
+        shareTimelineDesc = "书中也有万里路！ "+store.state.self.nickname+"已经加入阅读马拉松。Let's read together!"
     }
     if (to.name == 'invite') {
         let id = store.state.self.id
@@ -43,7 +42,7 @@ let wxShare = async function (to) {
         jssdk.share({
             link: link,
             desc: share_desc,
-            timeline_desc: share_timeline_desc
+            timelineDesc: shareTimelineDesc
         })
     } else if (to.name == 'board') {
         let id = store.state.self.id
@@ -51,7 +50,7 @@ let wxShare = async function (to) {
         jssdk.share({
             link: link,
             desc: share_desc,
-            timeline_desc: share_timeline_desc
+            timelineDesc: shareTimelineDesc
         })
     } else if (to.name == 'account') {
         let id = store.state.self.id
@@ -59,12 +58,12 @@ let wxShare = async function (to) {
         jssdk.share({
             link: link,
             desc: share_desc,
-            timeline_desc: share_timeline_desc
+            timelineDesc: shareTimelineDesc
         })
     } else {
         jssdk.share({
             desc: share_desc,
-            timeline_desc: share_timeline_desc
+            timelineDesc: shareTimelineDesc
         })
     }
 }
