@@ -51,7 +51,7 @@ Route::get('/oauth', function(Request $request){
     }
 });
 Route::get('/invite/{id}', function(Request $request){
-    $user = User::find($id);
+    $user = App\User::find($id);
     if( null != $user ){
         //写入session 授权时候插入
         session([
