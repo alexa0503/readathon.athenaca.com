@@ -60,6 +60,7 @@ Route::get('/invite/{id}', function(Request $request, $id){
     }
     return redirect('/');
 });
+/*
 Route::get('/random', function(Request $request){
     $i = 0;
     while(true){
@@ -86,6 +87,7 @@ Route::get('/random', function(Request $request){
         }
     }
 });
+*/
 Route::group(['middleware'=>['wx.auth']], function(){
     Route::get('/logout', function(Request $request){
         //session(['wx.user'=>null]);
