@@ -50,7 +50,7 @@ Route::get('/oauth', function(Request $request){
         return response()->view('error');
     }
 });
-Route::get('/invite/{id}', function(Request $request){
+Route::get('/invite/{id}', function(Request $request, $id){
     $user = App\User::find($id);
     if( null != $user ){
         //写入session 授权时候插入
