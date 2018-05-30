@@ -3,7 +3,7 @@ import * as apiUrls from './../utils/api-urls'
 export const share = function(data) {
     //默认值
     let defaultInfo = {
-        title: '坚持阅读，人生处处有惊喜！',
+        title: '阅读马拉松，书中也有万里路 ！',
         desc: '邀请好友一起参加阅读马拉松，就能获得500字数奖励！',
         timelineDesc: '邀请好友一起参加阅读马拉松，就能获得500字数奖励！',
         imgUrl: 'http://readathon.athenaca.com/images/share.png',
