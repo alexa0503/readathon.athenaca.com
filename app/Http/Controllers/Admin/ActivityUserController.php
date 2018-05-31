@@ -39,7 +39,7 @@ class ActivityUserController extends Controller
         }
 
         if( null != $request->input('age_id') ){
-            $orm->where('age_id', $request->input('age_id'));
+            $orm->where('age_group_id', $request->input('age_id'));
         }
 
         if( null != $request->input('receive_status') ){

@@ -60,9 +60,12 @@ class UserController extends Controller
         }
 
         if ($request->input('city')) {
+            $orm->where('city_id', $request->input('city'));
+            /*
             $orm->whereHas('user', function ($query) use ($request) {
                 $query->where('city_id', $request->input('city'));
             });
+            */
         }
 
         $current_activity = Helper::getCurrentActivity();
