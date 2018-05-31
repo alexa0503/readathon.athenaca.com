@@ -146,7 +146,7 @@ class ActivityUserController extends Controller
             'voted_number.*' => '请输入点赞数，且为数字~',
             'age_group_id.*' => '请选择年龄组~',
             'city_id.*' => '请选择城市~',
-            'receive_status.*' => '请选择核销状态~',
+            //'receive_status.*' => '请选择核销状态~',
         ];
         $validator = Validator::make($request->all(), [
             'reading_number' => 'required|numeric',
@@ -154,7 +154,7 @@ class ActivityUserController extends Controller
             'voted_number' => 'required|numeric',
             'age_group_id' => 'required|numeric',
             'city_id' => 'required|numeric',
-            'receive_status' => 'required|numeric',
+            //'receive_status' => 'required|numeric',
         ], $messages);
 
         if ($validator->fails()) {
