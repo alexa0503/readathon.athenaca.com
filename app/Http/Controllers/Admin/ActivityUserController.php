@@ -58,7 +58,7 @@ class ActivityUserController extends Controller
                 $orm->where('city_id', $request->input('city_id'));
             }
             if( null != $request->input('age_id') ){
-                $orm->where('age_id', $request->input('age_id'));
+                $orm->where('age_group_id', $request->input('age_id'));
             }
             $count = $orm->count();
             $item->rank = $count + 1;
