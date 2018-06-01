@@ -24,8 +24,6 @@ let wxShare = async function (to) {
         })
     }
     jssdk.initConfig(url)
-    //书中也有万里路！ xx已经在阅读马拉松记录了xxx字数。Let's read together!
-    //书中也有万里路！ xx已经加入阅读马拉松。Let's read together!
     var share_desc,shareTimelineDesc 
     if( store.state.self.has_joined == 1 ){
         share_desc = store.state.self.name+"已经在阅读马拉松记录了"+store.state.self.activity_info.words_number+"个字数。Let's read together!"
@@ -83,6 +81,12 @@ router.beforeEach((to, from, next) => {
         'page_title' : to.name,
         'page_path': to.fullPath
     });
+    gtag('event', 'user_view', {
+        'id': store.state.self.id,
+        'name': store.state.self.nickname,
+        'isActivated': store.state.self.is_activated,
+        'isRegistered': store.state.self.name != null
+    })
     next()
 })
 router.afterEach((to, from)=>{
