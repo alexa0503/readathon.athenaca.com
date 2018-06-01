@@ -64,6 +64,17 @@ let wxShare = async function (to) {
             timelineDesc: shareTimelineDesc
         })
     }
+
+    
+    var registerStatus = store.state.self.name != null ? '已注册' : '未注册';
+    console.log(store.state.self.id)
+    gtag('config', 'UA-117289831-2', {
+        'page_title' : to.name,
+        'page_path': to.fullPath,
+        'user_id': store.state.self.id,
+        'custom_map': {'dimension2':'register_status'}
+    });
+    gtag('event', 'register_status_dimension', {'register_status': registerStatus});
 }
 //根据路由切换背景
 router.beforeEach((to, from, next) => {
@@ -77,15 +88,6 @@ router.beforeEach((to, from, next) => {
         document.body.style.background = '#7fe2bf';
         //document.body.style.background = "#7fe2bf url('/images/bkg-01.png') 0 0 no-repeat";
     }
-    var registerStatus = store.state.self.name != null ? '已注册' : '未注册';
-    
-    gtag('config', 'UA-117289831-2', {
-        'page_title' : to.name,
-        'page_path': to.fullPath,
-        'user_id': store.state.self.id,
-        'custom_map': {'dimension2':'register_status'}
-    });
-    gtag('event', 'register_status_dimension', {'register_status': registerStatus});
     next()
 })
 router.afterEach((to, from)=>{
