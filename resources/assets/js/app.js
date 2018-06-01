@@ -81,11 +81,11 @@ router.beforeEach((to, from, next) => {
         'page_title' : to.name,
         'page_path': to.fullPath
     });
+    var registerStatus = store.state.self.name != null ? '已注册' : '未注册';
     gtag('event', 'user_view', {
-        'id': store.state.self.id,
-        'name': store.state.self.nickname,
-        'isActivated': store.state.self.is_activated,
-        'isRegistered': store.state.self.name != null
+        'event_category': 'view',
+        'event_label': registerStatus,
+        'value': store.state.self.id
     })
     next()
 })
