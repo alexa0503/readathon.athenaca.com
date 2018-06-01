@@ -96,7 +96,11 @@ Route::group(['middleware' => ['wx.auth']], function () {
             $rank = null;
             //return response()->json(['ret' => 1002, 'errMsg' => '你没有办法获取该活动得奖品']);
         } else {
-            $rank = $activity_user->getRank();
+            //$rank = $activity_user->getRank();
+            $city_id = $activity_user->city_id;
+            $age_group_id = $activity_user->age_group_id;
+            $rank = $activity_user->getRank($city_id, $age_group_id);
+            
         }
 
         $prizes = App\Prize::orderBy('sort_id','ASC')->where('activity_id', $activity->id)->paginate(2);
@@ -201,7 +205,13 @@ Route::group(['middleware' => ['wx.auth']], function () {
             return response()->json(['ret' => 1005, 'errMsg' => '该奖品领取时间已过期'], 403);
         }
         $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $user_id)->first();
-        $rank = $activity_user->getRank();
+        if( null == $activity_user ){
+            return response()->json(['ret' => 1006, 'errMsg' => '您没有中到此奖品'], 403);
+        }
+        $city_id = $activity_user->city_id;
+        $age_group_id = $activity_user->age_group_id;
+
+        $rank = $activity_user->getRank($city_id, $age_group_id);
         if ($rank < $prize->winning_min_rank || $rank > $prize->winning_max_rank) {
             return response()->json(['ret' => 1006, 'errMsg' => '您没有中到此奖品'], 403);
         }
