@@ -396,7 +396,7 @@ export default {
         }
         axios.get(url, {
             params: {
-                page: payload.page,
+                page: payload.page
             }
         }).then(function (response) {
             let data = response.data

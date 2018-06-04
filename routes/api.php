@@ -235,8 +235,14 @@ Route::group(['middleware' => ['wx.auth']], function () {
         return new PageResource($page, $block_type);
     });
     Route::get('/posts/{name}/{block_type?}', function (Request $request, $name = null, $block_type) {
-        $page = App\Page::where('name', $name)->first();
+        
         $orm = App\Post::orderBy('sort_id', 'ASC');
+        $id = null;
+        if( is_numeric($name) ){
+            $id = $name;
+            $name = 'about';
+        }
+        $page = App\Page::where('name', $name)->first();
         if (null == $page) {
             $orm->where('page_id', null)->where('block_type', $block_type);
         } else {
@@ -251,6 +257,9 @@ Route::group(['middleware' => ['wx.auth']], function () {
             }
             $posts = $orm->get();
         } else {
+            if( null != $id ){
+                $orm->where('id', $id);
+            }
             $posts = $orm->paginate(2);
         }
 
