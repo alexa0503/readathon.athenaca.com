@@ -1,9 +1,8 @@
 <template>
     <div class="container-fluid about" v-if="!loading">
-        <div class="about-content" v-html="about">
-        </div>
-        <div class="regester-succeeded-link" v-if="nextPost">
-            <router-link :to="{name:'about', params:{page:nextPost.id}}">{{ nextPost.title }}</router-link>
+        <div v-for="(item,index) in about" v-bind:key="index">
+            <div class="about-content" v-html="item.body">
+            </div>
         </div>
         <div class="board-space"></div>
     </div>
@@ -24,14 +23,7 @@
             loading: 'loading',
             about(state) {
                 if (state.posts.data && state.posts.data[0]) {
-                    return state.posts.data[0].body
-                } else {
-                    return '';
-                }
-            },
-            nextPost(state) {
-                if (state.posts.data && state.posts.data[1]) {
-                    return state.posts.data[1]
+                    return state.posts.data
                 } else {
                     return null;
                 }
