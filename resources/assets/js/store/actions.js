@@ -130,7 +130,8 @@ export default {
         commit
     }, type) {
         return new Promise((resolve, reject) => {
-            if ( state.self.is_activated == undefined || state.self.is_activated == 0) {
+            if ( state.self.is_activated == undefined || state.self.is_activated == 0 || type == 'refresh') {
+                type = undefined
                 axios.get(apiUrls.USER_URL, {
                         params: {
                             type: type,

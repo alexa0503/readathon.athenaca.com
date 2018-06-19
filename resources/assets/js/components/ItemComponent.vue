@@ -163,6 +163,8 @@
                             })
                             $('#prizeModal').modal('show')
                             vm.hasPosted = false
+                            vm.$store.dispatch('getSelfInfo', 'refresh')
+
                         })
                         .catch(function (error) {
                             vm.hasPosted = false
