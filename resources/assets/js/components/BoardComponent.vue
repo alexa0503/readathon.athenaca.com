@@ -43,7 +43,7 @@
                     </a>
                 </div>
                 <div class="star">{{ item.words_number }}</div>
-                <div class="name-text"><router-link :to="{ name: 'account', params: {id: item.user.id} }">{{ item.user.name | formatString }}</router-link></div>
+                <div class="name-text"><router-link :to="{ name: 'account', params: {id: item.user.id} }">{{ item.user.nickname | formatString }}</router-link></div>
                 <div class="number">
                     <span>{{ item.rank }}</span>
                 </div>

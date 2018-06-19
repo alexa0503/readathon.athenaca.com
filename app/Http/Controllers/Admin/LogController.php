@@ -4,18 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Carbon\Carbon;
 use App\Activity;
 use App\ActivityLog;
 use App\PrizeLog;
 use App\ReadingLog;
 use App\ActivityUser;
+use App\ExchangeLog;
 use App\User;
 use Validator;
+use DB;
 
 class LogController extends Controller
 {
     protected $class_name;
+    
     public function __construct(Request $request)
     {
         if( $request->input('type') ){
@@ -86,6 +89,9 @@ class LogController extends Controller
         elseif( $request->input('type') == 'prize' ){
             $titles = ["活动","用户","排名","奖品","状态","创建时间"];
         }
+        elseif( $request->input('type') == 'exchange' ){
+            $titles = ["活动","用户","兑换字数","奖品","状态","创建时间"];
+        }
         else{
             $titles = ["活动","用户","字数","原因","创建时间"];
         }
@@ -109,6 +115,17 @@ class LogController extends Controller
                         $v->rank,
                         $v->prize->name,
                         $item->has_checked == 0 ? '未核销' : '已核销' ,
+                        $v->created_at
+                    ];
+                }
+                elseif( $request->input('type') == 'exchange' ){
+                    $status_name = 0;
+                    $array = [
+                        $v->activity->name,
+                        $v->user->name,
+                        $v->words_number,
+                        $v->item->name,
+                        $v->status_name,
                         $v->created_at
                     ];
                 }
@@ -248,19 +265,45 @@ class LogController extends Controller
         $log->delete();
         return ['ret'=>0];
     }
-    public function check($id)
+    public function check(Request $request, $id)
     {
-        $log = PrizeLog::find($id);
-        $log->has_checked = 1;
-        $log->save();
+        if($request->input('type') == 'exchange'){
+            $log = ExchangeLog::find($id);
+            $log->received_status = 1;
+            $log->save();
+        }
+        else{
+            $log = PrizeLog::find($id);
+            $log->has_checked = 1;
+            $log->save();
+        }
         return ['ret'=>0];
         
     }
-    public function uncheck($id)
+    public function uncheck(Request $request, $id)
     {
-        $log = PrizeLog::find($id);
-        $log->has_checked = 0;
-        $log->save();
+        if($request->input('type') == 'exchange'){
+            DB::beginTransaction();
+            try{
+                $log = ExchangeLog::find($id);
+                $activity_user = ActivityUser::where('user_id', $log->user_id)->where('activity_id', $log->activity_id)->first();
+                $activity_user->exchanged_words_number += $activity_user->exchanged_words_number;
+                $activity_user->save();
+                $log->received_status = -1;
+                $log->save();
+                DB::commit();
+                return ['ret'=>0];
+
+            }catch(\Exception $e){
+                DB::rollback();
+                return ['ret'=>1001, 'errMsg'=>$e->getMessage()];
+            }
+        }
+        else{
+            $log = PrizeLog::find($id);
+            $log->has_checked = 0;
+            $log->save();
+        }
         return ['ret'=>0];
         
     }

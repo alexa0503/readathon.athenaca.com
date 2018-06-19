@@ -1055,8 +1055,9 @@ a:hover {
 }
 .prize-page .activity-title {
     margin: 2rem;
-    font-size: 2rem;
-    color: #ffe479;
+    font-size: 1.5rem;
+    color: #FFF;
+    font-weight: 800;
 }
 .prize-page .prize-content {
     background: #fff;
@@ -1357,4 +1358,25 @@ input[type="checkbox"]:focus {
 }
 .mw-td {
     min-width: 5rem;
+}
+.prize-btns {
+    margin-top: 2rem;
+    text-align: center;
+}
+.prize-btns .btn {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    font-size: 1.5rem;
+    background: #76cfe1;
+    border-radius: 1.5rem;
+    border-color: #76cfe1;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    color: $white;
+}
+.prize-btns .btn.disabled {
+    color: $white;
+    background: #b0b0b0;
+    border-color: #b0b0b0;
+    opacity: 1;
 }

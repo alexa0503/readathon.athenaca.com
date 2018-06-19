@@ -105,6 +105,16 @@ export default {
             state.prizesData = payload.prizes
         }
     },
+    setItems(state, payload){
+        if( payload != undefined && payload.more == true ){
+            let items = payload.items
+            items.data.items.data = state.items.data.items.data.concat(payload.items.data.items.data)
+            state.items = items
+        }
+        else{
+            state.items = payload.items
+        }
+    },
     setPosts(state, payload){
         if( payload != undefined && payload.more == true ){
             state.posts.data = state.posts.data.concat(payload.data.data)

@@ -22,6 +22,7 @@ export default new Vuex.Store({
     logs: {},
     question:{ret:0,data:{}},
     prizesData: {},
+    items: {},
     posts: {},
     slides: {},
     activityId: 0

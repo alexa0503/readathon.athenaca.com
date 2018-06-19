@@ -111,6 +111,7 @@
                                     <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'reading'])}}" >查看阅读记录</a></li>
                                     <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'activity'])}}" >查看活动记录</a></li>
                                     <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'prize'])}}" >查看奖品记录</a></li>
+                                    <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'exchange'])}}" >查看兑换记录</a></li>
                                 </ul>
                             </div>
                         </td>

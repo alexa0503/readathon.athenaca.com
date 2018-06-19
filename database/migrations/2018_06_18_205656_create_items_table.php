@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePrizesTable extends Migration
+class CreateItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,33 +13,34 @@ class CreatePrizesTable extends Migration
      */
     public function up()
     {
-        Schema::create('prizes', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->integer('winning_min_rank')->unsigned();
-            $table->integer('winning_max_rank')->unsigned();
-            $table->integer('winned_number')->unsigned();
-            $table->longText('body');
+            $table->integer('words_number')->unsigned();//兑换需要的字数
+            $table->integer('has_exchanged_number')->unsigned();
             $table->integer('activity_id')->unsigned();
             $table->foreign('activity_id')->references('id')->on('activities');
+            $table->integer('city_id')->unsigned();
+            $table->foreign('city_id')->references('id')->on('cities');
             $table->integer('sort_id')->default(999);
+            $table->integer('max_number')->unsigned();
+            $table->longText('body');
             $table->timestamps();
         });
         
-        Schema::create('prize_logs', function (Blueprint $table) {
+        Schema::create('exchange_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('prize_id')->unsigned();
-            $table->foreign('prize_id')->references('id')->on('prizes');
+            $table->integer('item_id')->unsigned();
+            $table->foreign('item_id')->references('id')->on('items');
             $table->integer('activity_id')->unsigned();
             $table->foreign('activity_id')->references('id')->on('activities');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('rank')->unsigned();
-            $table->boolean('has_checked');
+            $table->integer('words_number')->unsigned();
+            $table->smallInteger('receive_status');//领取状态
             $table->timestamp('checked_at')->nullable();
             $table->timestamps();
         });
-
     }
 
     /**
@@ -49,6 +50,7 @@ class CreatePrizesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prizes');
+        Schema::dropIfExists('exchange_logs');
+        Schema::dropIfExists('items');
     }
 }

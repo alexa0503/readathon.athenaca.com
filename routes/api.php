@@ -71,6 +71,8 @@ Route::group(['middleware' => ['wx.auth']], function () {
     
     Route::get('/question', 'Api\QuestionController@index');
     Route::post('/answer/{id}', 'Api\QuestionController@answer');
+    Route::get('/items/{id?}', 'Api\ItemController@index');
+    Route::post('/item/receive/{id?}', 'Api\ItemController@receive');
     
 
     //奖品列表

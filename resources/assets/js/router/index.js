@@ -16,6 +16,7 @@ import ModalComponent from './../components/ModalComponent.vue';//Modal提示
 import SucceededModalComponent from './../components/SucceededModalComponent.vue';//Modal提示
 import QuestionComponent from './../components/QuestionComponent.vue';//Modal提示
 import PrizeComponent from './../components/PrizeComponent.vue';//奖品
+import ItemComponent from './../components/ItemComponent.vue';//兑换礼品
 import InviteComponent from './../components/InviteComponent.vue';//邀请好友
 import ActivityComponent from './../components/ActivityComponent.vue';//邀请好友
 import AboutComponent from './../components/AboutComponent.vue';//关于马拉松
@@ -110,6 +111,15 @@ const router = new VueRouter({
             components: {
                 'topper': SlidesComponent,
                 'mainContent': PrizeComponent,
+                'navigation': NavigationComponent
+            }
+        },
+        {
+            path: '/page/item/:id?',
+            name: 'item',
+            components: {
+                'topper': SlidesComponent,
+                'mainContent': ItemComponent,
                 'navigation': NavigationComponent
             }
         },

@@ -51,6 +51,10 @@ class GenerateMenu
                 $prize = $menu->add('奖品管理', ['url' => route('prize.index'), 'class' => 'openable bg-palette3']);
                 $prize->add('查看', ['url' => route('prize.index'), 'class' => 'bg-palette3']);
                 $prize->add('新增', ['url' => route('prize.create'), 'class' => 'bg-palette3']);
+
+                $item = $menu->add('兑换物品管理', ['url' => route('item.index'), 'class' => 'openable bg-palette3']);
+                $item->add('查看', ['url' => route('item.index'), 'class' => 'bg-palette3']);
+                $item->add('新增', ['url' => route('item.create'), 'class' => 'bg-palette3']);
             }
             //问答管理
             if (($admin->hasPermissionTo('问答管理') && $admin->hasAnyRole(['管理员'])) || $admin->hasAnyRole(['超级管理员'])) {

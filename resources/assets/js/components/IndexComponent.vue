@@ -10,7 +10,7 @@
                     </a>
                 </div>
                 <div class="star">{{ user.activity_info.words_number }}</div>
-                <div class="name-text"><router-link :to="{ name: 'account', params: {id: user.id} }">{{ user.name | formatString }}</router-link></div>
+                <div class="name-text"><router-link :to="{ name: 'account', params: {id: user.id} }">{{user.nickname | formatString }}</router-link></div>
                 <div class="number">
                     <span>{{ user.activity_info.rank }}</span>
                 </div>
@@ -44,7 +44,7 @@
                     </a>
                 </div>
                 <div class="star">{{ item.words_number }}</div>
-                <div class="name-text"><router-link :to="{ name: 'account', params: {id: item.user.id} }">{{ item.user.name | formatString }}</router-link></div>
+                <div class="name-text"><router-link :to="{ name: 'account', params: {id: item.user.id} }">{{ item.user.nickname | formatString }}</router-link></div>
                 <div class="number">
                     <span>{{ item.rank }}</span>
                 </div>

@@ -1,38 +1,33 @@
 <template>
     <div class="container-fluid prize-page" v-if="!loading">
         <div class="prize-btns" v-if="status">
-            <router-link :to="{name:'item'}" class="btn btn-warning">字数兑换</router-link>
-            <router-link :to="{name:'prize'}" class="btn btn-warning disabled">奖品兑换</router-link>
+            <router-link :to="{name:'item'}" class="btn btn-warning disabled">字数兑换</router-link>
+            <router-link :to="{name:'prize'}" class="btn btn-warning">奖品兑换</router-link>
         </div>
         <div class="text-center activity-title" v-if="status">{{ activity.name }}</div>
         <div class="prize-content" v-if="!status">
             <h3>敬请期待</h3>
             <div>目前还没有奖品可以领取</div>
         </div>
-        <div class="prize-content" v-if="status" v-for="prize in prizes" v-bind:key="prize.id">
-            <h3>{{ prize.name }}</h3>
-            <div v-html="prize.body"></div>
+        <div class="prize-content" v-if="status" v-for="item in items" v-bind:key="item.id">
+            <h3>{{ item.name }}</h3>
+            <div>字数：{{ item.words_number }}</div>
+            <div>适用城市：{{ item.city_names }}</div>
+            <div class="mb-4">份数：{{ item.remaining_number }}/{{ item.total_number }}(共{{ item.remaining_number }}份剩余{{ item.total_number }}份)</div>
+            <div v-html="item.body"></div>
             <div class="prize-button">
-                <button type="button" class="btn btn-warning btn-lg disabled" v-if="prize.received_status == 1">已领取</button>
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 2">不可领取</button>
-                <!--活动未结束-->
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 6">不可领取</button>
-                <!--已领取其他奖品-->
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 7">不可领取</button>
-                <!--未激活或未参加活动-->
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 3">不可领取</button>
-                <!--未到领奖日期-->
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="prize.received_status == 4">已过领取奖期限</button>
+                <button type="button" class="btn btn-warning btn-lg disabled" v-if="item.received_status == 1">已兑换</button>
                 <!--已过领奖期限-->
-                <button type="button" v-on:click="receivePrize(prize.id)" class="btn btn-warning btn-lg" v-else-if="prize.received_status == 0">领取奖品</button>
-                <button type="button" class="btn btn-warning btn-lg disabled" v-else>不可领取</button>
+                <button type="button" class="btn btn-warning btn-lg disabled" v-else-if="item.received_status == 4">已兑换完</button>
+                <button type="button" v-on:click="receiveItem(item.id)" class="btn btn-warning btn-lg" v-else-if="item.received_status == 0">兑换字数</button>
+                <button type="button" class="btn btn-warning btn-lg disabled" v-else>无法兑换</button>
                 <!--未获得该奖品-->
             </div>
         </div>
-        <div class="row board-more" v-if="status && morePrizes && !fetching" v-on:click="fetchMore(true)">
+        <div class="row board-more" v-if="status && moreItems && !fetching" v-on:click="fetchMore(true)">
             <img src="/images/icon-more-01.png" />
         </div>
-        <div class="row board-more" v-if="status && morePrizes && fetching">
+        <div class="row board-more" v-if="status && moreItems && fetching">
             加载中...
         </div>
         <div class="board-space"></div>
@@ -82,48 +77,47 @@
         computed: {
             ...mapState({
                 loading: 'loading',
-                prizes(state) {
-                    if (state.prizesData.data == undefined) {
+                items(state) {
+                    if (state.items.data == undefined) {
                         return '';
                     }
-                    return state.prizesData.data.prizes.data
+                    return state.items.data.items.data
                 },
                 activity(state) {
-                    if (state.prizesData.data == undefined) {
+                    if (state.items.data == undefined) {
                         return '';
                     }
-                    return state.prizesData.data.activity
+                    return state.items.data.activity
                 },
                 status(state) {
-                    return state.prizesData && state.prizesData.ret == 0 && state.prizesData.data.prizes.total > 0 ?
+                    return state.items && state.items.ret == 0 && state.items.data.items.total > 0 ?
                         true : false
                 },
-                morePrizes(state) {
-                    if (state.prizesData.data == undefined) {
+                moreItems(state) {
+                    if (state.items.data == undefined) {
                         return false;
                     }
-                    let prizes = state.prizesData.data.prizes
-                    return prizes.current_page < prizes.last_page
+                    let items = state.items.data.items
+                    return items.current_page < items.last_page
                 },
                 current_page(state) {
-                    if (state.prizesData.data == undefined) {
+                    if (state.items.data == undefined) {
                         return 1;
                     }
-                    return state.prizesData.data.prizes.current_page
+                    return state.items.data.items.current_page
                 }
             })
         },
         created() {
             let id = this.$route.params.id
-            this.$store.dispatch('getPrizes', {
+            this.$store.dispatch('getItems', {
                 id: id
             })
-            //this.$store.dispatch('initPrizePage', id)
         },
         watch: {
             $route(to, from) {
                 let id = to.params.id
-                this.$store.dispatch('getPrizes', {
+                this.$store.dispatch('getItems', {
                     id: id
                 })
             }
@@ -134,12 +128,12 @@
                 vm.fetching = true
                 let page = vm.current_page + 1
                 let id = vm.$route.params.id
-               vm.$store.dispatch('getPrizes', {
+               vm.$store.dispatch('getItems', {
                     id: id,
                     more: more,
                     page: page
                 }).then((response)=>{
-                    if(response.data.prizes.current_page < response.data.prizes.last_page){
+                    if(response.data.items.current_page < response.data.items.last_page){
                         vm.fetching = false
                     }
                 })
@@ -154,14 +148,14 @@
                     vm.fetchMore(true)
                 }
             },
-            receivePrize: function (id) {
-                let url = apiUrls.RECEIVE_URL + '/' + id
+            receiveItem: function (id) {
+                let url = apiUrls.RECEIVE_ITEM_URL + '/' + id
                 let vm = this
                 if (!vm.hasPosted) {
                     vm.hasPosted = true
                     axios.post(url).then(function (response) {
                             let id = vm.$route.params.id
-                            vm.$store.dispatch('getPrizes', {
+                            vm.$store.dispatch('getItems', {
                                 id: id
                             })
                             $('#prizeModal').modal('show')

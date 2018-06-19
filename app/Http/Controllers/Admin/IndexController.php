@@ -30,7 +30,6 @@ class IndexController extends Controller
      */
     public function index()
     {
-        //dd(\Auth::guard('admin')->user());
         return view('admin/dashboard');
     }
 }

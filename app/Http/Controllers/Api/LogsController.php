@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 
+use App\Activity;
 use App\ActivityLog;
 use App\ActivityUser;
 use App\Helpers\Helper;
@@ -11,6 +12,7 @@ use App\Http\Resources\ReadingLog as ReadingLogResource;
 use App\PrizeLog;
 use App\ReadingLog;
 use App\VoteLog;
+use App\ExchangeLog;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
@@ -38,8 +40,50 @@ class LogsController extends Controller
         if (null == $user_id) {
             $user_id = session('wx.user.id');
         }
-        $logs = PrizeLog::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(4);
-        return PrizeLogResource::collection($logs);
+        $current_page = (int)$request->input('page');
+        if( $current_page < 1 ){
+            $current_page = 1;
+        }
+        $per_page = 4;
+        $init = ($current_page - 1)*$per_page;
+        $items = DB::select('(SELECT exchange_logs.activity_id,items.name as name,received_status as status,exchange_logs.created_at FROM exchange_logs LEFT JOIN items ON (items.id = exchange_logs.item_id) WHERE user_id = ?) UNION ALL (SELECT prize_logs.activity_id,prizes.name as name,has_checked as status,prize_logs.created_at FROM prize_logs LEFT JOIN prizes ON (prizes.id = prize_logs.prize_id) WHERE user_id = ?) ORDER BY created_at DESC LIMIT ?,?',[$user_id,$user_id,$init,$per_page]);
+
+        $count1 = DB::table('exchange_logs')->where('user_id', $user_id)->count();
+        $count2 = DB::table('prize_logs')->where('user_id', $user_id)->count();
+
+        $collection = collect($items)->map(function($item){
+            if( $item->status == -1 ){
+                $status_name = '取消领取';
+            }
+            elseif($item->status == 0){
+                $status_name = '审核中';
+            }
+            else{
+                $status_name = '已领取';
+            }
+            $activity = Activity::find($item->activity_id);
+            return [
+                'activity_name' => $activity->name,
+                'status_name' => $status_name,
+                'prize_name' => $item->name,
+                'created_at' => date('Y-m-d', strtotime($item->created_at))
+            ];
+        });
+       
+        $itemsWithPaginator = new \Illuminate\Pagination\LengthAwarePaginator(
+            $collection,
+            $count1+$count2,
+            $per_page,
+            $current_page, [
+                'path' => \Request::url(),
+                'query' => [
+                    'page' => $current_page,
+                ],
+            ]
+        );
+        $meta = $itemsWithPaginator->toArray();
+        unset($meta['data']);
+        return ['data'=>$collection,'meta'=>$meta];
     }
     public function postReading(Request $request)
     {
@@ -89,6 +133,7 @@ class LogsController extends Controller
             Helper::checkUserActivity($id, $activity);
             $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $id)->first();
             $activity_user->words_number += $request->input('words_number');
+            $activity_user->exchanged_words_number += $request->input('words_number');
             $activity_user->reading_number += 1;
             $activity_user->save();
             DB::commit();
@@ -132,6 +177,7 @@ class LogsController extends Controller
                 $has_voted = 0;
                 if ($count <= $voted_limit_add_times) {
                     $activity_user->words_number -= $voted_add_words_number;
+                    $activity_user->exchanged_words_number -= $voted_add_words_number;
                     /*
                     $activity_log = new ActivityLog;
                     $activity_log->activity_id = $activity->id;
@@ -153,6 +199,7 @@ class LogsController extends Controller
                
                 if ($count < $voted_limit_add_times) {
                     $activity_user->words_number += $voted_add_words_number;
+                    $activity_user->exchanged_words_number += $voted_add_words_number;
                     /*
                     $activity_log = new ActivityLog;
                     $activity_log->activity_id = $activity->id;

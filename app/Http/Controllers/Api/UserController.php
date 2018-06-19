@@ -123,7 +123,7 @@ class UserController extends Controller
         if( count($row) > 0 ){
             $orm->where('words_number', '>', $row[0]->words_number);
         }
-        $activity_users = $orm->paginate(4)->appends(request()->query());
+        $activity_users = $orm->paginate(4)->appends($request->query());
         return ActivityUserResource::collection($activity_users)->additional([
             'meta' => [
                 'is_current_activity' => $is_current_activity,

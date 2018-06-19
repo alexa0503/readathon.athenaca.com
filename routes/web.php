@@ -158,18 +158,17 @@ Route::group(['middleware' => ['role:管理员|超级管理员', 'menu'], 'prefi
     Route::get('/log/export', 'Admin\LogController@export')->name('log.export');
     Route::resource('log', 'Admin\LogController');
     Route::resource('prize', 'Admin\PrizeController');
+    Route::resource('item', 'Admin\ItemController');
     Route::resource('page.post', 'Admin\PostController');
     Route::resource('district', 'Admin\SchoolDistrictController');
     
 });
-//Route::get('/login', 'Auth\LoginController@showLoginForm');
-//Route::post('/login', 'Auth\LoginController@postLogin');
-//Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('/admin/login', 'Admin\LoginController@ShowLogin');
 Route::post('/admin/login', 'Admin\LoginController@login');
 Route::get('/admin/logout', 'Admin\LoginController@logout');
 Route::get('/admin/install', function () {
+    dd(bcrypt('admin@2017'));
     if (\App\User::count() == 0) {
         $role = Role::create(['guard_name'=>'admin','name' => 'superadmin']);
         $permission = Permission::create(['guard_name'=>'admin','name' => 'global privileges']);

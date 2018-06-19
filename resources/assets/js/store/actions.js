@@ -51,15 +51,6 @@ export default {
             dispatch('getBoardList', {page:1, type: 'withoutme', name:'home'})
         })()
     },
-    initPrizePage({
-        dispatch,
-        state,
-        commit
-    }, id) {
-        dispatch('getPrizes', {
-            id: id
-        })
-    },
     initAccountPage({
         dispatch,
         commit
@@ -332,7 +323,6 @@ export default {
         }).catch(function (error) {})
     },
     getPrizes({
-        state,
         commit
     }, payload) {
         let more, page, id, url
@@ -371,6 +361,50 @@ export default {
                     more
                 })
                 return resolve(prizes);
+            }).catch(function (error) {
+                return reject(error)
+            })
+        });
+    },
+    getItems({
+        commit
+    }, payload) {
+        let more, page, id, url
+        if (payload == undefined || payload.more == undefined) {
+            more = false
+        } else {
+            more = payload.more
+        }
+        if (payload == undefined || payload.page == undefined) {
+            page = 1
+        } else {
+            page = payload.page
+        }
+
+        if (payload == undefined || payload.id == undefined) {
+            id = null
+        } else {
+            id = payload.id
+        }
+
+        if (id != null) {
+            url = apiUrls.ITEMS_URL + '/' + id
+        } else {
+            url = apiUrls.ITEMS_URL
+        }
+        
+        return new Promise((resolve, reject) => {
+            axios.get(url, {
+                params: {
+                    page: page,
+                }
+            }).then(function (response) {
+                let items = response.data
+                commit('setItems', {
+                    items,
+                    more
+                })
+                return resolve(items);
             }).catch(function (error) {
                 return reject(error)
             })

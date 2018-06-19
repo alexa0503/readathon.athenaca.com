@@ -42,6 +42,9 @@ export default {
     prizesData: (state, getters) => {
         return state.prizesData
     },
+    items: (state, getters) => {
+        return state.items
+    },
     posts: (state, getters) => {
         return state.posts
     },

@@ -110,6 +110,7 @@ class QuestionController extends Controller
                 $activity_user = ActivityUser::where('activity_id', $activity->id)
                     ->where('user_id', $user_id)->first();
                 $activity_user->words_number += $question->rewarded_number;
+                $activity_user->exchanged_words_number += $question->rewarded_number;
                 $activity_user->save();
                 $activity_log = new ActivityLog;
                 $activity_log->activity_id = $activity->id;
