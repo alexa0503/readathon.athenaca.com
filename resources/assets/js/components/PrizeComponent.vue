@@ -42,7 +42,7 @@
                 <div class="modal-content">
                     <div class="modal-body text-center">
                         <h3>Yeah！领取成功！</h3>
-                        <p>请联系客服人员去兑换奖品！</p>
+                        <p>请在五个工作日内至知慧学院领取奖品！</p>
                         <button type="button" class="btn btn-go btn-info" data-dismiss="modal" aria-label="Close">
                             确定
                         </button>

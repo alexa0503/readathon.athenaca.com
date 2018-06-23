@@ -4,15 +4,15 @@
             <router-link :to="{name:'item'}" class="btn btn-warning disabled">字数兑换</router-link>
             <router-link :to="{name:'prize'}" class="btn btn-warning">奖品兑换</router-link>
         </div>
-        <div class="text-center activity-title" v-if="status">{{ activity.name }}可兑换字数 {{ exchanged_words_number }}</div>
+        <div class="text-center activity-title" v-if="status">{{ activity.name }}可兑换字数 {{ exchanged_words_number | formatNumber }}</div>
         <div class="prize-content" v-if="!status">
             <h3>敬请期待</h3>
             <div>目前还没有奖品可以领取</div>
         </div>
         <div class="prize-content" v-if="status" v-for="item in items" v-bind:key="item.id">
             <h3>{{ item.name }}</h3>
-            <div>字数：{{ item.words_number }}</div>
-            <div>适用城市：{{ item.city_names }}</div>
+            <div>字数：{{ item.words_number | formatNumber }}</div>
+            <!--<div>适用城市：{{ item.city_names }}</div>-->
             <div class="mb-4">份数：{{ item.remaining_number }}/{{ item.total_number }}(共{{ item.remaining_number }}份剩余{{ item.total_number }}份)</div>
             <div v-html="item.body"></div>
             <div class="prize-button">
@@ -37,7 +37,7 @@
                 <div class="modal-content">
                     <div class="modal-body text-center">
                         <h3>Yeah！领取成功！</h3>
-                        <p>请联系客服人员去兑换奖品！</p>
+                        <p>请在五个工作日内至知慧学院领取奖品！</p>
                         <button type="button" class="btn btn-go btn-info" data-dismiss="modal" aria-label="Close">
                             确定
                         </button>

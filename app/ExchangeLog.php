@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ExchangeLog extends Model
 {
     protected $received_status_names = [
+        '-2'=>'已过期',
         '-1'=>'取消领取',
         '0'=>'已兑换',
         '1'=>'已领取',

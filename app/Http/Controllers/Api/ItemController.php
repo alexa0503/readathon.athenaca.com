@@ -36,7 +36,8 @@ class ItemController extends Controller
             $age_group_id = $activity_user->age_group_id;
         }
 
-        $items = Item::orderBy('sort_id', 'ASC')->where('activity_id', $activity->id)->paginate(2);
+        # 仅显示用户自己城市奖品
+        $items = Item::orderBy('sort_id', 'ASC')->where('city_ids', 'LIKE', '%"'.$city_id.'"%')->where('activity_id', $activity->id)->paginate(2);
         $collection = $items->getCollection()->map(function ($item) use ($user_id, $activity, $activity_user) {
             if($activity_user->exchanged_words_number < $item->words_number){
                 $received_status = 5; // 字数不够 不可兑换

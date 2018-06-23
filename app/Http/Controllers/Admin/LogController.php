@@ -12,6 +12,7 @@ use App\ReadingLog;
 use App\ActivityUser;
 use App\ExchangeLog;
 use App\User;
+use App\Item;
 use Validator;
 use DB;
 
@@ -119,7 +120,7 @@ class LogController extends Controller
                     ];
                 }
                 elseif( $request->input('type') == 'exchange' ){
-                    $status_name = 0;
+                    //$status_name = 0;
                     $array = [
                         $v->activity->name,
                         $v->user->name,
@@ -287,10 +288,14 @@ class LogController extends Controller
             try{
                 $log = ExchangeLog::find($id);
                 $activity_user = ActivityUser::where('user_id', $log->user_id)->where('activity_id', $log->activity_id)->first();
-                $activity_user->exchanged_words_number += $activity_user->exchanged_words_number;
+                $activity_user->exchanged_words_number += $log->words_number;
                 $activity_user->save();
                 $log->received_status = -1;
                 $log->save();
+                # 礼品库存返回
+                $item = Item::find($log->item_id);
+                $item->has_exchanged_number -= 1;
+                $item->save();
                 DB::commit();
                 return ['ret'=>0];
 
@@ -306,5 +311,29 @@ class LogController extends Controller
         }
         return ['ret'=>0];
         
+    }
+
+    # 礼品过期处理
+    public function overdue(Request $request, $id)
+    {
+        if($request->input('type') == 'exchange'){
+            DB::beginTransaction();
+            try{
+                $log = ExchangeLog::find($id);
+                $log->received_status = -2;
+                $log->save();
+                # 礼品库存返回
+                $item = Item::find($log->item_id);
+                $item->has_exchanged_number -= 1;
+                $item->save();
+                DB::commit();
+                return ['ret'=>0];
+
+            }catch(\Exception $e){
+                DB::rollback();
+                return ['ret'=>1001, 'errMsg'=>$e->getMessage()];
+            }
+        }
+        return ['ret'=>0];
     }
 }

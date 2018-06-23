@@ -154,6 +154,7 @@ Route::group(['middleware' => ['role:管理员|超级管理员', 'menu'], 'prefi
     Route::resource('activityUser', 'Admin\ActivityUserController');
 
     Route::get('/log/check/{id}', 'Admin\LogController@check')->name('log.check');
+    Route::get('/log/overdue/{id}', 'Admin\LogController@overdue')->name('log.overdue');
     Route::get('/log/uncheck/{id}', 'Admin\LogController@uncheck')->name('log.uncheck');
     Route::get('/log/export', 'Admin\LogController@export')->name('log.export');
     Route::resource('log', 'Admin\LogController');

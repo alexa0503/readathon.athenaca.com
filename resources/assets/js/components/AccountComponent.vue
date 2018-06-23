@@ -12,10 +12,10 @@
             <div class="account-info">
                 <div class="account-rank" v-if="isSelf">我的排名<span v-if="user.activity_info">{{ user.activity_info.rank }}</span></div>
                 <div class="account-rank" v-else>TA的排名<span v-if="user.activity_info">{{ user.activity_info.rank }}</span></div>
-                <div class="account-text">本赛季阅读书籍<span v-if="user.activity_info">{{ user.activity_info.reading_number }}</span></div>
-                <div class="account-text">本赛季阅读字数<span v-if="user.activity_info">{{ user.activity_info.words_number }}</span></div>
-                <div class="account-text">累计阅读书籍<span v-if="user.activity_info">{{ user.total_reading_number }}</span></div>
-                <div class="account-text">累计阅读字数<span v-if="user.activity_info">{{ user.total_words_number }}</span></div>
+                <div class="account-text">本赛季阅读书籍<span v-if="user.activity_info">{{ user.activity_info.reading_number | formatNumber }}</span></div>
+                <div class="account-text">本赛季阅读字数<span v-if="user.activity_info">{{ user.activity_info.words_number | formatNumber }}</span></div>
+                <div class="account-text">累计阅读书籍<span v-if="user.activity_info">{{ user.total_reading_number | formatNumber }}</span></div>
+                <div class="account-text">累计阅读字数<span v-if="user.activity_info">{{ user.total_words_number | formatNumber }}</span></div>
                 <div class="account-add" v-if="isSelf"><a href="javascript:;" v-on:click="addReadingLog">添加阅读记录</a></div>
                 <div class="account-vote" v-else><a href="javascript:;" v-on:click="vote(user.id)">赞 <img src="/images/icon-account-vote.png" v-if="user.activity_info && user.activity_info.has_voted != 1" /><img src="/images/icon-account-voted.png" v-else /><span>{{ user.activity_info.voted_number }}</span></a></div>
             </div>
@@ -129,6 +129,13 @@
                 this.isSelf = true
             }
             this.$store.dispatch('initAccountPage',this.$route.params.id)
+        },
+        watch: {
+            $route(to, from) {
+                if( to.params.id == undefined ){
+                    this.isSelf = true
+                }
+            }
         },
         methods:{
             previous: function(){

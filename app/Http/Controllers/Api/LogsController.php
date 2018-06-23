@@ -56,7 +56,10 @@ class LogsController extends Controller
                 $status_name = '取消领取';
             }
             elseif($item->status == 0){
-                $status_name = '审核中';
+                $status_name = '未领取';
+            }
+            elseif($item->status == -2){
+                $status_name = '已过期';
             }
             else{
                 $status_name = '已领取';

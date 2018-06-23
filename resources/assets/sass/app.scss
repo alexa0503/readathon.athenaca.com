@@ -1367,16 +1367,16 @@ input[type="checkbox"]:focus {
     margin-left: 2rem;
     margin-right: 2rem;
     font-size: 1.5rem;
-    background: #76cfe1;
+    background: #b0b0b0;
     border-radius: 1.5rem;
-    border-color: #76cfe1;
+    border-color: #b0b0b0;
     padding-left: 2rem;
     padding-right: 2rem;
     color: $white;
 }
 .prize-btns .btn.disabled {
     color: $white;
-    background: #b0b0b0;
-    border-color: #b0b0b0;
+    background: #76cfe1;
+    border-color: #76cfe1;
     opacity: 1;
 }

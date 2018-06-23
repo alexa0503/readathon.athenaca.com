@@ -66,6 +66,7 @@
                             <a href="{{route('log.uncheck',['id'=>$item->id,'type'=>Request::input('type')])}}" class="btn checked btn-default btn-xs">撤销核销</a>@endif
                             @elseif(Request::input('type') == 'exchange')
                             @if($item->received_status == 0)<a href="{{route('log.check',['id'=>$item->id,'type'=>Request::input('type')])}}" class="btn checked btn-default btn-xs">核销领取</a>
+                            <a href="{{route('log.overdue',['id'=>$item->id,'type'=>Request::input('type')])}}" class="btn checked btn-default btn-xs">过期</a>
                             <a href="{{route('log.uncheck',['id'=>$item->id,'type'=>Request::input('type')])}}" class="btn checked btn-default btn-xs">取消领取</a>@else{{ '--' }}@endif
                             @endif
                         </td>
