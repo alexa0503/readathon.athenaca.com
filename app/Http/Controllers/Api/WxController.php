@@ -9,8 +9,12 @@ use  Intervention\Image\Facades\Image;
 
 class WxController extends Controller
 {
+    // 微信分享
     public function share(Request $request)
     {
+        if( $request->ip() == '127.0.0.1' ){
+            return;
+        }
         $url = urldecode($request->input('url'));
         if (null == $url) {
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";

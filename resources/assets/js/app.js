@@ -63,10 +63,7 @@ let wxShare = async function (to) {
             timelineDesc: shareTimelineDesc
         })
     }
-
-
-    var registerStatus = store.state.self.name != null ? '已注册' : '未注册';
-    console.log(store.state.self.id)
+    var status = store.state.self.name != null ? 2 : 1;
     gtag('config', 'UA-117289831-2', {
         'page_title': to.name,
         'page_path': to.fullPath,
@@ -76,7 +73,9 @@ let wxShare = async function (to) {
         }
     });
     gtag('event', 'register_status_dimension', {
-        'register_status': registerStatus
+        'event_label': '注册状态',
+        'event_category': '用户',
+        'value': status
     });
 }
 //根据路由切换背景
@@ -89,7 +88,6 @@ router.beforeEach((to, from, next) => {
         document.body.style.background = '#a6dfee';
     } else {
         document.body.style.background = '#7fe2bf';
-        //document.body.style.background = "#7fe2bf url('/images/bkg-01.png') 0 0 no-repeat";
     }
     next()
 })
@@ -107,25 +105,26 @@ Vue.filter('formatString', function (value) {
 
 Vue.filter('formatNumber', function (value) {
     if (!value) return '0';
-    //var intPart = Number(value).toFixed(0); //获取整数部分
     var intPartFormat = value.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,'); //将整数部分逢三一断
     return intPartFormat;
-    /*
-    var floatPart = ".00"; //预定义小数部分
-    var value2Array = value.split(".");
-    //=2表示数据有小数位
-    if (value2Array.length == 2) {
-        floatPart = value2Array[1].toString(); //拿到小数部分
-        if (floatPart.length == 1) { //补0,实际上用不着
-            return intPartFormat + "." + floatPart + '0';
-        } else {
-            return intPartFormat + "." + floatPart;
-        }
-    } else {
-        return intPartFormat + floatPart;
-    }
-    */
 })
+
+// axios 拦截器
+axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    // 返回 401 清除token信息并跳转到登录页面
+                    window.location.href = '/login?redirect=' + encodeURIComponent(router.currentRoute.fullPath)
+            }
+        }
+        return Promise.reject(error) // 返回接口返回的错误信息
+    }
+);
 const vm = new Vue({
     router,
     store,

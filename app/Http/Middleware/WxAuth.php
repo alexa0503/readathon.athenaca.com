@@ -21,14 +21,9 @@ class WxAuth
             $user = new UserResource(\App\User::find($id));
             session(['wx.user'=>collect($user)->toArray()]);
         }
-        //dd(session('wx.user'));
         if( !\Session::has('wx.user') ){
-            $appid = config('wx.appid');
-            $redirect_uri = url(config('wx.redirect_uri'));
-            $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='.$appid.'&redirect_uri='.$redirect_uri.'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
-            return redirect($url);
+            return response()->json(['error'=>'Not authorized.'], 401);
         }
-        
         return $next($request);
     }
 }

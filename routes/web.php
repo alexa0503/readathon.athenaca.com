@@ -16,6 +16,24 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Helpers;
 
+Auth::routes();
+Route::get('/login', function(Request $request){
+    if( $request->input('redirect') ){
+        $redirect = urldecode($request->input('redirect'));
+        if(preg_match('/utm_source=([a-zA-Z]+)$/', $redirect, $matches)){
+            session(['utm_source'=>$matches[1]]);
+        }
+    }
+    else{
+        $redirect = '/';
+    }
+    session(['redirect_url'=>$redirect]);
+
+    $appid = config('wx.appid');
+    $redirect_uri = url(config('wx.redirect_uri'));
+    $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='.$appid.'&redirect_uri='.$redirect_uri.'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
+    return redirect($url);
+});
 //微信回调页
 Route::get('/oauth', function(Request $request){
     $code = $request->input('code');
@@ -113,24 +131,15 @@ Route::group(['middleware'=>['wx.auth']], function(){
             }
             else{
                 return redirect('/page/home?'.http_build_query($data));
-                
             }
         }
     });
-    //vue页面 需要判断用户状态然后进行跳转，排行榜页面 账户查看页面等
-    Route::get('/page/{vue}/{id?}/{parms?}', function (Request $request) {
-        /*
-        $path = $request->path();
-        $allow_paths = [
-            'page/register'
-        ];
-        if( session('wx.user.is_activated') == 0 && !in_array($path, $allow_paths)  ){
-            return redirect('/page/register');
-        }
-        */
-        session(['redirect_url'=>$request->fullurl()]);
-        return view('index');
-    });
+});
+//vue页面 需要判断用户状态然后进行跳转，排行榜页面 账户查看页面等
+Route::get('/page/{vue}/{id?}/{parms?}', function (Request $request,$vue) {
+    //$url = $request->fullurl();
+    //session(['redirect_url'=>$url]);
+    return view('index');
 });
 
 Route::group(['middleware' => ['role:管理员|超级管理员', 'menu'], 'prefix' => 'admin'], function () {
@@ -186,4 +195,3 @@ Route::get('/admin/install', function () {
     }
     return redirect('/login');
 });
-Auth::routes();

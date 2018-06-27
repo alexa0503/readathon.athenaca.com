@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ActivityUser as ActivityUserResource;
 use App\Http\Resources\User as UserResource;
+use itbdw\Ip\IpLocation;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -180,6 +181,12 @@ class UserController extends Controller
             return response()->json($validator->errors(), 403);
         }
         try {
+            $utm_source = session('utm_source');
+
+            $ip = $request->ip();
+            $qqwry_filepath = storage_path('qqwry.dat');
+            $data = IpLocation::getLocation($ip, $qqwry_filepath);
+            $registered_city = $data['city'];
             $user = User::find($id);
             $user->name = $request->input('name');
             $user->birthdate = substr($request->input('birthdate'), 0, 10);
@@ -187,6 +194,9 @@ class UserController extends Controller
             $user->tel = $request->input('tel');
             $user->is_reading = $request->input('is_reading') == true ? 1 : 0;
             $user->is_activated = 0;
+            $user->registered_ip = $ip;
+            $user->registered_city = $registered_city;
+            $user->utm_source = $utm_source;
             $result = $user->save();
         } catch (\Exception $e) {
             $validator->errors()->add('name', '用户已激活过了');
@@ -228,4 +238,5 @@ class UserController extends Controller
         $user->save();
         return [];
     }
+
 }
