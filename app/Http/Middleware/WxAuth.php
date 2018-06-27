@@ -21,7 +21,7 @@ class WxAuth
             $user = new UserResource(\App\User::find($id));
             session(['wx.user'=>collect($user)->toArray()]);
         }
-        if( !\Session::has('wx.user') ){
+        if( !\Session::has('wx.user') && $request->path() != '/' ){
             return response()->json(['error'=>'Not authorized.'], 401);
         }
         return $next($request);
