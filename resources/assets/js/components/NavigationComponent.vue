@@ -19,7 +19,7 @@
                     href="javascript:;">
                     <i class="nav-icon nav-icon-activity"></i>比赛动态</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <router-link class="dropdown-item" active-class="active" :to="{ name: 'activity' }">比赛动态</router-link>
+                    <router-link class="dropdown-item" active-class="active" :to="{ name: 'activity' }">阅读动态</router-link>
                     <router-link class="dropdown-item" active-class="active" :to="{ name: 'item' }">兑换奖品</router-link>
                     <router-link class="dropdown-item" active-class="active" :to="{ name: 'question' }">有奖问答</router-link>
                     <div class="dropdown-divider"></div>
