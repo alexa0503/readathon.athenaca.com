@@ -71,6 +71,9 @@
                         <th>是否激活</th>
                         <th>状态</th>
                         <th>授权时间</th>
+                        <th>UTM SOURCE</th>
+                        <th>注册IP</th>
+                        <th>注册城市</th>
                         <th>管理者</th>
                         <th>操作</th>
                     </tr>
@@ -93,10 +96,11 @@
                         <td>@if($item->is_activated == 1){{ '已激活' }}@elseif($item->is_activated == 0){{ '未激活' }}@else{{ '已禁用' }}@endif</td>
                         <td>{{ $item->name != null ? '已注册' : '未注册' }}</td>
                         <td>{{ $item->created_at }}</td>
+                        <td>{{ $item->utm_source }}</td>
+                        <td>{{ $item->registered_ip }}</td>
+                        <td>{{ $item->registered_city }}</td>
                         <td>{{ $item->administrator_names }}</td>
                         <td>
-
-                            
                              <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                     操作 <span class="caret"></span>
@@ -121,7 +125,7 @@
                 @if($super_administrator)
                 <tfoot>
                     <tr>
-                        <td colspan="17">
+                        <td colspan="20">
                             <div class="btn-group dropup">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     将所选分配给<span class="caret"></span>

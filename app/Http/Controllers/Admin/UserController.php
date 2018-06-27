@@ -182,17 +182,26 @@ class UserController extends Controller
         $filename = date('YmdHis').'.csv';
         $fp = fopen(public_path("downloads/".$filename), 'w');
         fwrite($fp, chr(0xEF).chr(0xBB).chr(0xBF));
-        $titles = ["姓名","昵称","城市","电话","生日","在读学员","注册时间"];
+        $titles = ["ID","姓名","昵称","城市","电话","生日","性别","在读学员","GE","邀请人","是否激活","状态","注册IP","注册城市","UTM_SOURCE","注册时间"];
         fputcsv($fp, $titles);
         $orm->chunk(30000, function($items) use ($fp){
             foreach ($items as $k => $v) {
                 $array = [
+                    $v->id,
                     $v->name,
                     $v->nickname,
                     $v->city ? $v->city->name : '--',
                     $v->tel,
                     $v->birthdate,
-                    $v->is_reading,
+                    $v->sex == '0' ? '男' : '女',
+                    $v->is_reading ? '是' : '否',
+                    $v->ge,
+                    $v->invite_id ? $item->inviter->name : '--',
+                    $v->is_activated == 0 ? '否' : '是',
+                    $v->name != null ? '已注册' : '未注册',
+                    $v->registered_ip,
+                    $v->registered_city,
+                    $v->utm_source,
                     $v->created_at
                 ];
                 fputcsv($fp, $array);
