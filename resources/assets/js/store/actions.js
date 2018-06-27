@@ -47,7 +47,7 @@ export default {
         commit
     }) {
         (async function () {
-            await dispatch('getSelfInfo', 'withoutme')
+            //await dispatch('getSelfInfo', 'withoutme')
             dispatch('getBoardList', {page:1, type: 'withoutme', name:'home'})
         })()
     },
@@ -448,6 +448,11 @@ export default {
                 let avatar = response.data.data.url
                 commit('updateAvatar', avatar)
             }
+        }).catch(function (error) {})
+    },
+    sendUtm({commit}){
+        let url = apiUrls.SEND_UTM_URL + '/' + encodeURIComponent(window.location.href)
+        axios.get(url).then(function (response) {
         }).catch(function (error) {})
     }
 }

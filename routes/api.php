@@ -39,6 +39,12 @@ return $request->user();
 });
  */
 Route::group(['middleware' => ['wx.auth']], function () {
+    Route::get('user/utm', function(Request $request){
+        $url = urldecode($request->input('url'));
+        if(preg_match('/utm_source=([a-zA-Z]+)$/', $url, $matches)){
+            session(['utm_source'=>$matches[1]]);
+        }
+    });
     Route::get('user/{id?}', 'Api\UserController@index');
     Route::get('board', 'Api\UserController@board');
     Route::post('register', 'Api\UserController@register');

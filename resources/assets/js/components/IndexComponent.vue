@@ -99,6 +99,7 @@
         }),
         created() {
             this.$store.dispatch('initIndexPage')
+            this.$store.dispatch('sendUtm');
         },
         methods: {
             fetchMore: function (more = false) {
