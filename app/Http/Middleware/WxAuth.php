@@ -21,11 +21,11 @@ class WxAuth
             $user = new UserResource(\App\User::find($id));
             session(['wx.user'=>collect($user)->toArray()]);
         }
-        if( !\Session::has('wx.user') ){
-            return response()->json(['error'=>'Not authorized.'], 401);
-        }
-        elseif( !\Session::has('wx.user') && $request->path() == '/' ){
+        if( !\Session::has('wx.user') && $request->path() == '/' ){
             return redirect('/login');
+        }
+        elseif( !\Session::has('wx.user') ){
+            return response()->json(['error'=>'Not authorized.'], 401);
         }
         return $next($request);
     }
