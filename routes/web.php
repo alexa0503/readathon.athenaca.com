@@ -20,9 +20,6 @@ Auth::routes();
 Route::get('/login', function(Request $request){
     if( $request->input('redirect') ){
         $redirect = urldecode($request->input('redirect'));
-        if(preg_match('/utm_source=([a-zA-Z]+)$/', $redirect, $matches)){
-            session(['utm_source'=>$matches[1]]);
-        }
     }
     else{
         $redirect = '/';
@@ -137,6 +134,9 @@ Route::group(['middleware'=>['wx.auth']], function(){
 });
 //vue页面 需要判断用户状态然后进行跳转，排行榜页面 账户查看页面等
 Route::get('/page/{vue}/{id?}/{parms?}', function (Request $request,$vue) {
+    if(preg_match('/utm_source=([a-zA-Z]+)$/', $redirect, $matches)){
+        session(['utm_source'=>$matches[1]]);
+    }
     //$url = $request->fullurl();
     //session(['redirect_url'=>$url]);
     return view('index');

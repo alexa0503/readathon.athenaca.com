@@ -182,11 +182,10 @@ class UserController extends Controller
         }
         try {
             $utm_source = session('utm_source');
-
             $ip = $request->ip();
             $qqwry_filepath = storage_path('qqwry.dat');
             $data = IpLocation::getLocation($ip, $qqwry_filepath);
-            $registered_city = $data['city'];
+            $registered_city = empty($data['county']) ? $data['province'] : $data['city'];
             $user = User::find($id);
             $user->name = $request->input('name');
             $user->birthdate = substr($request->input('birthdate'), 0, 10);
