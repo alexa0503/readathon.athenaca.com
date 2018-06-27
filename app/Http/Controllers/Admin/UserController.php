@@ -189,7 +189,7 @@ class UserController extends Controller
                 $array = [
                     $v->name,
                     $v->nickname,
-                    $v->city->name,
+                    $v->city ? $v->city->name : '--',
                     $v->tel,
                     $v->birthdate,
                     $v->is_reading,
