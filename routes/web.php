@@ -111,6 +111,9 @@ Route::group(['middleware'=>['wx.auth']], function(){
     });
     //首页根据用户状态自动跳转
     Route::get('/', function(Request $request){
+        if(preg_match('/utm_source=([a-zA-Z]+)$/', $redirect, $matches)){
+            session(['utm_source'=>$matches[1]]);
+        }
         $data = $request->all();
         //如果已激活跳转到首页 未激活跳转到注册页面
         if( session('wx.user.is_activated') == 0 ){
