@@ -19,8 +19,9 @@ class WxAuth
         if($request->input('debug') == true){
             $id = $request->input('id') ? : 1;
             $user = new UserResource(\App\User::find($id));
-            dd(collect($user));
-            session(['wx.user'=>collect($user)->toArray()]);
+            $arr = collect($user)->toArray();
+            $arr['age_group_id'] = \App\Helpers\Helper::ageGroup($user->birthdate);
+            session(['wx.user'=>$arr]);
         }
         if( !\Session::has('wx.user') && $request->path() == '/' ){
             return redirect('/login');

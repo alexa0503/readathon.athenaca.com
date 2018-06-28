@@ -54,7 +54,9 @@ Route::get('/oauth', function(Request $request){
             $user->is_activated = 0;
             $user->save();
         }
-        session(['wx.user'=>collect($user)->toArray()]);
+        $arr = collect($user)->toArray();
+        $arr['age_group_id'] = App\Helpers\Helper::ageGroup($user->birthdate);
+        session(['wx.user'=>$arr]);
         $redirect_url = session('redirect_url');
         if( null != $redirect_url){
             session(['redirect_url'=>null]);

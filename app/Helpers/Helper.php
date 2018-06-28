@@ -4,6 +4,7 @@ namespace App\Helpers;
 use App\Activity;
 use App\ActivityUser;
 use App\User;
+use App\AgeGroup;
 use Carbon\Carbon;
 
 class Helper
@@ -17,11 +18,23 @@ class Helper
         $dt2 = Carbon::createFromFormat('Y-m-d', $birthdate);
         return $dt1->diffInYears($dt2);
     }
+    public static function ageGroup($birthdate)
+    {
+        $age = self::age($birthdate);
+        $age_group = AgeGroup::where('min_age', '<=', $age)->where('max_age', '>=', $age)->first();
+        if( null == $age_group ){
+            return 1;
+        }
+        else{
+            return $age_group->id;
+        }
+
+    }
     public static function checkUserActivity($user_id, Activity $activity)
     {
         $activity_user = ActivityUser::where('user_id', $user_id)->where('activity_id', $activity->id)->first();
         //$user = User::find($user_id);
-        $age_group_id = self::age(session('wx.user.birthdate'));
+        $age_group_id = self::ageGroup(session('wx.user.birthdate'));
         if (null == $activity_user) {
             ///获取当前用户的年龄组
             $activity_user = new ActivityUser;
