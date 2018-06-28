@@ -106,7 +106,6 @@
             if (name == 'question' || name == 'item' || name == 'about' || name == 'activity') {
                 this.navigations[3].isActive = true
             }
-            console.log(this.routerName)
         },
         computed: {
             ...mapState({
