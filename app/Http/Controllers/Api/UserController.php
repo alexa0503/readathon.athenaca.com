@@ -201,7 +201,7 @@ class UserController extends Controller
             # 自动分配用户
             if( !empty($utm_source) ){
                 $administrator = Administrator::where('name', $utm_source)->first();
-                if($administrator){
+                if( $administrator ){
                     $user_administrator = \DB::table('user_administrators')->where('administrator_id', $administrator->id)->where('user_id', $user->id)->first();
                     if( !$user_administrator){
                         \DB::table('user_administrators')->insert([
