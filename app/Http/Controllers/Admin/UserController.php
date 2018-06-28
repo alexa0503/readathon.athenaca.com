@@ -196,7 +196,7 @@ class UserController extends Controller
                     $v->sex == '0' ? '男' : '女',
                     $v->is_reading ? '是' : '否',
                     $v->ge,
-                    $v->invite_id ? $item->inviter->name : '--',
+                    $v->invite_id ? $v->inviter->name : '--',
                     $v->is_activated == 0 ? '否' : '是',
                     $v->name != null ? '已注册' : '未注册',
                     $v->registered_ip,
