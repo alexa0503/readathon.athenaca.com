@@ -9,6 +9,7 @@ use App\Http\Resources\ActivityUser as ActivityUserResource;
 use App\Http\Resources\User as UserResource;
 use itbdw\Ip\IpLocation;
 use App\User;
+use App\Administrator;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -196,7 +197,21 @@ class UserController extends Controller
             $user->registered_ip = $ip;
             $user->registered_city = $registered_city;
             $user->utm_source = $utm_source;
-            $result = $user->save();
+            $user->save();
+            # 自动分配用户
+            if( !empty($utm_source) ){
+                $administrator = Administrator::where('name', $utm_source)->first();
+                if($administrator){
+                    $user_administrator = \DB::table('user_administrators')->where('administrator_id', $administrator->id)->where('user_id', $user->id)->first();
+                    if( !$user_administrator){
+                        \DB::table('user_administrators')->insert([
+                            'user_id'=>$user->id,
+                            'administrator_id' => $administrator->id
+                        ]);
+                    }
+                }
+            }
+            
         } catch (\Exception $e) {
             $validator->errors()->add('name', '用户已激活过了');
         }
