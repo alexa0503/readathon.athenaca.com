@@ -108,7 +108,7 @@ class UserController extends Controller
         
         if ($request->input('type') == 'withoutme') {
             if ($wx_activity_user != null) {
-                $orm->where('age_group_id', $wx_activity_user->age_group_id);
+                //$orm->where('age_group_id', $wx_activity_user->age_group_id);
                 $orm->whereHas('user', function ($query) use ($wx_activity_user) {
                     $query->where('city_id', $wx_activity_user->city_id);
                 });

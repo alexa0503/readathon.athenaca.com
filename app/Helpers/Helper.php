@@ -3,12 +3,16 @@ namespace App\Helpers;
 
 use App\Activity;
 use App\ActivityUser;
+use App\User;
 use Carbon\Carbon;
 
 class Helper
 {
     public static function age($birthdate)
     {
+        if( null == $birthdate ){
+            return 1;
+        }
         $dt1 = Carbon::now();
         $dt2 = Carbon::createFromFormat('Y-m-d', $birthdate);
         return $dt1->diffInYears($dt2);
@@ -16,12 +20,14 @@ class Helper
     public static function checkUserActivity($user_id, Activity $activity)
     {
         $activity_user = ActivityUser::where('user_id', $user_id)->where('activity_id', $activity->id)->first();
+        //$user = User::find($user_id);
+        $age_group_id = self::age(session('wx.user.birthdate'));
         if (null == $activity_user) {
             ///获取当前用户的年龄组
             $activity_user = new ActivityUser;
             $activity_user->user_id = $user_id;
             $activity_user->activity_id = $activity->id;
-            $activity_user->age_group_id = session('wx.user.age_group_id') ?: 1;
+            $activity_user->age_group_id = $age_group_id;
             $activity_user->reading_number = 0;
             $activity_user->voted_number = 0;
             $activity_user->city_id = session('wx.user.city_id') ?: 1;
@@ -32,7 +38,7 @@ class Helper
     public static function getCurrentActivity()
     {
         $dt = Carbon::now();
-        $activity = Activity::where('start_date', '<=', $dt)->where('end_date', '>', $dt)->first();
+        $activity = Activity::where('start_date', '<=', $dt->toDateString())->where('end_date', '>=', $dt->toDateString())->first();
         return $activity;
     }
     public static function getLatestActivity()

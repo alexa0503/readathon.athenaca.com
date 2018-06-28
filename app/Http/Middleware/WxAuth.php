@@ -19,6 +19,7 @@ class WxAuth
         if($request->input('debug') == true){
             $id = $request->input('id') ? : 1;
             $user = new UserResource(\App\User::find($id));
+            dd(collect($user));
             session(['wx.user'=>collect($user)->toArray()]);
         }
         if( !\Session::has('wx.user') && $request->path() == '/' ){
