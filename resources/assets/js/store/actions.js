@@ -451,7 +451,7 @@ export default {
         }).catch(function (error) {})
     },
     sendUtm({commit}){
-        let url = apiUrls.SEND_UTM_URL + '/' + encodeURIComponent(window.location.href)
+        let url = apiUrls.SEND_UTM_URL + encodeURIComponent(window.location.href)
         axios.get(url).then(function (response) {
         }).catch(function (error) {})
     }
