@@ -69,7 +69,7 @@
         watch: {
             $route (to, from) {
                 let name = to.name
-                if( name == 'question' || name == 'prize' || name == 'about' || name == 'activity'){
+                if( name == 'question' || name == 'prize' || name == 'about' || name == 'activity' || name == 'item'){
                     this.active = true
                 }
                 else{

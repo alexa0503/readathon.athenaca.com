@@ -119,7 +119,7 @@ Route::group(['middleware'=>['wx.auth']], function(){
         $data = $request->all();
         //如果已激活跳转到首页 未激活跳转到注册页面
         if( session('wx.user.is_activated') == 0 ){
-            if( empty($query) ){
+            if( empty($data) ){
                 return redirect('/page/register');
             }
             else{
@@ -128,7 +128,7 @@ Route::group(['middleware'=>['wx.auth']], function(){
             }
         }
         else{
-            if( empty($query) ){
+            if( empty($data) ){
                 return redirect('/page/home');
             }
             else{
@@ -139,8 +139,11 @@ Route::group(['middleware'=>['wx.auth']], function(){
 });
 //vue页面 需要判断用户状态然后进行跳转，排行榜页面 账户查看页面等
 Route::get('/page/{vue}/{id?}/{parms?}', function (Request $request,$vue) {
-    //$url = $request->fullurl();
-    //session(['redirect_url'=>$url]);
+    if(Session::has('wx.user')){
+        if( session('wx.user.is_activated') == 1 && $vue == 'register' ){
+            return redirect('/page/home');
+        }
+    }
     return view('index');
 });
 
@@ -180,7 +183,6 @@ Route::get('/admin/login', 'Admin\LoginController@ShowLogin');
 Route::post('/admin/login', 'Admin\LoginController@login');
 Route::get('/admin/logout', 'Admin\LoginController@logout');
 Route::get('/admin/install', function () {
-    dd(bcrypt('admin@2017'));
     if (\App\User::count() == 0) {
         $role = Role::create(['guard_name'=>'admin','name' => 'superadmin']);
         $permission = Permission::create(['guard_name'=>'admin','name' => 'global privileges']);

@@ -9,18 +9,20 @@ import store from './store'
 import * as jssdk from './utils/wx'
 
 let wxShare = async function (to) {
-    //await store.dispatch('loading')
     let url = 'http://readathon.athenaca.com' + to.fullPath
-    //console.log(window.location.href, url)
-    //let url = window.location.href;
     await store.dispatch('getSelfInfo')
     if (store.state.self == undefined) {
         router.push({
-            path: '/'
+            path: '/login'
         })
     } else if (store.state.self.is_activated != 1 && (to.name == 'invite' || (to.name == 'account' && to.params.id == undefined) || to.name == 'profile')) {
         router.push({
             name: 'register'
+        })
+    }
+    else if(store.state.self.is_activated == 1 && to.name == 'register' ){
+        router.push({
+            name: 'home'
         })
     }
     jssdk.initConfig(url)
