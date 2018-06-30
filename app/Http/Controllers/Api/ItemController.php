@@ -35,18 +35,24 @@ class ItemController extends Controller
             return response()->json(['ret' => 1001, 'errMsg' => '当前没有活动哦']);
         }
 
+        $city_id = 1;
         $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $user_id)->first();
         if ($activity_user == null) {
             $rank = null;
         } else {
-            $city_id = $activity_user->city_id;
+            $city_id = $activity_user->city_id ?:1;
             $age_group_id = $activity_user->age_group_id;
         }
+
+        
 
         # 仅显示用户自己城市奖品
         $items = Item::orderBy('sort_id', 'ASC')->where('city_ids', 'LIKE', '%"'.$city_id.'"%')->where('activity_id', $activity->id)->paginate(2);
         $collection = $items->getCollection()->map(function ($item) use ($user_id, $activity, $activity_user) {
-            if($activity_user->exchanged_words_number < $item->words_number){
+            if( null == $activity_user ){
+                $received_status = 5;
+            }
+            elseif($activity_user->exchanged_words_number < $item->words_number){
                 $received_status = 5; // 字数不够 不可兑换
             }
             elseif( !in_array($activity_user->city_id, $item->city_ids) ){
@@ -131,7 +137,10 @@ class ItemController extends Controller
             return response()->json(['ret' => 1004, 'errMsg' => '此礼品超出兑换时间了'], 403);
         }
         $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $user_id)->first();
-        if($activity_user->exchanged_words_number < $item->words_number){
+        if( $activity_user == null ){
+            return response()->json(['ret' => 1007, 'errMsg' => '您字数不够呢'], 403);
+        }
+        elseif($activity_user->exchanged_words_number < $item->words_number){
             return response()->json(['ret' => 1005, 'errMsg' => '您字数不够呢'], 403);
         }
         elseif( !in_array($activity_user->city_id, $item->city_ids) ){

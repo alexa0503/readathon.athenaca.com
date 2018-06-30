@@ -1,17 +1,34 @@
 <template>
     <div class="fixed-bottom" id="navigation">
         <ul class="nav nav-pills nav-fill">
-            <li class="nav-item" v-for="navigation in navigations" v-bind:key="navigation.name" v-bind:class="{ dropdown:navigation.hasSubMenu }">
-                <a :href="navigation.path" class="nav-link no-dropdown" v-bind:class="{ active: navigation.name == routerName }" v-if="!navigation.hasSubMenu">
-                    <i class="nav-icon" v-bind:class="navigation.icon"></i>{{ navigation.title }}
-                </a>
-                <a href="javascript:;" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" v-bind:class="{ active: navigation.name == routerName || navigation.isActive }" v-else>
-                    <i class="nav-icon nav-icon-activity"></i>{{ navigation.title }}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown" v-if="navigation.hasSubMenu">
-                    <a :href="sub.path" class="dropdown-item" v-for="sub in navigation.items" :key="sub.name" v-bind:class="{active: sub.name == routerName}">{{ sub.title }}</a>
+            <li class="nav-item">
+                <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'home' }" exact="exact">
+                    <i class="nav-icon nav-icon-index"></i>首页
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'board' }">
+                    <i class="nav-icon nav-icon-board"></i>排名榜</router-link>
+            </li>
+            <li class="nav-item">
+                <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'invite' }">
+                    <i class="nav-icon nav-icon-invite"></i>邀请好友</router-link>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" v-bind:class="active == true ? 'active' : ''" v-on:click="clearActive" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    href="javascript:;">
+                    <i class="nav-icon nav-icon-activity"></i>比赛动态</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <router-link class="dropdown-item" active-class="active" :to="{ name: 'activity' }">阅读动态</router-link>
+                    <router-link class="dropdown-item" active-class="active" :to="{ name: 'item' }">兑换奖品</router-link>
+                    <router-link class="dropdown-item" active-class="active" :to="{ name: 'question' }">有奖问答</router-link>
+                    <div class="dropdown-divider"></div>
+                    <router-link class="dropdown-item" active-class="active" :to="{ name: 'about' }">关于阅读马拉松</router-link>
                 </div>
+            </li>
+            <li class="nav-item">
+                <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'account' }">
+                    <i class="nav-icon nav-icon-account"></i>我的账户</router-link>
             </li>
         </ul>
     </div>
@@ -24,87 +41,18 @@
         mapActions
     } from 'vuex'
     export default {
-        data() {
+        data(){
             return {
-                routerName: null,
-                navigations: [{
-                        path: '/page/home',
-                        icon: 'nav-icon-index',
-                        title: '首页',
-                        name: 'home',
-                        isActive: false,
-                        hasSubMenu: false
-                    },
-                    {
-                        path: '/page/board',
-                        icon: 'nav-icon-board',
-                        title: '排名榜',
-                        name: 'board',
-                        isActive: false,
-                        hasSubMenu: false
-                    },
-                    {
-                        path: '/page/invite',
-                        icon: 'nav-icon-invite',
-                        title: '邀请好友',
-                        name: 'invite',
-                        isActive: false,
-                        hasSubMenu: false
-                    },
-                    {
-                        path: '/page/activity',
-                        icon: 'nav-icon-activity',
-                        title: '比赛动态',
-                        name: 'activity',
-                        isActive: false,
-                        hasSubMenu: true,
-                        items: [
-                            {
-                                path: '/page/activity',
-                                icon: 'nav-icon-activity',
-                                name: 'activity',
-                                title: '阅读动态',
-                                isActive: false,
-                            },
-                            {
-                                path: '/page/item',
-                                icon: 'nav-icon-activity',
-                                name: 'item',
-                                title: '兑换奖品',
-                                isActive: false,
-                            },
-                            {
-                                path: '/page/question',
-                                icon: 'nav-icon-activity',
-                                name: 'question',
-                                title: '有奖问答',
-                                isActive: false,
-                            },
-                            {
-                                path: '/page/about',
-                                icon: 'nav-icon-activity',
-                                title: '关于阅读马拉松',
-                                name: 'about',
-                                isActive: false,
-                            }
-                        ]
-                    },
-                    {
-                        path: '/page/account',
-                        icon: 'nav-icon-account',
-                        title: '我的账户',
-                        name: 'account',
-                        isActive: false,
-                        hasSubMenu: false
-                    }
-                ]
+                active: false
             }
         },
-        created() {
-            this.routerName = this.$router.history.current.name
-            let name = this.routerName;
-            if (name == 'question' || name == 'item' || name == 'about' || name == 'activity') {
-                this.navigations[3].isActive = true
+        created(){
+            let name = this.$router.history.current.name
+            if( name == 'question' || name == 'prize' || name == 'about' || name == 'activity' || name == 'item'){
+                this.active = true
+            }
+            else{
+                this.active = false
             }
         },
         computed: {
@@ -113,11 +61,15 @@
             })
         },
         methods: {
+            clearActive: function () {
+                $('.no-dropdown').removeClass('active')
+                //$('.dropdown-toggle').addClass('active')
+            }
         },
         watch: {
             $route (to, from) {
                 let name = to.name
-                if( name == 'question' || name == 'prize' || name == 'about' || name == 'activity' || name == 'item'){
+                if( name == 'question' || name == 'prize' || name == 'about' || name == 'activity'|| name == 'item'){
                     this.active = true
                 }
                 else{

@@ -89,7 +89,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
             $dt = Carbon::now();
             $activity = Activity::where('start_date', '<=', $dt)->where('receive_end_date', '>=', $dt)->orderBy('start_date', 'DESC')->first();
             if( null == $activity ){
-                $activity = Activity::where('start_date', '<=', $dt)->orderBy('start_date', 'ASC')->first();
+                $activity = Activity::where('start_date', '>=', $dt)->orderBy('start_date', 'ASC')->first();
             }
         } else {
             $activity = Activity::find($id);
@@ -105,10 +105,9 @@ Route::group(['middleware' => ['wx.auth']], function () {
             //return response()->json(['ret' => 1002, 'errMsg' => '你没有办法获取该活动得奖品']);
         } else {
             //$rank = $activity_user->getRank();
-            $city_id = $activity_user->city_id;
+            $city_id = $activity_user->city_id ?: 1;
             $age_group_id = $activity_user->age_group_id;
             $rank = $activity_user->getRank($city_id, $age_group_id);
-            
         }
 
         $prizes = App\Prize::orderBy('sort_id','ASC')->where('activity_id', $activity->id)->paginate(2);
