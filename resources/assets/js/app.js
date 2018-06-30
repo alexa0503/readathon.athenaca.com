@@ -35,15 +35,9 @@ let wxShare = async function (to) {
         share_desc = store.state.self.nickname + "已经加入阅读马拉松。Let's read together!"
         shareTimelineDesc = "书中也有万里路！ " + store.state.self.nickname + "已经加入阅读马拉松。Let's read together!"
     }
-    if (to.name == 'invite') {
-        let id = store.state.self.id
-        let link = 'http://readathon.athenaca.com/invite/' + id
-        jssdk.share({
-            link: link,
-            desc: share_desc,
-            timelineDesc: shareTimelineDesc
-        })
-    } else if (to.name == 'board') {
+    
+    
+    if (to.name == 'board') {
         let id = store.state.self.id
         let link = 'http://readathon.athenaca.com/page/board/' + id
         jssdk.share({
@@ -60,7 +54,10 @@ let wxShare = async function (to) {
             timelineDesc: shareTimelineDesc
         })
     } else {
+        let id = store.state.self.id
+        let link = 'http://readathon.athenaca.com/invite/' + id
         jssdk.share({
+            link: link,
             desc: share_desc,
             timelineDesc: shareTimelineDesc
         })
