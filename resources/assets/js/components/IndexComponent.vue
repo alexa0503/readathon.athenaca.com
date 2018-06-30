@@ -19,8 +19,8 @@
                 </div>
             </div>
             <div class="board-list board-list-home" v-else-if="!hasCurrent">
-                <div class="board-no-activated">
-                    <router-link :to="{ name: 'account' }">抱歉，当前没有可以参加的活动</router-link>
+                <div class="board-no-activated" v-if="nextActivity">
+                    <router-link :to="{ name: 'account' }">{{ nextActivity.name }}开赛时间是为{{ nextActivity.start_date }}-{{ nextActivity.end_date }}，敬请期待！</router-link>
                 </div>
             </div>
             <div class="board-list board-list-home" v-else-if="user.is_activated == 1 && user.has_joined == 0">
@@ -94,6 +94,11 @@
             currentActivityName(state){
                 if( state.homeBoardList.meta && state.homeBoardList.meta.current_activity ){
                     return state.homeBoardList.meta.current_activity.name
+                }
+            },
+            nextActivity(state){
+                if( state.homeBoardList.meta && state.homeBoardList.meta.next_activity ){
+                    return state.homeBoardList.meta.next_activity
                 }
             }
         }),

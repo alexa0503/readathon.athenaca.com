@@ -54,6 +54,17 @@ class Helper
         $activity = Activity::where('start_date', '<=', $dt->toDateString())->where('end_date', '>=', $dt->toDateString())->first();
         return $activity;
     }
+    public static function getNextActivity()
+    {
+        $dt = Carbon::now();
+        $activity = Activity::where('start_date', '>', $dt->toDateString())
+        ->orderBy('start_date', 'ASC')->first();
+        if($activity){
+            $activity->start_date = date('m月d日', strtotime($activity->start_date));
+            $activity->end_date = date('m月d日', strtotime($activity->end_date));
+        }
+        return $activity;
+    }
     public static function getLatestActivity()
     {
         $activity = Activity::orderBy('start_date', 'DESC')->first();

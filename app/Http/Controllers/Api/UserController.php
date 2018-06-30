@@ -126,10 +126,12 @@ class UserController extends Controller
             $orm->where('words_number', '>', $row[0]->words_number);
         }
         $activity_users = $orm->paginate(4)->appends($request->query());
+        $next_activity = Helper::getNextActivity();
         return ActivityUserResource::collection($activity_users)->additional([
             'meta' => [
                 'is_current_activity' => $is_current_activity,
                 'current_activity' => $current_activity,
+                'next_activity' => $next_activity,
                 'activity_id' => $activity_id
             ],
         ]);
