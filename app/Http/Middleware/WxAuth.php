@@ -16,15 +16,13 @@ class WxAuth
      */
     public function handle($request, Closure $next)
     {
-        /*
-        if($request->input('debug') == true){
+        if($request->input('debug') == true && env('APP_ENV') == 'local'){
             $id = $request->input('id') ? : 1;
             $user = new UserResource(\App\User::find($id));
             $arr = collect($user)->toArray();
             $arr['age_group_id'] = \App\Helpers\Helper::ageGroup($user->birthdate);
             session(['wx.user'=>$arr]);
         }
-        */
         if( !\Session::has('wx.user') && $request->path() == '/' ){
             return redirect('/login');
         }

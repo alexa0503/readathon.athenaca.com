@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="board-list board-list-home" v-else-if="!hasCurrent">
-                <div class="board-no-activated" v-if="nextActivity">
+                <div class="board-no-activated-02">
                     <router-link :to="{ name: 'account' }">{{ nextActivity.name }}开赛时间是为{{ nextActivity.start_date }}-{{ nextActivity.end_date }}，敬请期待！</router-link>
                 </div>
             </div>
@@ -91,14 +91,14 @@
                     return true
                 }
             },
+            nextActivity(state){
+                if( state.homeBoardList && state.homeBoardList.ret == 1001 ){
+                    return state.homeBoardList.latest
+                }
+            },
             currentActivityName(state){
                 if( state.homeBoardList.meta && state.homeBoardList.meta.current_activity ){
                     return state.homeBoardList.meta.current_activity.name
-                }
-            },
-            nextActivity(state){
-                if( state.homeBoardList.meta && state.homeBoardList.meta.next_activity ){
-                    return state.homeBoardList.meta.next_activity
                 }
             }
         }),

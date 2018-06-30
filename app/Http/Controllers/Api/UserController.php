@@ -82,7 +82,15 @@ class UserController extends Controller
         } else {
             //没有活动
             if (null == $current_activity && $request->input('type') == 'withoutme') {
-                return response()->json(['ret' => 1001, 'errMsg' => '当前没有活动', 'latest'=>$activity]);
+                if( null != $activity){
+                    $activity->start_date = date('m月d日',strtotime($activity->start_date));
+                    $activity->end_date = date('m月d日',strtotime($activity->end_date));
+                }
+                return response()->json([
+                    'ret' => 1001, 
+                    'errMsg' => '当前没有活动', 
+                    'latest'=>$activity
+                ]);
             }
             $is_current_activity = null == $current_activity ? 0 : 1;
             $activity_id = $activity->id;
@@ -126,12 +134,10 @@ class UserController extends Controller
             $orm->where('words_number', '>', $row[0]->words_number);
         }
         $activity_users = $orm->paginate(4)->appends($request->query());
-        $next_activity = Helper::getNextActivity();
         return ActivityUserResource::collection($activity_users)->additional([
             'meta' => [
                 'is_current_activity' => $is_current_activity,
                 'current_activity' => $current_activity,
-                'next_activity' => $next_activity,
                 'activity_id' => $activity_id
             ],
         ]);
