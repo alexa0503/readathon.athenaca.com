@@ -18,8 +18,15 @@ class ItemController extends Controller
         if ($id == null) {
             $dt = Carbon::now();
             $activity = Activity::where('start_date', '<=', $dt)->where('items_end_date', '>=', $dt)->orderBy('start_date', 'DESC')->first();
+            # 当前没有显示上期
+            /*
             if (null == $activity) {
                 $activity = Activity::where('start_date', '<=', $dt)->orderBy('start_date', 'ASC')->first();
+            }
+            */
+            # 上期没有显示下期
+            if (null == $activity) {
+                $activity = Activity::where('start_date', '>=', $dt)->orderBy('start_date', 'ASC')->first();
             }
         } else {
             $activity = Activity::find($id);

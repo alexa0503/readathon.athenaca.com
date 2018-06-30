@@ -35,6 +35,19 @@
                     </div>
                 </div>
 
+
+                <div class="form-group">
+                    <label for="" class="col-lg-2 col-md-2 control-label">字数可兑换时间段</label>
+                    <div class="col-lg-3 col-md-3">
+                        <input name="items_start_date" type="text" class="form-control datepicker" value="" id="items_start_date" placeholder="">
+                        <label class="help-block" for="" id="help-items_start_date"></label>
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <input name="items_end_date" type="text" class="form-control datepicker" value="" id="items_end_date" placeholder="">
+                        <label class="help-block" for="" id="help-items_end_date"></label>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="name" class="col-lg-2 control-label">图片</label>
                     <div class="col-lg-10">

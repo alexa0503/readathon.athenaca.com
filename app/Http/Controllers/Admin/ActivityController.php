@@ -57,6 +57,8 @@ class ActivityController extends Controller
             'end_date.*' => '请选择活动结束如期~',
             'receive_start_date.*' => '请选择活动礼品开始领取日期~',
             'receive_end_date.*' => '请选择活动礼品结束领取日期~',
+            'items_start_date.*' => '请选择字数兑换开始领取日期~',
+            'items_end_date.*' => '请选择字数兑换结束领取日期~',
             'image.*' => '请上传图片~',
         ];
         $validator = Validator::make($request->all(), [
@@ -65,6 +67,8 @@ class ActivityController extends Controller
             'end_date' => 'required|date',
             'receive_start_date' => 'required|date',
             'receive_end_date' => 'required|date',
+            'items_start_date' => 'required|date',
+            'items_end_date' => 'required|date',
             'image' => 'required',
         ], $messages);
 
@@ -78,6 +82,8 @@ class ActivityController extends Controller
         $activity->body = $request->input('body') ? : '';
         $activity->receive_start_date = $request->input('receive_start_date');
         $activity->receive_end_date = $request->input('receive_end_date');
+        $activity->items_start_date = $request->input('items_start_date');
+        $activity->items_end_date = $request->input('items_end_date');
         $activity->image = $request->input('image') ? : '';
         $activity->save();
         return response()->json(['ret' => 0, 'url' => route('activity.index')]);
@@ -124,6 +130,8 @@ class ActivityController extends Controller
             'end_date.*' => '请选择活动结束如期~',
             'receive_start_date.*' => '请选择活动礼品开始领取日期~',
             'receive_end_date.*' => '请选择活动礼品结束领取日期~',
+            'items_start_date.*' => '请选择字数兑换开始领取日期~',
+            'items_end_date.*' => '请选择字数兑换结束领取日期~',
             'image.*' => '请上传图片~',
         ];
         $validator = Validator::make($request->all(), [
@@ -132,6 +140,8 @@ class ActivityController extends Controller
             'end_date' => 'required|date',
             'receive_start_date' => 'required|date',
             'receive_end_date' => 'required|date',
+            'items_start_date' => 'required|date',
+            'items_end_date' => 'required|date',
             'image' => 'required',
         ], $messages);
 
@@ -145,6 +155,8 @@ class ActivityController extends Controller
         $activity->receive_start_date = $request->input('receive_start_date');
         $activity->receive_end_date = $request->input('receive_end_date');
         $activity->image = $request->input('image') ? : '';
+        $activity->items_start_date = $request->input('items_start_date');
+        $activity->items_end_date = $request->input('items_end_date');
         $activity->save();
         return response()->json(['ret' => 0, 'url' => route('activity.index')]);
     }
