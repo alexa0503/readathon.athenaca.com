@@ -182,7 +182,7 @@ class UserController extends Controller
         $filename = date('YmdHis').'.csv';
         $fp = fopen(public_path("downloads/".$filename), 'w');
         fwrite($fp, chr(0xEF).chr(0xBB).chr(0xBF));
-        $titles = ["ID","姓名","昵称","城市","电话","生日","性别","在读学员","GE","邀请人","是否激活","状态","注册IP","注册城市","UTM_SOURCE","注册时间"];
+        $titles = ["ID","姓名","昵称","城市","电话","生日","性别","在读学员","GE","邀请人","是否激活","状态","备注","注册IP","注册城市","UTM_SOURCE","注册时间"];
         fputcsv($fp, $titles);
         $orm->chunk(30000, function($items) use ($fp){
             foreach ($items as $k => $v) {
@@ -199,6 +199,7 @@ class UserController extends Controller
                     $v->invite_id ? $v->inviter->name : '--',
                     $v->is_activated == 0 ? '否' : '是',
                     $v->name != null ? '已注册' : '未注册',
+                    $v->remark,
                     $v->registered_ip,
                     $v->registered_city,
                     $v->utm_source,
@@ -305,6 +306,7 @@ class UserController extends Controller
         $user->ge = $request->input('ge');
         $user->is_reading = $request->input('is_reading');
         $user->sex = $request->input('sex');
+        $user->remark = $request->input('remark');
         $user->school_district_id = $request->input('school_district_id');
         $user->save();
         return response()->json(['ret' => 0, 'url' => route('user.index')]);

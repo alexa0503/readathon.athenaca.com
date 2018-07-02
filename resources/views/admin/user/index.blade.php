@@ -66,6 +66,7 @@
                         <th>生日</th>
                         <th>性别</th>
                         <th>在读学员</th>
+                        <th>校区</th>
                         <th>GE</th>
                         <th>邀请人</th>
                         <th>是否激活</th>
@@ -74,6 +75,7 @@
                         <th>UTM SOURCE</th>
                         <th>注册IP</th>
                         <th>注册城市</th>
+                        <th>备注</th>
                         <th>管理者</th>
                         <th>操作</th>
                     </tr>
@@ -91,6 +93,7 @@
                         <td>{{ $item->birthdate }}</td>
                         <td>{{ $item->sex == '0' ? '男' : '女' }}</td>
                         <td>{{ $item->is_reading ? '是' : '否' }}</td>
+                        <td>{{ $item->district ? $item->district->name : '--' }}</td>
                         <td>{{ $item->ge }}</td>
                         <td>@if($item->invite_id)<a href="{{ route('user.index').'?id='.$item->id }}" target="_blank">{{ $item->inviter->name }}</a>@else{{ '--' }}@endif</td>
                         <td>@if($item->is_activated == 1){{ '已激活' }}@elseif($item->is_activated == 0){{ '未激活' }}@else{{ '已禁用' }}@endif</td>
@@ -99,6 +102,7 @@
                         <td>{{ $item->utm_source }}</td>
                         <td>{{ $item->registered_ip }}</td>
                         <td>{{ $item->registered_city }}</td>
+                        <td>{{ $item->remark }}</td>
                         <td>{{ $item->administrator_names }}</td>
                         <td>
                              <div class="btn-group">

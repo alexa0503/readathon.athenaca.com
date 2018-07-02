@@ -85,6 +85,15 @@
                         <label class="help-block" for="" id="help-ge"></label>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="" class="col-lg-2 col-md-2 control-label">备注</label>
+                    <div class="col-lg-10 col-md-10">
+                        <textarea name="remark" type="text" class="form-control" id="remark">{{ $item->remark }}</textarea>
+                        <label class="help-block" for="" id="help-remark"></label>
+                    </div>
+                </div>
+
 				<div class="form-group">
 					<div class="col-lg-offset-2 col-md-offset-2 col-lg-10 col-md-10">
 						<button type="submit" class="btn btn-success btn-sm">提交</button>
