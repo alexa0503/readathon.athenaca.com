@@ -277,9 +277,9 @@ class UserController extends Controller
             'city_id.*' => '请选择城市~',
             'tel.*' => '电话必须填写~',
             'is_reading.*' => '请选择是否在读学员~',
-            'sex.*' => '请选择性别~',
-            'ge.*' => '请输入GE~',
-            'school_district_id.*' => '请选择校区~',
+            //'sex.*' => '请选择性别~',
+            //'ge.*' => '请输入GE~',
+            //'school_district_id.*' => '请选择校区~',
             
         ];
         $validator = \Validator::make($request->all(), [
@@ -289,9 +289,9 @@ class UserController extends Controller
             'city_id' => 'required|exists:cities,id',
             'tel' => 'required',
             'is_reading' => 'required',
-            'sex' => 'required',
-            'ge' => 'required',
-            'school_district_id' => 'required',
+            //'sex' => 'required',
+            //'ge' => 'required',
+            //'school_district_id' => 'required',
         ], $messages);
 
         if ($validator->fails()) {
