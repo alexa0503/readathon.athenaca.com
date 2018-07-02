@@ -15,6 +15,10 @@ class User extends Model
     {
         return $this->belongsTo('App\User', 'invite_id', 'id');
     }
+    public function school_district()
+    {
+        return $this->belongsTo('App\SchoolDistrict', 'school_district_id', 'id');
+    }
     public function administrators()
     {
         return $this->belongsToMany('App\Administrator', 'user_administrators', 'user_id', 'administrator_id');

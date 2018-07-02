@@ -93,7 +93,7 @@
                         <td>{{ $item->birthdate }}</td>
                         <td>{{ $item->sex == '0' ? '男' : '女' }}</td>
                         <td>{{ $item->is_reading ? '是' : '否' }}</td>
-                        <td>{{ $item->district ? $item->district->name : '--' }}</td>
+                        <td>{{ $item->school_district_id ? $item->school_district->name : '--' }}</td>
                         <td>{{ $item->ge }}</td>
                         <td>@if($item->invite_id)<a href="{{ route('user.index').'?id='.$item->id }}" target="_blank">{{ $item->inviter->name }}</a>@else{{ '--' }}@endif</td>
                         <td>@if($item->is_activated == 1){{ '已激活' }}@elseif($item->is_activated == 0){{ '未激活' }}@else{{ '已禁用' }}@endif</td>
