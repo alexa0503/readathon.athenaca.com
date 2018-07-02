@@ -15,13 +15,13 @@
             </div>
             <div class="form-group">
                 <select name="school_district_id" class="form-control" id="school_district_id">
-                        <option value="" >选择校区/所有</option>
-                        @foreach($districts as $district)
-                        <option value="{{ $district->id }}" {!! $district->id == Request::input('school_district_id') ? 'selected="selected"' : '' !!}>{{ $district->name }}</option>
-                        @endforeach
-                    </select>
+                    <option value="">选择校区/所有</option>
+                    @foreach($districts as $district)
+                    <option value="{{ $district->id }}" {!! $district->id == Request::input('school_district_id') ? 'selected="selected"' : '' !!}>{{ $district->name }}</option>
+                    @endforeach
+                </select>
             </div>
-             <div class="form-group">
+            <div class="form-group">
                 <select name="age_id" class="form-control">
                     <option value="">请选择年龄组/所有</option>
                     @foreach($ages as $age)
@@ -29,20 +29,27 @@
                     @endforeach
                 </select>
             </div>
-            
-             <div class="form-group">
+
+            <div class="form-group">
                 <select name="status" class="form-control">
                     <option value="">请选择状态/所有</option>
-                    <option value="1" {{ Request::input('status') == '1' ? 'selected="selected"' : '' }}>已注册</option>
-                    <option value="0" {{ Request::input('status') == '0' ? 'selected="selected"' : '' }}>未注册</option>
+                    <option value="1" {{ Request::input( 'status')=='1' ? 'selected="selected"' : '' }}>已注册</option>
+                    <option value="0" {{ Request::input( 'status')=='0' ? 'selected="selected"' : '' }}>未注册</option>
                 </select>
             </div>
-             <div class="form-group">
+            <div class="form-group">
                 <select name="is_activated" class="form-control">
                     <option value="">是否激活/所有</option>
-                    <option value="1" {{ Request::input('is_activated') == '1' ? 'selected="selected"' : '' }}>已激活</option>
-                    <option value="0" {{ Request::input('is_activated') == '0' ? 'selected="selected"' : '' }}>未激活</option>
-                    <option value="0" {{ Request::input('is_activated') == '-1' ? 'selected="selected"' : '' }}>禁用</option>
+                    <option value="1" {{ Request::input( 'is_activated')=='1' ? 'selected="selected"' : '' }}>已激活</option>
+                    <option value="0" {{ Request::input( 'is_activated')=='0' ? 'selected="selected"' : '' }}>未激活</option>
+                    <option value="0" {{ Request::input( 'is_activated')=='-1' ? 'selected="selected"' : '' }}>禁用</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="is_reading" class="form-control">
+                    <option value="">是否在读/所有</option>
+                    <option value="1" {{ Request::input('is_reading') == '1' ? 'selected="selected"' : '' }}>在读</option>
+                    <option value="0" {{ Request::input('is_reading') == '0' ? 'selected="selected"' : '' }}>未在读</option>
                 </select>
             </div>
             <div class="form-group">
@@ -56,7 +63,9 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th><input name="all" type="checkbox" value="1" /></th>
+                        <th>
+                            <input name="all" type="checkbox" value="1" />
+                        </th>
                         <th>头像</th>
                         <th>ID</th>
                         <th>姓名</th>
@@ -83,8 +92,12 @@
                 <tbody>
                     @foreach($items as $item)
                     <tr>
-                        <td><input name="id[]" type="checkbox" value="{{ $item->id }}" /></td>
-                        <td><img src="{{ asset($item->avatar) }}" class="img-circle" style="max-width:100px;" /></td>
+                        <td>
+                            <input name="id[]" type="checkbox" value="{{ $item->id }}" />
+                        </td>
+                        <td>
+                            <img src="{{ asset($item->avatar) }}" class="img-circle" style="max-width:100px;" />
+                        </td>
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->nickname }}</td>
@@ -95,8 +108,10 @@
                         <td>{{ $item->is_reading ? '是' : '否' }}</td>
                         <td>{{ $item->school_district_id ? $item->school_district->name : '--' }}</td>
                         <td>{{ $item->ge }}</td>
-                        <td>@if($item->invite_id)<a href="{{ route('user.index').'?id='.$item->id }}" target="_blank">{{ $item->inviter->name }}</a>@else{{ '--' }}@endif</td>
-                        <td>@if($item->is_activated == 1){{ '已激活' }}@elseif($item->is_activated == 0){{ '未激活' }}@else{{ '已禁用' }}@endif</td>
+                        <td>@if($item->invite_id)
+                            <a href="{{ route('user.index').'?id='.$item->id }}" target="_blank">{{ $item->inviter->name }}</a>@else{{ '--' }}@endif</td>
+                        <td>@if($item->is_activated == 1){{ '已激活' }}@elseif($item->is_activated == 0){{ '未激活' }}@else{{ '已禁用'
+                            }}@endif</td>
                         <td>{{ $item->name != null ? '已注册' : '未注册' }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>{{ $item->utm_source }}</td>
@@ -105,21 +120,39 @@
                         <td>{{ $item->remark }}</td>
                         <td>{{ $item->administrator_names }}</td>
                         <td>
-                             <div class="btn-group">
+                            <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                    操作 <span class="caret"></span>
+                                    操作
+                                    <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right" role="menu">
-                                     @if($item->is_activated == 0 && $item->name != null)<li><a href="{{route('user.activate',['id'=>$item->id])}}" class="activate">激活</a></li>@endif
-                                    @if($item->is_activated == 1)<li><a href="{{route('user.disable',['id'=>$item->id])}}" class="activate">禁用</a></li>@endif
-                                    @if($item->is_activated == -1)<li><a href="{{route('user.activate',['id'=>$item->id])}}" class="activate">重新启用</a></li>@endif
-                                    <li><a href="{{route('user.edit',['id'=>$item->id])}}" class="">编辑</a></li>
+                                    @if($item->is_activated == 0 && $item->name != null)
+                                    <li>
+                                        <a href="{{route('user.activate',['id'=>$item->id])}}" class="activate">激活</a>
+                                    </li>@endif @if($item->is_activated == 1)
+                                    <li>
+                                        <a href="{{route('user.disable',['id'=>$item->id])}}" class="activate">禁用</a>
+                                    </li>@endif @if($item->is_activated == -1)
+                                    <li>
+                                        <a href="{{route('user.activate',['id'=>$item->id])}}" class="activate">重新启用</a>
+                                    </li>@endif
+                                    <li>
+                                        <a href="{{route('user.edit',['id'=>$item->id])}}" class="">编辑</a>
+                                    </li>
 
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'reading'])}}" >查看阅读记录</a></li>
-                                    <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'activity'])}}" >查看活动记录</a></li>
-                                    <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'prize'])}}" >查看奖品记录</a></li>
-                                    <li><a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'exchange'])}}" >查看兑换记录</a></li>
+                                    <li>
+                                        <a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'reading'])}}">查看阅读记录</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'activity'])}}">查看活动记录</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'prize'])}}">查看奖品记录</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('log.index',['user_id'=>$item->id, 'activity'=>Request::input('activity'), 'type'=>'exchange'])}}">查看兑换记录</a>
+                                    </li>
                                 </ul>
                             </div>
                         </td>
@@ -129,24 +162,30 @@
                 @if($super_administrator)
                 <tfoot>
                     <tr>
-                        <td colspan="20">
+                        <td colspan="22">
                             <div class="btn-group dropup">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    将所选分配给<span class="caret"></span>
+                                    将所选分配给
+                                    <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right" role="menu">
                                     @foreach($administrators as $administrator)
-                                    <li><a href="{{ route('user.dispatch',$administrator->id) }}" class="dispatch" data-id="{{ $administrator->id }}">{{ $administrator->name }}</a></li>
+                                    <li>
+                                        <a href="{{ route('user.dispatch',$administrator->id) }}" class="dispatch" data-id="{{ $administrator->id }}">{{ $administrator->name }}</a>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </div>
                             <div class="btn-group dropup">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    将所选取消权限<span class="caret"></span>
+                                    将所选取消权限
+                                    <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right" role="menu">
                                     @foreach($administrators as $administrator)
-                                    <li><a href="{{ route('user.revoke',$administrator->id) }}" class="dispatch" data-id="{{ $administrator->id }}">{{ $administrator->name }}</a></li>
+                                    <li>
+                                        <a href="{{ route('user.revoke',$administrator->id) }}" class="dispatch" data-id="{{ $administrator->id }}">{{ $administrator->name }}</a>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -159,36 +198,35 @@
         </div>
     </div>
 </div>
-@endsection
-@section('scripts')
+@endsection @section('scripts')
 <script>
-$(function() {
-    $('.dispatch').on('click', function(){
-        var url = $(this).attr('href')
-        var users = []
-        $('input[name="id[]"]:checked').each(function(){
-            users.push($(this).val())
+    $(function () {
+        $('.dispatch').on('click', function () {
+            var url = $(this).attr('href')
+            var users = []
+            $('input[name="id[]"]:checked').each(function () {
+                users.push($(this).val())
+            })
+            //var users = $('input[name="id[]"]').val();
+            $.post(url, {
+                users: users
+            }, function (data) {
+                if (data.ret == 0) {
+                    alert('提交成功')
+                    window.location.reload();
+                } else {
+                    alert(data.errMsg)
+                }
+            }, "JSON")
+            return false;
         })
-        //var users = $('input[name="id[]"]').val();
-        $.post(url, {users: users}, function(data){
-            if(data.ret == 0){
-                alert('提交成功')
-                window.location.reload();
+        $('input[name="all"]').on('click', function () {
+            if ($(this).is(':checked')) {
+                $('input[name="id[]"]').prop('checked', true)
+            } else {
+                $('input[name="id[]"]').prop('checked', false)
             }
-            else{
-                alert(data.errMsg)
-            }
-        },"JSON")
-        return false;
-    })
-    $('input[name="all"]').on('click', function(){
-        if( $(this).is(':checked') ){
-            $('input[name="id[]"]').prop('checked', true)
-        }
-        else{
-            $('input[name="id[]"]').prop('checked', false)
-        }
-    })
-});
+        })
+    });
 </script>
 @endsection

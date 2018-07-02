@@ -53,6 +53,9 @@ class UserController extends Controller
         if( null != $request->input('is_activated') ){
             $orm->where('is_activated', $request->input('is_activated') );
         }
+        if( null != $request->input('is_reading') ){
+            $orm->where('is_reading', $request->input('is_reading') );
+        }
         if( null != $request->input('id') ){
             $orm->where('id', $request->input('id') );
         }
@@ -151,6 +154,9 @@ class UserController extends Controller
         }
         if( $request->input('keywords') ){
             $orm->where('name', 'LIKE', '%'.$request->keywords.'%');
+        }
+        if( null != $request->input('is_reading') ){
+            $orm->where('is_reading', $request->input('is_reading') );
         }
         if( $request->input('city_id') ){
             $orm->where('city_id', $request->input('city_id'));
