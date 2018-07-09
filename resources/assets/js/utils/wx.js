@@ -73,7 +73,7 @@ export const share = function(data) {
 }
 export const initConfig = function(url){
     if( url == undefined ){
-        let url = window.location.href
+        url = window.location.href.split('#')[0]
     }
     axios.get(apiUrls.WX_CONFIG_URL, {
         params: {
