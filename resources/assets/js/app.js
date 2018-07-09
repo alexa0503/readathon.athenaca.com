@@ -31,6 +31,12 @@ let wxShare = async function (to) {
     if( need_share_init_config ){
         jssdk.initConfig(url)
     }
+    
+    // IOS只需要调用一次config
+    let u = window.navigator.userAgent
+    if( u.indexOf('Android') < -1 && u.indexOf('Linux') < -1){
+        need_share_init_config = false
+    }
     var share_desc, shareTimelineDesc
     if (store.state.self.has_joined == 1) {
         share_desc = store.state.self.name + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
@@ -86,11 +92,6 @@ let wxShare = async function (to) {
 router.beforeEach((to, from, next) => {
     store.dispatch('loading')
     wxShare(to)
-    // IOS只需要调用一次config
-    let u = window.navigator.userAgent
-    if( u.indexOf('Android') < 0 && u.indexOf('Linux') < 0){
-        need_share_init_config = false
-    }
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';
     } else if (to.name == 'invite') {
