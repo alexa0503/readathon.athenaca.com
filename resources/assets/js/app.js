@@ -8,6 +8,8 @@ import router from './router'
 import store from './store'
 import * as jssdk from './utils/wx'
 
+let need_share_config = true
+let origin_url = null
 let wxShare = async function (to) {
     let url = 'http://readathon.athenaca.com' + to.fullPath
     await store.dispatch('getSelfInfo')
@@ -25,7 +27,13 @@ let wxShare = async function (to) {
             name: 'home'
         })
     }
-    jssdk.initConfig(url)
+    
+    // IOS只需要调用一次config
+    if( need_share_config ){
+        origin_url = url
+    }
+    jssdk.initConfig(origin_url)
+
     var share_desc, shareTimelineDesc
     if (store.state.self.has_joined == 1) {
         share_desc = store.state.self.name + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
@@ -78,16 +86,13 @@ let wxShare = async function (to) {
     });
 }
 //根据路由切换背景
-let has_shared = false
 router.beforeEach((to, from, next) => {
     store.dispatch('loading')
-    if( !has_shared ){
-        wxShare(to)
-    }
-    // IOS只需要调用一次config
+    wxShare(to)
+    // IOS需要config一次
     let u = window.navigator.userAgent
     if( u.indexOf('Android') < 0 && u.indexOf('Linux') < 0){
-        has_shared = true
+        need_share_config = false
     }
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';
