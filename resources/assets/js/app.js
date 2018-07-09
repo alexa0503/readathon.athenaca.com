@@ -31,10 +31,10 @@ let wxShare = async function (to) {
     if( need_share_init_config ){
         jssdk.initConfig(url)
     }
-    
+    //jssdk.initConfig(url)
     // IOS只需要调用一次config
     let u = window.navigator.userAgent
-    if( u.indexOf('Android') < -1 && u.indexOf('Linux') < -1){
+    if( u.indexOf('Android') <= -1 && u.indexOf('Linux') <= -1){
         need_share_init_config = false
     }
     var share_desc, shareTimelineDesc

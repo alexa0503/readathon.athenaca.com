@@ -77,7 +77,7 @@ export const initConfig = function(url){
     }
     axios.get(apiUrls.WX_CONFIG_URL, {
         params: {
-            url: url
+            url: url.split('#')[0]
         }
     })
     .then(function (response) {

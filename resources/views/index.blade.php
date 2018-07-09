@@ -48,9 +48,7 @@
 			});
 		}
 	</script>
-	@if(env('APP_ENV') != 'production')
 	<script src="/js/isconsole.min.js"></script>
-	@endif
 
 </body>
 
