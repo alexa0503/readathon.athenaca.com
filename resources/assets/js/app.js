@@ -78,9 +78,17 @@ let wxShare = async function (to) {
     });
 }
 //根据路由切换背景
+let has_shared = false
 router.beforeEach((to, from, next) => {
     store.dispatch('loading')
-    wxShare(to)
+    if( !has_shared ){
+        wxShare(to)
+    }
+    // IOS只需要调用一次config
+    let u = window.navigator.userAgent
+    if( u.indexOf('Android') < 0 && u.indexOf('Linux') < 0){
+        has_shared = true
+    }
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';
     } else if (to.name == 'invite') {
