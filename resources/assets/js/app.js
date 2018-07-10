@@ -8,10 +8,30 @@ import router from './router'
 import store from './store'
 import * as jssdk from './utils/wx'
 
+
+// axios 拦截器
+axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    let url = location.href
+                    // 返回 401 清除token信息并跳转到登录页面
+                    location.href = '/login?redirect=' + encodeURIComponent(url)
+            }
+        }
+        return Promise.reject(error) // 返回接口返回的错误信息
+    }
+);
 // 微信分享是否需要init config
 let need_share_init_config = true
+let firstView = false
+// 记录第一次打开时候的url，然后微信每次请求config用此url
+let firstUrl = location.href
 let wxShare = async function (to,from) {
-    let url = 'http://readathon.athenaca.com' + to.fullPath
     var type = undefined
     if( to.name == 'home' ){
         type = 'me'
@@ -32,28 +52,31 @@ let wxShare = async function (to,from) {
         })
     }
     if( need_share_init_config ){
-        jssdk.initConfig()
+        //jssdk.initConfig()
     }
     
-    //console.log(url)
-    //console.log(location.href)
     // IOS只需要调用一次config
     let u = window.navigator.userAgent
     if( u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
+        jssdk.initConfig(firstUrl)
+        /*
         need_share_init_config = false
-        console.log(window.history)
-        if(window.history.length == 2){
+        if( (window.history.length == 2 && firstView)
+        || (window.history.length == 3 && firstView)
+        ){
             //need_share_init_config = true
             if(url.indexOf('?') < 0){
-                window.location.href = url + '?_=' + Math.random()
+                //window.location.href = url + '?_=' + Math.random()
             }
             else{
-                window.location.href = url + '&_=' + Math.random()
+                //window.location.href = url + '&_=' + Math.random()
             }
             return
-            //need_share_init_config = true
         }
-        //firstView = false
+        */
+    }
+    else{
+        jssdk.initConfig()
     }
     var share_desc, shareTimelineDesc
     if (store.state.self.has_joined == 1) {
@@ -137,22 +160,6 @@ Vue.filter('formatNumber', function (value) {
     return intPartFormat;
 })
 
-// axios 拦截器
-axios.interceptors.response.use(
-    response => {
-        return response;
-    },
-    error => {
-        if (error.response) {
-            switch (error.response.status) {
-                case 401:
-                    // 返回 401 清除token信息并跳转到登录页面
-                    location.href = '/login?redirect=' + encodeURIComponent(location.href)
-            }
-        }
-        return Promise.reject(error) // 返回接口返回的错误信息
-    }
-);
 const vm = new Vue({
     router,
     store,

@@ -1,5 +1,40 @@
 window.axios = require('axios')
 import * as apiUrls from './../utils/api-urls'
+
+export const initConfig = function(url){
+    if( url == undefined ){
+        url = location.href
+    }
+    url = url.split('#')[0];
+    axios.get(apiUrls.WX_CONFIG_URL, {
+        params: {
+            url: url
+        }
+    })
+    .then(function (response) {
+        let data = response.data
+        wx.config({
+            debug: true,
+            appId: data.appId,
+            timestamp: data.timestamp,
+            nonceStr: data.nonceStr,
+            signature: data.signature,
+            jsApiList: [
+                'onMenuShareAppMessage',
+                'onMenuShareTimeline',
+                'chooseImage',
+                'uploadImage',
+                'previewImage',
+                'getLocalImgData',
+            ]
+        });
+        wx.error(function(res){
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+        });
+    })
+    .catch(function (error) {
+    });
+}
 export const share = function(data) {
     //默认值
     let defaultInfo = {
@@ -77,41 +112,5 @@ export const share = function(data) {
                 // 用户取消分享后执行的回调函数
             }
         });
-    });
-}
-export const initConfig = function(url){
-    if( url == undefined ){
-        url = location.href
-    }
-    url = url.split('#')[0];
-    axios.get(apiUrls.WX_CONFIG_URL, {
-        params: {
-            url: url
-        }
-    })
-    .then(function (response) {
-        let data = response.data
-        wx.config({
-            debug: true,
-            appId: data.appId,
-            timestamp: data.timestamp,
-            nonceStr: data.nonceStr,
-            signature: data.signature,
-            jsApiList: [
-                'onMenuShareAppMessage',
-                'onMenuShareTimeline',
-                'chooseImage',
-                'uploadImage',
-                'previewImage',
-                'getLocalImgData',
-            ]
-        });
-        wx.error(function(res){
-            initConfig()
-            console.log(res)
-            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-        });
-    })
-    .catch(function (error) {
     });
 }
