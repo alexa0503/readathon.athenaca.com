@@ -10,7 +10,6 @@ import * as jssdk from './utils/wx'
 
 // 微信分享是否需要init config
 let need_share_init_config = true
-
 let wxShare = async function (to) {
     let url = 'http://readathon.athenaca.com' + to.fullPath
     var type = undefined
@@ -32,6 +31,7 @@ let wxShare = async function (to) {
             name: 'home'
         })
     }
+    console.log(document.referrer)
     if( need_share_init_config ){
         jssdk.initConfig()
     }
