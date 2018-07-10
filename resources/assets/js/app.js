@@ -32,7 +32,7 @@ let wxShare = async function (to) {
         })
     }
     if( need_share_init_config ){
-        jssdk.initConfig()
+        jssdk.initConfig(url)
     }
     // IOS只需要调用一次config
     let u = window.navigator.userAgent
