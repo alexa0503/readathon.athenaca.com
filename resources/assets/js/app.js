@@ -10,7 +10,7 @@ import * as jssdk from './utils/wx'
 
 // 微信分享是否需要init config
 let need_share_init_config = true
-let wxShare = async function (to) {
+let wxShare = async function (to,from) {
     let url = 'http://readathon.athenaca.com' + to.fullPath
     var type = undefined
     if( to.name == 'home' ){
@@ -35,12 +35,19 @@ let wxShare = async function (to) {
         jssdk.initConfig()
     }
     
-    console.log(url)
-    console.log(location.href)
+    //console.log(url)
+    //console.log(location.href)
     // IOS只需要调用一次config
+    console.log(window.history.state,'history state')
+    console.log(need_share_init_config,'need_share_init_config')
+    console.log(from.name,'from name')
     let u = window.navigator.userAgent
     if( !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
         need_share_init_config = false
+        if( !from.name && window.history.state ){
+            need_share_init_config = true
+        }
+        //firstView = false
     }
     var share_desc, shareTimelineDesc
     if (store.state.self.has_joined == 1) {
@@ -96,7 +103,7 @@ let wxShare = async function (to) {
 //根据路由切换背景
 router.beforeEach((to, from, next) => {
     store.dispatch('loading')
-    wxShare(to)
+    wxShare(to,from)
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';
     } else if (to.name == 'invite') {
