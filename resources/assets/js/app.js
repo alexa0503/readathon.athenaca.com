@@ -42,7 +42,9 @@ let wxShare = async function (to,from) {
     if( !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
         need_share_init_config = false
         console.log(window.history)
-        if(window.history == 2){
+        if(window.history.length == 2){
+            need_share_init_config = true
+            /*
             if(url.indexOf('?') < 0){
                 console.log('1')
                 window.location.href = url + '?_=' + Math.random()
@@ -52,6 +54,7 @@ let wxShare = async function (to,from) {
                 window.location.href = url + '&_=' + Math.random()
             }
             return
+            */
             //need_share_init_config = true
         }
         //firstView = false
