@@ -139,6 +139,9 @@
             fetchMore: function (more = false) {
                 let vm = this
                 let page = vm.currentPage;
+                if(vm.boardList.meta.last_page == 1){
+                    return
+                }
                 vm.fetching = true
                 if (more == true) {
                     page = vm.boardList.meta.current_page + 1

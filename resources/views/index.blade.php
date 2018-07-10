@@ -11,6 +11,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<link rel="stylesheet" href="{{ mix('css/app.css') }}">
+	<script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 
 <body>
@@ -30,9 +31,7 @@
 	window.dataLayer = window.dataLayer || [];
 	function gtag(){dataLayer.push(arguments);}
 	gtag('js', new Date());
-	//gtag('config', 'UA-117289831-2');
 	</script>
-	<script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 	<script src="{{ mix('js/app.js') }}"></script>
 	<script>
 		var windowInnerHeight = window.innerHeight; //获取当前浏览器窗口高度
@@ -48,7 +47,9 @@
 			});
 		}
 	</script>
+	@if(Request::input('debug') == 'true')
 	<script src="/js/isconsole.min.js"></script>
+	@endif
 
 </body>
 
