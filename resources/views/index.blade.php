@@ -11,7 +11,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<link rel="stylesheet" href="{{ mix('css/app.css') }}">
-	<script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<script src="//res.wx.qq.com/open/js/jweixin-1.2.2.js"></script>
 </head>
 
 <body>
