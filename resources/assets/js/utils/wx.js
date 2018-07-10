@@ -76,8 +76,6 @@ export const initConfig = function(url){
         url = location.href
     }
     url = url.split('#')[0];
-    console.log(url)
-    console.log(location.href)
     axios.get(apiUrls.WX_CONFIG_URL, {
         params: {
             url: url

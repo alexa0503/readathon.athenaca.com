@@ -32,8 +32,11 @@ let wxShare = async function (to) {
         })
     }
     if( need_share_init_config ){
-        jssdk.initConfig(url)
+        jssdk.initConfig()
     }
+    
+    console.log(url)
+    console.log(location.href)
     // IOS只需要调用一次config
     let u = window.navigator.userAgent
     if( !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
