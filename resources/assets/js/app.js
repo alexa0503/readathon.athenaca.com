@@ -8,7 +8,6 @@ import router from './router'
 import store from './store'
 import * as jssdk from './utils/wx'
 
-
 // axios 拦截器
 axios.interceptors.response.use(
     response => {
@@ -28,9 +27,10 @@ axios.interceptors.response.use(
 );
 // 微信分享是否需要init config
 let need_share_init_config = true
-let firstView = false
 // 记录第一次打开时候的url，然后微信每次请求config用此url
 let firstUrl = location.href
+let window_history_length = window.history.length
+
 let wxShare = async function (to,from) {
     var type = undefined
     if( to.name == 'home' ){
@@ -59,29 +59,28 @@ let wxShare = async function (to,from) {
     let u = window.navigator.userAgent
     if( u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
         jssdk.initConfig(firstUrl)
-        /*
-        need_share_init_config = false
-        if( (window.history.length == 2 && firstView)
-        || (window.history.length == 3 && firstView)
-        ){
-            //need_share_init_config = true
+        //console.log(window_history_length,window.history.length)
+        if( (window.history.length == 2 && window_history_length == 1) || (window.history.length == 3 && window_history_length == 2) ){
+            let url = location.href
+            console.log(url)
             if(url.indexOf('?') < 0){
-                //window.location.href = url + '?_=' + Math.random()
+                window.location.href = url + '?_=' + Math.random()
             }
             else{
-                //window.location.href = url + '&_=' + Math.random()
+                window.location.href = url + '&_=' + Math.random()
             }
             return
         }
-        */
     }
     else{
         jssdk.initConfig()
     }
+    //var urlParams = new URLSearchParams(window.location.search)
+    //console.log(urlParams.has('debug'),window.location.search)
     var share_desc, shareTimelineDesc
     if (store.state.self.has_joined == 1) {
-        share_desc = store.state.self.name + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
-        shareTimelineDesc = "书中也有万里路！ " + store.state.self.name + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
+        share_desc = store.state.self.nickname + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
+        shareTimelineDesc = "书中也有万里路！ " + store.state.self.nickname + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
 
     } else {
         share_desc = store.state.self.nickname + "已经加入阅读马拉松。Let's read together!"
