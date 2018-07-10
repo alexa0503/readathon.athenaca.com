@@ -103,8 +103,15 @@
             }
         }),
         created() {
-            this.$store.dispatch('initIndexPage')
+            if(this.user.activity_info){
+                this.$store.dispatch('getBoardList', {page:1, type: 'withoutme', name:'home','city':this.user.activity_info.city_id})
+            }
             this.$store.dispatch('sendUtm');
+        },
+        watch: {
+            user: function(user){
+                this.$store.dispatch('getBoardList', {page:1, type: 'withoutme', name:'home','city':user.activity_info.city_id})
+            }
         },
         methods: {
             fetchMore: function (more = false) {
