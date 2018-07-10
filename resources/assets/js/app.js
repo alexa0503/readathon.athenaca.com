@@ -57,11 +57,10 @@ let wxShare = async function (to,from) {
     let u = window.navigator.userAgent
     if( u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
         if( need_share_init_config ){
-            
+            setTimeout(function(){
+                jssdk.initConfig(firstUrl)
+            },500)
         }
-        setTimeout(function(){
-            jssdk.initConfig(firstUrl)
-        },500)
         /*
         if( window.history.length == window_history_length + 1 && window_history_length >= 1 ){
             let url = location.href
