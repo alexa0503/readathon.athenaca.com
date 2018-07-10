@@ -110,7 +110,6 @@ Route::get('/random', function(Request $request){
 */
 Route::group(['middleware'=>['wx.auth']], function(){
     Route::get('/logout', function(Request $request){
-        //session(['wx.user'=>null]);
         $request->session()->forget('wx.user');
         return redirect('/');
     });

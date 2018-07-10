@@ -33,7 +33,7 @@ let wxShare = async function (to) {
         })
     }
     if( need_share_init_config ){
-        jssdk.initConfig(url)
+        jssdk.initConfig()
     }
     // IOS只需要调用一次config
     let u = window.navigator.userAgent
@@ -133,7 +133,7 @@ axios.interceptors.response.use(
             switch (error.response.status) {
                 case 401:
                     // 返回 401 清除token信息并跳转到登录页面
-                    window.location.href = '/login?redirect=' + encodeURIComponent(router.currentRoute.fullPath)
+                    location.href = '/login?redirect=' + encodeURIComponent(location.href)
             }
         }
         return Promise.reject(error) // 返回接口返回的错误信息
