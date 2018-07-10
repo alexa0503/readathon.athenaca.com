@@ -38,13 +38,11 @@ let wxShare = async function (to,from) {
     //console.log(url)
     //console.log(location.href)
     // IOS只需要调用一次config
-    console.log(window.history.state,'history state')
-    console.log(need_share_init_config,'need_share_init_config')
-    console.log(from.name,'from name')
     let u = window.navigator.userAgent
     if( !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
         need_share_init_config = false
-        if( !from.name && window.history.state ){
+        if(window.history == 2){
+            //window.location.href = url + '?_=' + Math.random()
             need_share_init_config = true
         }
         //firstView = false

@@ -51,7 +51,11 @@ export const share = function(data) {
             type:'link', // 分享类型,music、video或link，不填默认为link
             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {
+                console.log('success')
                 // 用户确认分享后执行的回调函数
+            },
+            fail: function(){
+                console.log('fail')
             },
             cancel: function () {
                 // 用户取消分享后执行的回调函数
@@ -63,7 +67,11 @@ export const share = function(data) {
             imgUrl: imgUrl, // 分享图标
             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {
+                console.log('success')
                 // 用户确认分享后执行的回调函数
+            },
+            fail: function(){
+                console.log('fail')
             },
             cancel: function () {
                 // 用户取消分享后执行的回调函数
@@ -84,7 +92,7 @@ export const initConfig = function(url){
     .then(function (response) {
         let data = response.data
         wx.config({
-            debug: false,
+            debug: true,
             appId: data.appId,
             timestamp: data.timestamp,
             nonceStr: data.nonceStr,
