@@ -38,7 +38,7 @@ let wxShare = async function (to) {
     // IOS只需要调用一次config
     let u = window.navigator.userAgent
     if( !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
-        //need_share_init_config = false
+        need_share_init_config = false
     }
     var share_desc, shareTimelineDesc
     if (store.state.self.has_joined == 1) {
