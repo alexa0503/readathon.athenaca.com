@@ -114,6 +114,7 @@ class UserController extends Controller
             }
         }
         
+        /*
         if ($request->input('type') == 'withoutme') {
             if ($wx_activity_user != null) {
                 $orm->whereHas('user', function ($query) use ($wx_activity_user) {
@@ -121,6 +122,7 @@ class UserController extends Controller
                 });
             }
         }
+        */
         //获取排名99的用户
         $_orm = Clone $orm;
         if ($request->input('type') == 'withoutme') {
