@@ -10,12 +10,16 @@
                     </a>
                 </div>
                 <div class="star">{{ user.activity_info.words_number }}</div>
-                <div class="name-text"><router-link :to="{ name: 'account', params: {id: user.id} }">{{user.nickname | formatString }}</router-link></div>
+                <div class="name-text">
+                    <router-link :to="{ name: 'account', params: {id: user.id} }">{{user.nickname | formatString }}</router-link>
+                </div>
                 <div class="number">
                     <span>{{ user.activity_info.rank }}</span>
                 </div>
                 <div class="avatar">
-                    <router-link :to="{ name: 'account', params: {id: user.id} }"><img :src="user.avatar" class="rounded-circle" /></router-link>
+                    <router-link :to="{ name: 'account', params: {id: user.id} }">
+                        <img :src="user.avatar" class="rounded-circle" />
+                    </router-link>
                 </div>
             </div>
             <div class="board-list board-list-home" v-else-if="!hasCurrent">
@@ -36,7 +40,7 @@
             <div class="board-list board-list-home-others" v-for="(item,index) in boardList.data" v-bind:key="index">
                 <div class="vote">
                     <span>{{ item.voted_number }}</span>
-                    <a href="javascript:;" v-if="item.has_voted == 1"  v-on:click="vote(item.user.id, index)">
+                    <a href="javascript:;" v-if="item.has_voted == 1" v-on:click="vote(item.user.id, index)">
                         <img src="/images/icon-voted.png" />
                     </a>
                     <a href="javascript:;" v-on:click="vote(item.user.id, index)" v-else>
@@ -44,12 +48,16 @@
                     </a>
                 </div>
                 <div class="star">{{ item.words_number }}</div>
-                <div class="name-text"><router-link :to="{ name: 'account', params: {id: item.user.id} }">{{ item.user.nickname | formatString }}</router-link></div>
+                <div class="name-text">
+                    <router-link :to="{ name: 'account', params: {id: item.user.id} }">{{ item.user.nickname | formatString }}</router-link>
+                </div>
                 <div class="number">
                     <span>{{ item.rank }}</span>
                 </div>
                 <div class="avatar">
-                    <router-link :to="{ name: 'account', params: {id: item.user.id} }"><img :src="item.user.avatar" class="rounded-circle" /></router-link>
+                    <router-link :to="{ name: 'account', params: {id: item.user.id} }">
+                        <img :src="item.user.avatar" class="rounded-circle" />
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -70,7 +78,7 @@
         mapActions
     } from 'vuex'
     export default {
-        data(){
+        data() {
             return {
                 currentPage: 1,
                 fetching: false,
@@ -81,36 +89,48 @@
             user: 'self',
             boardList: 'homeBoardList',
             showMore(state) {
-                return state.homeBoardList.meta && (state.homeBoardList.meta.current_page != state.homeBoardList.meta.last_page)
+                return state.homeBoardList.meta && (state.homeBoardList.meta.current_page != state.homeBoardList
+                    .meta.last_page)
             },
-            hasCurrent(state){
-                if( state.homeBoardList && state.homeBoardList.ret == 1001 ){
+            hasCurrent(state) {
+                if (state.homeBoardList && state.homeBoardList.ret == 1001) {
                     return false
-                }
-                else{
+                } else {
                     return true
                 }
             },
-            nextActivity(state){
-                if( state.homeBoardList && state.homeBoardList.ret == 1001 ){
+            nextActivity(state) {
+                if (state.homeBoardList && state.homeBoardList.ret == 1001) {
                     return state.homeBoardList.latest
                 }
             },
-            currentActivityName(state){
-                if( state.homeBoardList.meta && state.homeBoardList.meta.current_activity ){
+            currentActivityName(state) {
+                if (state.homeBoardList.meta && state.homeBoardList.meta.current_activity) {
                     return state.homeBoardList.meta.current_activity.name
                 }
             }
         }),
         created() {
-            if(this.user.activity_info){
-                this.$store.dispatch('getBoardList', {page:1, type: 'withoutme', name:'home',city:this.user.activity_info.city_id})
+            if (this.user.activity_info) {
+                this.$store.dispatch('getBoardList', {
+                    page: 1,
+                    type: 'withoutme',
+                    name: 'home',
+                    city: this.user.activity_info.city_id,
+                    agegroup: this.user.activity_info.age_group_id
+                })
             }
             this.$store.dispatch('sendUtm');
         },
         watch: {
-            user: function(user){
-                this.$store.dispatch('getBoardList', {page:1, type: 'withoutme', name:'home',city:user.activity_info.city_id})
+            user: function (user) {
+                this.$store.dispatch('getBoardList', {
+                    page: 1,
+                    type: 'withoutme',
+                    name: 'home',
+                    city: user.activity_info.city_id,
+                    agegroup: user.activity_info.age_group_id
+                })
             }
         },
         methods: {
@@ -125,9 +145,10 @@
                     page: page,
                     name: 'home',
                     type: 'withoutme',
-                    city: vm.user.activity_info.city_id
+                    city: vm.user.activity_info.city_id,
+                    agegroup: vm.user.activity_info.age_group_id
                 }).then((response) => {
-                    if( response.meta.current_page < response.meta.last_page){
+                    if (response.meta.current_page < response.meta.last_page) {
                         vm.fetching = false
                     }
                 })
@@ -140,7 +161,7 @@
                     name
                 })
             },
-            handleScroll: function(){
+            handleScroll: function () {
                 let vm = this
                 let scrollTop = $(window).scrollTop();
                 let scrollHeight = $(document).height();
@@ -150,11 +171,11 @@
                 }
             }
         },
-        mounted () {
-            window.addEventListener('scroll', this.handleScroll);//监听页面滚动事件
+        mounted() {
+            window.addEventListener('scroll', this.handleScroll); //监听页面滚动事件
         },
-        destroyed(){
-            window.removeEventListener('scroll', this.handleScroll);//监听页面滚动事件
+        destroyed() {
+            window.removeEventListener('scroll', this.handleScroll); //监听页面滚动事件
         },
     }
 </script>

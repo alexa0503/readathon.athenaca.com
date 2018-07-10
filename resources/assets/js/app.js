@@ -13,7 +13,11 @@ let need_share_init_config = true
 
 let wxShare = async function (to) {
     let url = 'http://readathon.athenaca.com' + to.fullPath
-    await store.dispatch('getSelfInfo')
+    var type = undefined
+    if( to.name == 'home' ){
+        type = 'me'
+    }
+    await store.dispatch('getSelfInfo', type)
     if (store.state.self == undefined) {
         router.push({
             path: '/login'

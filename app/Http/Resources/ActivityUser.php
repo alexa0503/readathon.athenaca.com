@@ -22,15 +22,21 @@ class ActivityUser extends JsonResource
     {
         //排名信息
         $orm = ActivityUser::where('activity_id', $this->activity_id);
-        //未激活用户
-        if( $request->input('type') != 'withoutme' ){
-            if( null != $request->input('city') ){
-                $orm->where('city_id', $request->input('city'));
-            }
-            if( null != $request->input('agegroup') ){
-                $orm->where('age_group_id', $request->input('agegroup'));
-            }
+
+        if( null != $request->input('city') ){
+            $orm->where('city_id', $request->input('city'));
         }
+        
+        if( null != $request->input('agegroup') ){
+            $orm->where('age_group_id', $request->input('agegroup'));
+        }
+        
+        if( $request->input('type') == 'me' ){
+            $orm->where('city_id', $this->city_id);
+            $orm->where('age_group_id', $this->age_group_id);
+
+        }
+        
         $orm->where('words_number', '>', $this->words_number);
         $rank = $orm->count() + 1;
         //当前用户得投票信息
