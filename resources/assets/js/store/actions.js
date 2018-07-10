@@ -48,7 +48,7 @@ export default {
     }) {
         (async function () {
             //await dispatch('getSelfInfo', 'withoutme')
-            dispatch('getBoardList', {page:1, type: 'withoutme', name:'home'})
+            //dispatch('getBoardList', {page:1, type: 'withoutme', name:'home'})
         })()
     },
     initAccountPage({
