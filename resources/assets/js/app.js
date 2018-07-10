@@ -31,7 +31,6 @@ let wxShare = async function (to) {
             name: 'home'
         })
     }
-    console.log(document.referrer)
     if( need_share_init_config ){
         jssdk.initConfig()
     }
