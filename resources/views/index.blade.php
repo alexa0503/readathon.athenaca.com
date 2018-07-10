@@ -12,6 +12,14 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 	<script src="//res.wx.qq.com/open/js/jweixin-1.2.2.js"></script>
+	<script>
+	window.onpageshow = function(event) {
+        console.log(event);
+        if (event.persisted) {
+            window.location.reload()
+        }
+    };
+	</script>
 </head>
 
 <body>
