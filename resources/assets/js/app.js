@@ -61,8 +61,7 @@ let wxShare = async function (to,from) {
                 jssdk.initConfig(firstUrl)
             },500)
         }
-        /*
-        if( window.history.length == window_history_length + 1 && window_history_length >= 1 ){
+        if( window.history.length == window_history_length + 1 && window_history_length >= 2 ){
             let url = location.href
             if(url.indexOf('?') < 0){
                 window.location.href = url + '?_=' + Math.random()
@@ -72,7 +71,6 @@ let wxShare = async function (to,from) {
             }
             return
         }
-        */
         need_share_init_config = false
     }
     else{
