@@ -104,13 +104,13 @@
         }),
         created() {
             if(this.user.activity_info){
-                this.$store.dispatch('getBoardList', {page:1, type: 'withoutme', name:'home','city':this.user.activity_info.city_id})
+                this.$store.dispatch('getBoardList', {page:1, type: 'withoutme', name:'home',city:this.user.activity_info.city_id})
             }
             this.$store.dispatch('sendUtm');
         },
         watch: {
             user: function(user){
-                this.$store.dispatch('getBoardList', {page:1, type: 'withoutme', name:'home','city':user.activity_info.city_id})
+                this.$store.dispatch('getBoardList', {page:1, type: 'withoutme', name:'home',city:user.activity_info.city_id})
             }
         },
         methods: {
@@ -124,7 +124,8 @@
                 vm.$store.dispatch('getBoardList', {
                     page: page,
                     name: 'home',
-                    type: 'withoutme'
+                    type: 'withoutme',
+                    city: vm.user.activity_info.city_id
                 }).then((response) => {
                     if( response.meta.current_page < response.meta.last_page){
                         vm.fetching = false
