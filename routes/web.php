@@ -111,7 +111,7 @@ Route::get('/random', function(Request $request){
 Route::group(['middleware'=>['wx.auth']], function(){
     Route::get('/logout', function(Request $request){
         $request->session()->forget('wx.user');
-        return redirect('/page/home');
+        return redirect('/page/home?debug=true');
     });
     //首页根据用户状态自动跳转
     Route::get('/', function(Request $request){
