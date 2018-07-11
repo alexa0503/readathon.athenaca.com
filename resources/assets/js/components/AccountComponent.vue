@@ -125,6 +125,7 @@
             }
         }),
         created() {
+            console.log(this.$route.params.id)
             if( this.$route.params.id == undefined ){
                 this.isSelf = true
             }
@@ -132,6 +133,7 @@
         },
         watch: {
             $route(to, from) {
+                console.log(to)
                 if( to.params.id == undefined ){
                     this.isSelf = true
                 }

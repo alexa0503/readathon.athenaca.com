@@ -27,7 +27,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'account' }" replace>
+                <router-link class="nav-link no-dropdown" active-class="active" :to="{ name: 'account' }">
                     <i class="nav-icon nav-icon-account"></i>我的账户</router-link>
             </li>
         </ul>
