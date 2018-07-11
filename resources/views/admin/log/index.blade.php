@@ -60,7 +60,7 @@
                         @elseif(Request::input('type') == 'reading')<td>{{ $item->book_name }}</td>@endif
                         <td>{{ $item->created_at }}</td>
                         <td>
-                            @if(Request::input('type') !== 'exchange')<a href="{{route('log.destroy',['id'=>$item->id])}}" class="btn destroy btn-default btn-xs">删除</a>@endif
+                            @if(Request::input('type') !== 'exchange')<a href="{{route('log.destroy',['id'=>$item->id,'type'=>Request::input('type')])}}" class="btn destroy btn-default btn-xs">删除</a>@endif
                             @if(Request::input('type') == 'prize')
                             @if($item->has_checked == 0)<a href="{{route('log.check',['id'=>$item->id,'type'=>Request::input('type')])}}" class="btn checked btn-default btn-xs">核销</a>@else
                             <a href="{{route('log.uncheck',['id'=>$item->id,'type'=>Request::input('type')])}}" class="btn checked btn-default btn-xs">撤销核销</a>@endif

@@ -254,13 +254,11 @@ class LogController extends Controller
     public function destroy($id)
     {
         $class_name = $this->class_name;
-
         $log = $class_name::find($id);
         $activity_user = ActivityUser::where('user_id', $log->user_id)
             ->where('activity_id', $log->activity_id)
             ->first();
         if( null != $activity_user){
-            //$total = $class_name::where('user_id', $activity_user->user_id)->sum('words_number');
             $activity_user->words_number = $activity_user->words_number - $log->words_number;
             if($activity_user->words_number < 0){
                 $activity_user->words_number = 0;
