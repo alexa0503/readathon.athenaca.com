@@ -14,7 +14,7 @@ export const initConfig = function(url){
     .then(function (response) {
         let data = response.data
         wx.config({
-            debug: true,
+            debug: false,
             appId: data.appId,
             timestamp: data.timestamp,
             nonceStr: data.nonceStr,
