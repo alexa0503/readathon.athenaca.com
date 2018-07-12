@@ -109,7 +109,7 @@
                         <td>{{ $item->school_district_id ? $item->school_district->name : '--' }}</td>
                         <td>{{ $item->ge }}</td>
                         <td>@if($item->invite_id)
-                            <a href="{{ route('user.index').'?id='.$item->id }}" target="_blank">{{ $item->inviter->name }}</a>@else{{ '--' }}@endif</td>
+                            <a href="{{ route('user.index').'?id='.$item->invite_id }}" target="_blank">{{ $item->inviter->name }}</a>@else{{ '--' }}@endif</td>
                         <td>@if($item->is_activated == 1){{ '已激活' }}@elseif($item->is_activated == 0){{ '未激活' }}@else{{ '已禁用'
                             }}@endif</td>
                         <td>{{ $item->name != null ? '已注册' : '未注册' }}</td>
