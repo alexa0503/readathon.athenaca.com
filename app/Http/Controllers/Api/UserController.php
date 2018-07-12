@@ -96,8 +96,7 @@ class UserController extends Controller
             $activity_id = $activity->id;
             $orm->where('activity_id', $activity->id);
         }
-
-        $orm->orderBy('words_number', 'DESC');
+        $orm->orderBy('words_number', 'DESC')->orderBy('user_id','DESC');
         ///获取当前用户的排名 然后计算出是多少页 直接显示排名小于当前用户的用户 然后滚动至底部
         if ($current_user_id) {
             $current_activity_user = ActivityUser::where('user_id', $current_user_id)->where('activity_id', $activity_id)->first();
@@ -113,7 +112,6 @@ class UserController extends Controller
                 }
             }
         }
-        
         /*
         if ($request->input('type') == 'withoutme') {
             if ($wx_activity_user != null) {
