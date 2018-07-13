@@ -30,7 +30,7 @@
                     <div class="col-lg-10 col-md-10">
                         <select name="city_id" class="form-control">
                         @foreach($cities as $city)
-                        <option value="{{ $item->city_id }}" {!! $city->id == $item->city_id ? 'selected="selected"' : '' !!}>{{ $city->name }}</option>
+                        <option value="{{ $city->id }}" {!! $city->id == $item->city_id ? 'selected="selected"' : '' !!}>{{ $city->name }}</option>
                         @endforeach
                         </select>
                         <label class="help-block" for="" id="help-city_id"></label>

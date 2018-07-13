@@ -39,6 +39,7 @@ class ItemController extends Controller
         $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $user_id)->first();
         if ($activity_user == null) {
             $rank = null;
+            $city_id = session('wx.user.city_id') ?: 1;
         } else {
             $city_id = $activity_user->city_id ?:1;
             $age_group_id = $activity_user->age_group_id;
