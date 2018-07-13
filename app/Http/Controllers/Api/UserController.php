@@ -106,8 +106,8 @@ class UserController extends Controller
                     ->count();
                 $rank = $count + 1;
                 $page = (int)(ceil($rank/4));
-                if($page > 24){
-                    $page = 24;
+                if($page > 25){
+                    $page = 25;
                 }
                 //$orm->where('words_number', '<=', $current_activity_user->words_number);
                 if( $request->input('page') == 1 || $request->input('page') == null ){
