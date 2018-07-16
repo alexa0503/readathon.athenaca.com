@@ -32,7 +32,7 @@ class ActivityUserController extends Controller
         else{
             $activity = Activity::find($request->input('activity'));
         }
-        $orm = ActivityUser::with('user')->where('activity_id', $activity->id)->orderBy('words_number', 'DESC');
+        $orm = ActivityUser::with('user')->where('activity_id', $activity->id)->orderBy('words_number', 'DESC')->orderBy('user_id', 'ASC');
 
         if( null != $request->input('city_id') ){
             $orm->where('city_id', $request->input('city_id'));
@@ -77,6 +77,63 @@ class ActivityUserController extends Controller
         ]);
     }
 
+    //导出
+    public function export(Request $request)
+    {
+        if( $request->input('activity') == null ){
+            $activity = Activity::orderBy('start_date', 'DESC')->first();
+        }
+        else{
+            $activity = Activity::find($request->input('activity'));
+        }
+        $orm = ActivityUser::with('user')->where('activity_id', $activity->id)->orderBy('words_number', 'DESC')->orderBy('user_id', 'ASC');
+
+        if( null != $request->input('city_id') ){
+            $orm->where('city_id', $request->input('city_id'));
+        }
+
+        if( null != $request->input('age_id') ){
+            $orm->where('age_group_id', $request->input('age_id'));
+        }
+
+        if( null != $request->input('receive_status') ){
+            $orm->where('receive_status', $request->input('receive_status'));
+        }
+
+        if( null != $request->input('keywords') ){
+            $orm->whereHas('user', function ($query) use($request) {
+                $query->where('name', 'LIKE', '%'.$request->keywords.'%');
+            });
+        }
+
+        
+        
+        
+        
+
+
+        $filename = date('YmdHis').'.csv';
+        $fp = fopen(public_path("downloads/".$filename), 'w');
+        fwrite($fp, chr(0xEF).chr(0xBB).chr(0xBF));
+        $titles = ["排名","昵称","姓名","阅读字数","阅读数","赞数","创建时间"];
+        fputcsv($fp, $titles);
+        $orm->chunk(30000, function($items) use ($fp, $request){
+            foreach ($items as $k => $v) {
+                $array = [
+                    $k+1,
+                    $v->user->nickname,
+                    $v->user->name,
+                    $v->words_number,
+                    $v->reading_number,
+                    $v->voted_number,
+                    $v->created_at,
+                ];
+                fputcsv($fp, $array);
+            }
+        });
+        fclose($fp);
+        return response()->download("downloads/".$filename);
+    }
     /**
      * Show the form for creating a new resource.
      *

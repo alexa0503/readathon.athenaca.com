@@ -306,7 +306,12 @@ $(function() {
 		//var formData = new FormData('#form-search');
 		var url = $(this).attr('href');
 		var formData = $('#form-search').serialize()
-		window.location.href = url + '/?' + formData
+		if(url.indexOf('?') != -1){
+			window.location.href = url + '/?' + formData
+		}
+		else{
+			window.location.href = url + '&' + formData
+		}
 		//console.log(formData)
 		return false;
 	})

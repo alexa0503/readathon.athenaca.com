@@ -164,6 +164,8 @@ Route::group(['middleware' => ['role:管理员|超级管理员', 'menu'], 'prefi
     Route::resource('question', 'Admin\QuestionController');
     Route::resource('question.answer', 'Admin\AnswerController');
     Route::resource('activity', 'Admin\ActivityController');
+    
+    Route::get('/activityUser/export', 'Admin\ActivityUserController@export')->name('activityUser.export');
     Route::resource('activityUser', 'Admin\ActivityUserController');
 
     Route::get('/log/check/{id}', 'Admin\LogController@check')->name('log.check');
