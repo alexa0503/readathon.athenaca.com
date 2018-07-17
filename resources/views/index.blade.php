@@ -13,6 +13,9 @@
 	<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 	<script src="//res.wx.qq.com/open/js/jweixin-1.2.2.js"></script>
 	<script>
+	function alert(e){
+		console.log(e)
+	}
 	</script>
 </head>
 
@@ -30,12 +33,9 @@
 	</div>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-117289831-2"></script>
 	<script>
-		window.dataLayer = window.dataLayer || [];
-
-		function gtag() {
-			dataLayer.push(arguments);
-		}
-		gtag('js', new Date());
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
 	</script>
 	<script src="{{ mix('js/app.js') }}"></script>
 	<script>
