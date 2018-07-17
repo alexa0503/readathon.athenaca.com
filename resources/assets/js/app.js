@@ -71,19 +71,22 @@ let wxShare = async function (to, from) {
     
     if (u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
         let baseUrl = "/page/home" + (location.search ? location.search : "");
-        console.log(window["__wxjs_is_wkwebview"])
+        
         if (window["__wxjs_is_wkwebview"]) {
             history.replaceState(null, null, baseUrl);
         } else {
             location.replace(baseUrl);
         }
-        jssdk.loadWxShare(store.state.wxShareUrl).then((config) => {
-            jssdk.share(config, {
-                link: link,
-                desc: share_desc,
-                timelineDesc: shareTimelineDesc
+        console.log(baseUrl,store.state.wxShareUrl)
+        setTimeout(function(){
+            jssdk.loadWxShare(store.state.wxShareUrl).then((config) => {
+                jssdk.share(config, {
+                    link: link,
+                    desc: share_desc,
+                    timelineDesc: shareTimelineDesc
+                })
             })
-        })
+        },1000)
     } else {
         jssdk.loadWxShare().then((config) => {
             jssdk.share(config, {
