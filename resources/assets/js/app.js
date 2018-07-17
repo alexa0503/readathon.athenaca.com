@@ -68,7 +68,15 @@ let wxShare = async function (to, from) {
         link = 'http://readathon.athenaca.com/invite/' + id
     }
     let u = window.navigator.userAgent
+    
     if (u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+        let baseUrl = "/page/home" + (location.search ? location.search : "");
+        console.log(window["__wxjs_is_wkwebview"])
+        if (window["__wxjs_is_wkwebview"]) {
+            history.replaceState(null, null, baseUrl);
+        } else {
+            location.replace(baseUrl);
+        }
         jssdk.loadWxShare(store.state.wxShareUrl).then((config) => {
             jssdk.share(config, {
                 link: link,
@@ -102,21 +110,6 @@ let wxShare = async function (to, from) {
     });
 }
 
-//注意排除 微信web开发者工具
-let isIos = () => {
-    return /\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(navigator.userAgent) &&
-        !(navigator.userAgent.indexOf("wechatdevtools") > -1);
-}
-if (isIos() && location.pathname == "/") {
-    let baseUrl = "/page/home" + (location.search ? location.search : "");
-    //
-    console.log(window["__wxjs_is_wkwebview"])
-    if (window["__wxjs_is_wkwebview"]) {
-        history.replaceState(null, null, baseUrl);
-    } else {
-        location.replace(baseUrl);
-    }
-}
 //根据路由切换背景
 router.beforeEach((to, from, next) => {
     store.dispatch('loading')
