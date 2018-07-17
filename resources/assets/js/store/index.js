@@ -25,7 +25,8 @@ export default new Vuex.Store({
     items: {},
     posts: {},
     slides: {},
-    activityId: 0
+    activityId: 0,
+    wxShareUrl: null
   },
   getters,
   actions,

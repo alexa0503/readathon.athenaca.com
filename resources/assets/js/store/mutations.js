@@ -133,5 +133,8 @@ export default {
     },
     updateActivityId(state, v){
         state.activityId = v
+    },
+    setWxShareUrl(state,url){
+        state.wxShareUrl = url
     }
 }

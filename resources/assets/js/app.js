@@ -26,11 +26,7 @@ axios.interceptors.response.use(
     }
 );
 // 微信分享是否需要init config
-let need_share_init_config = true
 // 记录第一次打开时候的url，然后微信每次请求config用此url
-let firstUrl = location.href
-let window_history_length = window.history.length
-
 let wxShare = async function (to,from) {
     var type = undefined
     if( to.name == 'home' ){
@@ -52,33 +48,7 @@ let wxShare = async function (to,from) {
         })
     }
     
-    
-    // IOS只需要调用一次config
-    let u = window.navigator.userAgent
-    if( u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
-        if( need_share_init_config ){
-            setTimeout(function(){
-                jssdk.initConfig(firstUrl)
-            },800)
-        }
-        if( window.history.length == window_history_length + 1 && window_history_length >= 2 ){
-            let url = location.href
-            if(url.indexOf('?') < 0){
-                window.location.href = url + '?_=' + Math.random()
-            }
-            else{
-                window.location.href = url + '&_=' + Math.random()
-            }
-            return
-        }
-        need_share_init_config = false
-    }
-    else{
-        jssdk.initConfig()
-    }
-    //var urlParams = new URLSearchParams(window.location.search)
-    //console.log(urlParams.has('debug'),window.location.search)
-    var share_desc, shareTimelineDesc
+    let share_desc, shareTimelineDesc, id,link
     if (store.state.self.has_joined == 1) {
         share_desc = store.state.self.nickname + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
         shareTimelineDesc = "书中也有万里路！ " + store.state.self.nickname + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
@@ -87,33 +57,39 @@ let wxShare = async function (to,from) {
         share_desc = store.state.self.nickname + "已经加入阅读马拉松。Let's read together!"
         shareTimelineDesc = "书中也有万里路！ " + store.state.self.nickname + "已经加入阅读马拉松。Let's read together!"
     }
-    
-    
+
     if (to.name == 'board') {
-        let id = store.state.self.id
-        let link = 'http://readathon.athenaca.com/page/board/' + id
-        jssdk.share({
-            link: link,
-            desc: share_desc,
-            timelineDesc: shareTimelineDesc
-        })
+        id = store.state.self.id
+        link = 'http://readathon.athenaca.com/page/board/' + id
     } else if (to.name == 'account') {
-        let id = store.state.self.id
-        let link = 'http://readathon.athenaca.com/page/account/' + id
-        jssdk.share({
-            link: link,
-            desc: share_desc,
-            timelineDesc: shareTimelineDesc
-        })
+        id = store.state.self.id
+        link = 'http://readathon.athenaca.com/page/account/' + id
     } else {
-        let id = store.state.self.id
-        let link = 'http://readathon.athenaca.com/invite/' + id
-        jssdk.share({
-            link: link,
-            desc: share_desc,
-            timelineDesc: shareTimelineDesc
+        id = store.state.self.id
+        link = 'http://readathon.athenaca.com/invite/' + id
+    }
+    let u = window.navigator.userAgent
+    if( u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
+        setTimeout(function(){
+            jssdk.loadWxShare(store.state.wxShareUrl).then((config)=>{
+                jssdk.share(config,{
+                    link: link,
+                    desc: share_desc,
+                    timelineDesc: shareTimelineDesc
+                })
+            })
+        },800)
+    }
+    else{
+        jssdk.loadWxShare().then((config)=>{
+            jssdk.share(config,{
+                link: link,
+                desc: share_desc,
+                timelineDesc: shareTimelineDesc
+            })
         })
     }
+
     var status = store.state.self.name != null ? 2 : 1;
     gtag('config', 'UA-117289831-2', {
         'page_title': to.name,
@@ -132,7 +108,12 @@ let wxShare = async function (to,from) {
 //根据路由切换背景
 router.beforeEach((to, from, next) => {
     store.dispatch('loading')
-    wxShare(to,from)
+    if( !store.state.wxShareUrl ){
+        store.commit('setWxShareUrl',document.URL)
+    }
+    setTimeout(function(){
+        wxShare(to,from)
+    },200)
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';
     } else if (to.name == 'invite') {
