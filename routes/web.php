@@ -85,7 +85,7 @@ Route::get('/invite/{id}', function(Request $request, $id){
             return redirect('/page/register?debug=true');
         }
         else{
-            return redirect('/page/register?'.http_build_query($data));
+            return redirect('/page/register?debug=true&'.http_build_query($data));
             
         }
     }
@@ -94,7 +94,7 @@ Route::get('/invite/{id}', function(Request $request, $id){
             return redirect('/page/home?debug=true');
         }
         else{
-            return redirect('/page/home?'.http_build_query($data));
+            return redirect('/page/home?debug=true&'.http_build_query($data));
         }
     }
 });
@@ -140,7 +140,7 @@ Route::group(['middleware'=>['wx.auth']], function(){
                 return redirect('/page/register?debug=true');
             }
             else{
-                return redirect('/page/register?'.http_build_query($data));
+                return redirect('/page/register?debug=true&'.http_build_query($data));
                 
             }
         }
@@ -149,7 +149,7 @@ Route::group(['middleware'=>['wx.auth']], function(){
                 return redirect('/page/home?debug=true');
             }
             else{
-                return redirect('/page/home?'.http_build_query($data));
+                return redirect('/page/home?debug=true&'.http_build_query($data));
             }
         }
     });
