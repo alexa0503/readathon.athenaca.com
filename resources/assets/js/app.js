@@ -76,7 +76,6 @@ let wxShare = async function (to, from) {
         } else {
             location.replace(store.state.wxShareUrl);
         }
-        console.log(store.state.wxShareUrl)
         setTimeout(function(){
             jssdk.loadWxShare(store.state.wxShareUrl).then((config) => {
                 jssdk.share(config, {

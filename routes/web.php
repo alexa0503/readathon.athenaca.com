@@ -82,19 +82,19 @@ Route::get('/invite/{id}', function(Request $request, $id){
     //如果已激活跳转到首页 未激活跳转到注册页面
     if( session('wx.user.is_activated') == 0 ){
         if( empty($data) ){
-            return redirect('/page/register?debug=true');
+            return redirect('/page/register');
         }
         else{
-            return redirect('/page/register?debug=true&'.http_build_query($data));
+            return redirect('/page/register?'.http_build_query($data));
             
         }
     }
     else{
         if( empty($data) ){
-            return redirect('/page/home?debug=true');
+            return redirect('/page/home');
         }
         else{
-            return redirect('/page/home?debug=true&'.http_build_query($data));
+            return redirect('/page/home?'.http_build_query($data));
         }
     }
 });
@@ -137,19 +137,19 @@ Route::group(['middleware'=>['wx.auth']], function(){
         //如果已激活跳转到首页 未激活跳转到注册页面
         if( session('wx.user.is_activated') == 0 ){
             if( empty($data) ){
-                return redirect('/page/register?debug=true');
+                return redirect('/page/register');
             }
             else{
-                return redirect('/page/register?debug=true&'.http_build_query($data));
+                return redirect('/page/register?'.http_build_query($data));
                 
             }
         }
         else{
             if( empty($data) ){
-                return redirect('/page/home?debug=true');
+                return redirect('/page/home');
             }
             else{
-                return redirect('/page/home?debug=true&'.http_build_query($data));
+                return redirect('/page/home?'.http_build_query($data));
             }
         }
     });
