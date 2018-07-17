@@ -6,7 +6,7 @@ export const loadWxShare = function(url){
         if( url == undefined ){
             url = location.href
         }
-        url = url.split('#')[0];
+        url = encodeURIComponent(url.split('#')[0]);
         axios.get(apiUrls.WX_CONFIG_URL, {
             params: {
                 url: url
@@ -47,7 +47,6 @@ export const share = function(config,data) {
         imgUrl: data.imgUrl || 'http://readathon.athenaca.com/images/share.png',
         link: data.link || 'http://readathon.athenaca.com/'
     }
-    console.log(shareData)
     wx.ready(function () {
         wx.onMenuShareAppMessage({
             title: shareData.title, // 分享标题
