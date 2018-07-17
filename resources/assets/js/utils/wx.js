@@ -22,7 +22,7 @@ export const loadWxShare = function(url){
 }
 export const share = function(config,data) {
     wx.config({
-        debug: true,
+        debug: false,
         appId: config.appId,
         timestamp: config.timestamp,
         nonceStr: config.nonceStr,
