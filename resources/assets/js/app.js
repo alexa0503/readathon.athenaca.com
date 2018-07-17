@@ -27,9 +27,9 @@ axios.interceptors.response.use(
 );
 // 微信分享是否需要init config
 // 记录第一次打开时候的url，然后微信每次请求config用此url
-let wxShare = async function (to,from) {
+let wxShare = async function (to, from) {
     var type = undefined
-    if( to.name == 'home' ){
+    if (to.name == 'home') {
         type = 'me'
     }
     await store.dispatch('getSelfInfo', type)
@@ -41,14 +41,13 @@ let wxShare = async function (to,from) {
         router.push({
             name: 'register'
         })
-    }
-    else if(store.state.self.is_activated == 1 && to.name == 'register' ){
+    } else if (store.state.self.is_activated == 1 && to.name == 'register') {
         router.push({
             name: 'home'
         })
     }
-    
-    let share_desc, shareTimelineDesc, id,link
+
+    let share_desc, shareTimelineDesc, id, link
     if (store.state.self.has_joined == 1) {
         share_desc = store.state.self.nickname + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
         shareTimelineDesc = "书中也有万里路！ " + store.state.self.nickname + "已经在阅读马拉松记录了" + store.state.self.activity_info.words_number + "个字数。Let's read together!"
@@ -69,18 +68,17 @@ let wxShare = async function (to,from) {
         link = 'http://readathon.athenaca.com/invite/' + id
     }
     let u = window.navigator.userAgent
-    if( u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
-        jssdk.loadWxShare(store.state.wxShareUrl).then((config)=>{
-            jssdk.share(config,{
+    if (u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+        jssdk.loadWxShare(store.state.wxShareUrl).then((config) => {
+            jssdk.share(config, {
                 link: link,
                 desc: share_desc,
                 timelineDesc: shareTimelineDesc
             })
         })
-    }
-    else{
-        jssdk.loadWxShare().then((config)=>{
-            jssdk.share(config,{
+    } else {
+        jssdk.loadWxShare().then((config) => {
+            jssdk.share(config, {
                 link: link,
                 desc: share_desc,
                 timelineDesc: shareTimelineDesc
@@ -103,14 +101,27 @@ let wxShare = async function (to,from) {
         'value': status
     });
 }
+
+//注意排除 微信web开发者工具
+let isIos = () => {
+    return /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) &&
+        !(navigator.userAgent.indexOf("wechatdevtools") > -1);
+}
+if (isIos() && location.pathname == "/") {
+    let baseUrl = "/page/home" + (location.search ? location.search : "");
+    //
+    if (window["__wxjs_is_wkwebview"]) {
+        history.replaceState(null, null, baseUrl);
+    } else {
+        location.replace(baseUrl);
+    }
+}
 //根据路由切换背景
 router.beforeEach((to, from, next) => {
-    //this.setCurrentPage(location.href)
     store.dispatch('loading')
-    if( !store.state.wxShareUrl ){
-        store.commit('setWxShareUrl',document.URL)
+    if (!store.state.wxShareUrl) {
+        store.commit('setWxShareUrl', document.URL)
     }
-    window.history.replaceState({}, document.title, store.state.wxShareUrl)
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';
     } else if (to.name == 'invite') {
@@ -121,8 +132,7 @@ router.beforeEach((to, from, next) => {
     next()
 })
 router.afterEach((to, from) => {
-    wxShare(to,from)
-    window.history.replaceState({}, document.title, store.state.wxShareUrl)
+    wxShare(to, from)
     store.dispatch('finished')
 })
 Vue.filter('formatString', function (value) {
