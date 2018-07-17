@@ -70,14 +70,13 @@ let wxShare = async function (to, from) {
     let u = window.navigator.userAgent
     
     if (u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
-        let baseUrl = "/page/home" + (location.search ? location.search : "");
         
         if (window["__wxjs_is_wkwebview"]) {
-            history.replaceState(null, null, baseUrl);
+            history.replaceState(null, null, store.state.wxShareUrl);
         } else {
-            location.replace(baseUrl);
+            location.replace(store.state.wxShareUrl);
         }
-        console.log(baseUrl,store.state.wxShareUrl)
+        console.log(store.state.wxShareUrl)
         setTimeout(function(){
             jssdk.loadWxShare(store.state.wxShareUrl).then((config) => {
                 jssdk.share(config, {
