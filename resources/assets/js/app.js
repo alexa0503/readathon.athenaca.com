@@ -84,7 +84,7 @@ let wxShare = async function (to, from) {
                     timelineDesc: shareTimelineDesc
                 })
             })
-        },1000)
+        },200)
     } else {
         jssdk.loadWxShare().then((config) => {
             jssdk.share(config, {
