@@ -33,6 +33,20 @@ let wxShare = async function (to,from) {
         type = 'me'
     }
     await store.dispatch('getSelfInfo', type)
+    if (store.state.self == undefined) {
+        router.push({
+            path: '/login'
+        })
+    } else if (store.state.self.is_activated != 1 && (to.name == 'invite' || (to.name == 'account' && to.params.id == undefined) || to.name == 'profile')) {
+        router.push({
+            name: 'register'
+        })
+    }
+    else if(store.state.self.is_activated == 1 && to.name == 'register' ){
+        router.push({
+            name: 'home'
+        })
+    }
     
     let share_desc, shareTimelineDesc, id,link
     if (store.state.self.has_joined == 1) {
@@ -91,10 +105,12 @@ let wxShare = async function (to,from) {
 }
 //根据路由切换背景
 router.beforeEach((to, from, next) => {
+    //this.setCurrentPage(location.href)
     store.dispatch('loading')
     if( !store.state.wxShareUrl ){
         store.commit('setWxShareUrl',document.URL)
     }
+    window.history.replaceState({}, document.title, store.state.wxShareUrl)
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';
     } else if (to.name == 'invite') {
@@ -106,6 +122,7 @@ router.beforeEach((to, from, next) => {
 })
 router.afterEach((to, from) => {
     wxShare(to,from)
+    window.history.replaceState({}, document.title, store.state.wxShareUrl)
     store.dispatch('finished')
 })
 Vue.filter('formatString', function (value) {
