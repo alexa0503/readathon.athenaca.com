@@ -104,12 +104,13 @@ let wxShare = async function (to, from) {
 
 //注意排除 微信web开发者工具
 let isIos = () => {
-    return /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) &&
+    return /\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(navigator.userAgent) &&
         !(navigator.userAgent.indexOf("wechatdevtools") > -1);
 }
 if (isIos() && location.pathname == "/") {
     let baseUrl = "/page/home" + (location.search ? location.search : "");
     //
+    console.log(window["__wxjs_is_wkwebview"])
     if (window["__wxjs_is_wkwebview"]) {
         history.replaceState(null, null, baseUrl);
     } else {
@@ -132,6 +133,7 @@ router.beforeEach((to, from, next) => {
     next()
 })
 router.afterEach((to, from) => {
+    console.log(to.name)
     wxShare(to, from)
     store.dispatch('finished')
 })
