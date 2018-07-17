@@ -13,9 +13,6 @@
 	<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 	<script src="//res.wx.qq.com/open/js/jweixin-1.2.2.js"></script>
 	<script>
-	function alert(e){
-		console.log(e)
-	}
 	</script>
 </head>
 

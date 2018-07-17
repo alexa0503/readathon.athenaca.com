@@ -70,15 +70,13 @@ let wxShare = async function (to,from) {
     }
     let u = window.navigator.userAgent
     if( u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ){
-        setTimeout(function(){
-            jssdk.loadWxShare(store.state.wxShareUrl).then((config)=>{
-                jssdk.share(config,{
-                    link: link,
-                    desc: share_desc,
-                    timelineDesc: shareTimelineDesc
-                })
+        jssdk.loadWxShare(store.state.wxShareUrl).then((config)=>{
+            jssdk.share(config,{
+                link: link,
+                desc: share_desc,
+                timelineDesc: shareTimelineDesc
             })
-        },800)
+        })
     }
     else{
         jssdk.loadWxShare().then((config)=>{
@@ -113,7 +111,7 @@ router.beforeEach((to, from, next) => {
     }
     setTimeout(function(){
         wxShare(to,from)
-    },200)
+    },600)
     if (to.name == 'account' || to.name == 'profile' || to.name == 'board' || to.name == 'register') {
         document.body.style.background = '#fff';
     } else if (to.name == 'invite') {
