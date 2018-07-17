@@ -306,7 +306,7 @@ $(function() {
 		//var formData = new FormData('#form-search');
 		var url = $(this).attr('href');
 		var formData = $('#form-search').serialize()
-		if(url.indexOf('?') != -1){
+		if(url.indexOf('?') == -1){
 			window.location.href = url + '/?' + formData
 		}
 		else{
