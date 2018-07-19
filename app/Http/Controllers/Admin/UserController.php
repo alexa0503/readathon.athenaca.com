@@ -48,7 +48,12 @@ class UserController extends Controller
             $orm->where('city_id', $request->input('city_id'));
         }
         if( $request->input('school_district_id') ){
-            $orm->where('school_district_id', $request->input('school_district_id'));
+            if( 'null' == $request->input('school_district_id') ){
+                $orm->whereNull('school_district_id');
+            }
+            else{
+                $orm->where('school_district_id', $request->input('school_district_id'));
+            }
         }
         if( null != $request->input('is_activated') ){
             $orm->where('is_activated', $request->input('is_activated') );
@@ -162,7 +167,12 @@ class UserController extends Controller
             $orm->where('city_id', $request->input('city_id'));
         }
         if( $request->input('school_district_id') ){
-            $orm->where('school_district_id', $request->input('school_district_id'));
+            if( 'null' == $request->input('school_district_id') ){
+                $orm->whereNull('school_district_id');
+            }
+            else{
+                $orm->where('school_district_id', $request->input('school_district_id'));
+            }
         }
         if( null != $request->input('is_activated') ){
             $orm->where('is_activated', $request->input('is_activated') );
@@ -257,14 +267,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         $user = \App\User::find($id);
         $cities = \App\City::all();
+        if( $request->input('redirect') ){
+            $request->session()->put('admin_redirect_url', urldecode($request->input('redirect')));
+        }
         return view('admin.user.edit', [
             'item' => $user,
             'cities' => $cities,
             'districts' => District::all(),
+            //'redirect' => Request::input('redirect')
         ]);
     }
 
@@ -316,7 +330,14 @@ class UserController extends Controller
         $user->remark = $request->input('remark');
         $user->school_district_id = $request->input('school_district_id');
         $user->save();
-        return response()->json(['ret' => 0, 'url' => route('user.index')]);
+        if( session('admin_redirect_url') ){
+            $url = session('admin_redirect_url');
+        }
+        else{
+            $url = route('user.index');
+        }
+        $request->session()->pull('admin_redirect_url', null);
+        return response()->json(['ret' => 0, 'url' => $url]);
     }
 
     public function dispatchUser(Request $request, $id)

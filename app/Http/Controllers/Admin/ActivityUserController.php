@@ -106,16 +106,11 @@ class ActivityUserController extends Controller
             });
         }
 
-        
-        
-        
-        
-
 
         $filename = date('YmdHis').'.csv';
         $fp = fopen(public_path("downloads/".$filename), 'w');
         fwrite($fp, chr(0xEF).chr(0xBB).chr(0xBF));
-        $titles = ["排名","昵称","姓名","阅读字数","阅读数","赞数","创建时间"];
+        $titles = ["排名","昵称","姓名","用户ID","阅读字数","阅读数","赞数","创建时间"];
         fputcsv($fp, $titles);
         $orm->chunk(30000, function($items) use ($fp, $request){
             foreach ($items as $k => $v) {
@@ -123,6 +118,7 @@ class ActivityUserController extends Controller
                     $k+1,
                     $v->user->nickname,
                     $v->user->name,
+                    $v->user->id,
                     $v->words_number,
                     $v->reading_number,
                     $v->voted_number,
@@ -179,6 +175,9 @@ class ActivityUserController extends Controller
             ->where('activity_id', $request->input('activity'))
             ->first();
         $has_permission = Auth::guard('admin')->user()->hasAnyRole(['超级管理员']);
+        if( $request->input('redirect') ){
+            $request->session()->put('admin_redirect_url', urldecode($request->input('redirect')));
+        }
         return view('admin.activity_user.edit', [
             'item' => $activity_user,
             'age_groups' => $age_groups,
@@ -230,7 +229,15 @@ class ActivityUserController extends Controller
         $activity_user->city_id = $request->input('city_id');
         //$activity_user->receive_status = $request->input('receive_status');
         $activity_user->save();
-        return response()->json(['ret' => 0, 'url' => route('activityUser.index',['activity'=>$request->input('activity')])]);
+        
+        if( session('admin_redirect_url') ){
+            $url = session('admin_redirect_url');
+        }
+        else{
+            $url = route('activityUser.index',['activity'=>$request->input('activity')]);
+        }
+        $request->session()->pull('admin_redirect_url', null);
+        return response()->json(['ret' => 0, 'url' => $url]);
     }
 
     /**

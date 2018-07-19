@@ -16,6 +16,7 @@
             <div class="form-group">
                 <select name="school_district_id" class="form-control" id="school_district_id">
                     <option value="">选择校区/所有</option>
+                    <option value="null" {!! Request::input('school_district_id') == 'null' ? 'selected="selected"' : '' !!}>无校区</option>
                     @foreach($districts as $district)
                     <option value="{{ $district->id }}" {!! $district->id == Request::input('school_district_id') ? 'selected="selected"' : '' !!}>{{ $district->name }}</option>
                     @endforeach
@@ -137,7 +138,11 @@
                                         <a href="{{route('user.activate',['id'=>$item->id])}}" class="activate">重新启用</a>
                                     </li>@endif
                                     <li>
-                                        <a href="{{route('user.edit',['id'=>$item->id])}}" class="">编辑</a>
+                                    @php
+                                    $url = urlencode(Request::fullurl())
+
+                                    @endphp
+                                        <a href="{{route('user.edit',['id'=>$item->id,'redirect'=>urlencode(Request::fullurl())] )}}" class="edit">编辑</a>
                                     </li>
 
                                     <li role="separator" class="divider"></li>

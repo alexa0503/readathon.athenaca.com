@@ -49,7 +49,7 @@
                     <tr>
                         <th>排名</th>
                         <th>头像</th>
-                        <th>昵称/姓名</th>
+                        <th>昵称/姓名/用户ID</th>
                         <th>阅读字数/阅读数/赞</th>
                         <th>创建时间</th>
                         <th>操作</th>
@@ -60,7 +60,7 @@
                     <tr>
                         <td>{{ $item->rank }}</td>
                         <td><a title="点击查看用户信息" href="{{ route('user.index',['id'=>$item->user_id]) }}" target="_blank"><img src="{{ asset($item->user->avatar) }}" class="img-circle" style="max-width:100px;" /></a></td>
-                        <td>{{ $item->user->nickname }} / {{ $item->user->name }}</td>
+                        <td>{{ $item->user->nickname }} / {{ $item->user->name }} / {{ $item->user->id }}</td>
                         <td>{{ $item->words_number }} / {{ $item->reading_number }} / {{ $item->voted_number }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>
@@ -69,7 +69,7 @@
                                     操作 <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right" role="menu">
-                                    <li><a href="{{route('activityUser.edit',['id'=>$item->user_id, 'activity'=>Request::input('activity')])}}" >编辑基础信息</a></li>
+                                    <li><a href="{{route('activityUser.edit',['id'=>$item->user_id, 'activity'=>Request::input('activity'),'redirect'=>urlencode(Request::fullurl())])}}" >编辑基础信息</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="{{route('log.index',['user_id'=>$item->user_id, 'activity'=>Request::input('activity'), 'type'=>'reading'])}}" >查看阅读记录</a></li>
                                     <li><a href="{{route('log.index',['user_id'=>$item->user_id, 'activity'=>Request::input('activity'), 'type'=>'activity'])}}" >查看活动记录</a></li>
