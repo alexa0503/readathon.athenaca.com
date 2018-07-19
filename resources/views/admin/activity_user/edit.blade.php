@@ -33,7 +33,7 @@
                     <div class="col-lg-10 col-md-10">
                         <select name="age_group_id" id="age_group_id" class="form-control">
                         @foreach($age_groups as $age_group)
-                            <option value="{{ $age_group->id }}" {!! $age_group->id == $item->age_group_id ? 'selected="selected"' : '' !!}>{{ $age_group->title }} {{$item->age_group_id}}</option>
+                            <option value="{{ $age_group->id }}" {!! $age_group->id == $item->age_group_id ? 'selected="selected"' : '' !!}>{{ $age_group->title }}</option>
                         @endforeach
                         </select>
                         <label class="help-block" for="" id="help-age_group_id"></label>
