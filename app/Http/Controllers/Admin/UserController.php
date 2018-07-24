@@ -106,7 +106,7 @@ class UserController extends Controller
             if( null != $user->invite_id && $user->is_activated == 0 ){
                 $inviter = $user->inviter;
                 $activity = Helper::getCurrentActivity();
-                if( null != $activity ){
+                if( null != $activity && $inviter->is_activated == 1 ){
                     $activity_user = ActivityUser::where('user_id', $user->invite_id)->where('activity_id', $activity->id)->first();
                     if( null == $activity_user ){
                         $activity_user = new ActivityUser;
