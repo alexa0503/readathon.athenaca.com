@@ -198,7 +198,7 @@ class UserController extends Controller
         $filename = date('YmdHis').'.csv';
         $fp = fopen(public_path("downloads/".$filename), 'w');
         fwrite($fp, chr(0xEF).chr(0xBB).chr(0xBF));
-        $titles = ["ID","姓名","昵称","城市","电话","生日","性别","在读学员","GE","校区","邀请人","是否激活","状态","备注","注册IP","注册城市","UTM_SOURCE","注册时间"];
+        $titles = ["ID","姓名","昵称","城市","电话","生日","性别","在读学员","GE","校区","邀请人","是否激活","状态","备注","注册IP","注册城市","UTM_SOURCE","管理者","注册时间"];
         fputcsv($fp, $titles);
         $orm->chunk(30000, function($items) use ($fp){
             foreach ($items as $k => $v) {
@@ -220,6 +220,7 @@ class UserController extends Controller
                     $v->registered_ip,
                     $v->registered_city,
                     $v->utm_source,
+                    $v->administrator_names,
                     $v->created_at
                 ];
                 fputcsv($fp, $array);

@@ -115,6 +115,10 @@ class UserController extends Controller
                 }
             }
         }
+        // 排除未激活用户
+        // $orm->whereHas('user', function ($query) {
+        //     $query->where('is_activated', 1);
+        // });
         /*
         if ($request->input('type') == 'withoutme') {
             if ($wx_activity_user != null) {
