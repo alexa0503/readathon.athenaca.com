@@ -75,7 +75,7 @@ class ItemController extends Controller
                     //$ts1 = strtotime($activity->start_date);
                     //$ts2 = strtotime($activity->end_date);
                     $ts3 = strtotime($activity->items_start_date);
-                    $ts4 = strtotime($activity->items_end_date);
+                    $ts4 = strtotime($activity->items_end_date.' 23:59:59');
                     if ($now < $ts3) {
                         $received_status = 2;
                     } elseif ($now > $ts4) {

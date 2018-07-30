@@ -86,7 +86,7 @@ Route::group(['middleware' => ['wx.auth']], function () {
         //$activity = Helper::getCurrentActivity();
         //获取最近一次可以领取奖品的活动
         if ($id == null) {
-            $dt = Carbon::now();
+            $dt = date('Y-m-d');
             $activity = Activity::where('start_date', '<=', $dt)->where('receive_end_date', '>=', $dt)->orderBy('start_date', 'DESC')->first();
             if( null == $activity ){
                 $activity = Activity::where('start_date', '>=', $dt)->orderBy('start_date', 'ASC')->first();
@@ -125,10 +125,10 @@ Route::group(['middleware' => ['wx.auth']], function () {
 
                 $now = time();
                 $ts1 = strtotime($activity->start_date);
-                $ts2 = strtotime($activity->end_date);
+                $ts2 = strtotime($activity->end_date.' 23:59:59');
     
                 $ts3 = strtotime($activity->receive_start_date);
-                $ts4 = strtotime($activity->receive_end_date);
+                $ts4 = strtotime($activity->receive_end_date.' 23:59:59');
     
                 //dd($ts2,$now);
                 if ($now < $ts2) {
@@ -197,10 +197,10 @@ Route::group(['middleware' => ['wx.auth']], function () {
         $activity = $prize->activity;
         $now = time();
         $ts1 = strtotime($activity->start_date);
-        $ts2 = strtotime($activity->end_date);
+        $ts2 = strtotime($activity->end_date.' 23:59:59');
 
         $ts3 = strtotime($activity->receive_start_date);
-        $ts4 = strtotime($activity->receive_end_date);
+        $ts4 = strtotime($activity->receive_end_date.' 23:59:59');
 
         if ($now < $ts2) {
             return response()->json(['ret' => 1003, 'errMsg' => '活动未结束，该奖品暂时无法领取'], 403);
