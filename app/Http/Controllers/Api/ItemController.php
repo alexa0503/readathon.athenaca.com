@@ -16,7 +16,8 @@ class ItemController extends Controller
     {
         $user_id = session('wx.user.id');
         if ($id == null) {
-            $dt = Carbon::now();
+            // $dt = Carbon::now();
+            $dt = date('Y-m-d');
             $activity = Activity::where('start_date', '<=', $dt)->where('items_end_date', '>=', $dt)->orderBy('start_date', 'DESC')->first();
             # 当前没有显示上期
             /*
@@ -131,7 +132,7 @@ class ItemController extends Controller
         $activity = $item->activity;
         $now = time();
         $ts3 = strtotime($activity->items_start_date);
-        $ts4 = strtotime($activity->items_end_date);
+        $ts4 = strtotime($activity->items_end_date.'23:59:59');
         if ($now < $ts3) {
             return response()->json(['ret' => 1003, 'errMsg' => '此礼品还未开始兑换呢'], 403);
         } elseif ($now > $ts4) {

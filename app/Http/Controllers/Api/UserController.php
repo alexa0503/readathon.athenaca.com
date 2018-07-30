@@ -51,7 +51,10 @@ class UserController extends Controller
         $current_user_id = $request->input('id');
         $id = session('wx.user.id');
         $orm = ActivityUser::with('user');
-        $activity = Helper::getLatestActivity();
+        $activity = Helper::getCurrentActivity();
+        if( !$activity ){
+            $activity = Helper::getLatestActivity();
+        }
 
         $wx_activity_user = ActivityUser::where('user_id', session('wx.user.id'))
             ->where('activity_id', $activity->id)

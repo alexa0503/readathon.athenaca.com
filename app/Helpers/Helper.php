@@ -50,14 +50,17 @@ class Helper
     }
     public static function getCurrentActivity()
     {
-        $dt = Carbon::now();
-        $activity = Activity::where('start_date', '<=', $dt->toDateString())->where('end_date', '>=', $dt->toDateString())->first();
+        // $dt = Carbon::now();
+        $dt = date('Y-m-d');
+        $activity = Activity::where('start_date', '<=', $dt)->where('end_date', '>=', $dt)->first();
         return $activity;
     }
     public static function getNextActivity()
     {
-        $dt = Carbon::now();
-        $activity = Activity::where('start_date', '>', $dt->toDateString())
+        // $dt = Carbon::now();
+        $dt = date('Y-m-d');
+
+        $activity = Activity::where('start_date', '>', $dt)
         ->orderBy('start_date', 'ASC')->first();
         if($activity){
             $activity->start_date = date('m月d日', strtotime($activity->start_date));
