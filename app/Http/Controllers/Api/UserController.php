@@ -52,7 +52,7 @@ class UserController extends Controller
         $id = session('wx.user.id');
         $orm = ActivityUser::with('user');
         $activity = Helper::getCurrentActivity();
-        if( !$activity ){
+        if( $activity == null ){
             $activity = Helper::getLatestActivity();
         }
 
