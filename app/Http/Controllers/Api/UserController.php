@@ -21,11 +21,19 @@ class UserController extends Controller
         }
         $activity = Activity::current();
         $has_joined = 0;
+        // 
+        // 上期兑换字数
+        
         $activity_info = [
             'words_number' => 0,
             'reading_number' => 0,
             'rank' => '--',
         ];
+        if( $activity == null ){
+            $latest_activity = Helper::getLatestActivity();
+            $latest_activity_user = ActivityUser::where('activity_id', $latest_activity->id)->where('user_id', $id)->first();
+            $activity_info['exchanged_words_number'] = $latest_activity_user->exchanged_words_number;
+        }
         if (null != $activity) {
             $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $id)->first();
             $has_joined = null == $activity_user ? 0 : 1;
