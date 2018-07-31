@@ -53,7 +53,12 @@ class UserController extends Controller
         $orm = ActivityUser::with('user');
         $activity = Helper::getCurrentActivity();
         if( $activity == null ){
-            $activity = Helper::getLatestActivity();
+            if($request->input('type') == 'withoutme' ){
+                $activity = Helper::getNextActivity();
+            }
+            else{
+                $activity = Helper::getLatestActivity();
+            }
         }
 
         $wx_activity_user = ActivityUser::where('user_id', session('wx.user.id'))
