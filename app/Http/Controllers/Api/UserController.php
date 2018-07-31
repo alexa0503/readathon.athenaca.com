@@ -32,7 +32,7 @@ class UserController extends Controller
         if( $activity == null ){
             $latest_activity = Helper::getLatestActivity();
             $latest_activity_user = ActivityUser::where('activity_id', $latest_activity->id)->where('user_id', $id)->first();
-            if( null == $activity_info ){
+            if( null == $latest_activity_user ){
                 $activity_info['exchanged_words_number'] = 0;
             }
             else{
