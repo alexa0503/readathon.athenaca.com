@@ -32,7 +32,12 @@ class UserController extends Controller
         if( $activity == null ){
             $latest_activity = Helper::getLatestActivity();
             $latest_activity_user = ActivityUser::where('activity_id', $latest_activity->id)->where('user_id', $id)->first();
-            $activity_info['exchanged_words_number'] = $latest_activity_user->exchanged_words_number;
+            if( $activity_info ){
+                $activity_info['exchanged_words_number'] = 0;
+            }
+            else{
+                $activity_info['exchanged_words_number'] = $latest_activity_user->exchanged_words_number;
+            }
         }
         if (null != $activity) {
             $activity_user = ActivityUser::where('activity_id', $activity->id)->where('user_id', $id)->first();
