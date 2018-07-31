@@ -91,8 +91,8 @@ class UserController extends Controller
             //没有活动
             if (null == $current_activity && $request->input('type') == 'withoutme') {
                 if( null != $activity){
-                    $activity->start_date = date('m月d日',strtotime($activity->start_date));
-                    $activity->end_date = date('m月d日',strtotime($activity->end_date));
+                    // $activity->start_date = date('m月d日',strtotime($activity->start_date));
+                    // $activity->end_date = date('m月d日',strtotime($activity->end_date));
                 }
                 return response()->json([
                     'ret' => 1001, 
