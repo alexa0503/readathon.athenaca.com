@@ -115,7 +115,7 @@ class LogController extends Controller
                         $v->user->name,
                         $v->rank,
                         $v->prize->name,
-                        $item->has_checked == 0 ? '未核销' : '已核销' ,
+                        $v->has_checked == 0 ? '未核销' : '已核销' ,
                         $v->created_at
                     ];
                 }
