@@ -113,7 +113,7 @@ class UserController extends Controller
                         $activity_user->words_number = 500;
                         $activity_user->user_id = $user->invite_id;
                         $activity_user->activity_id = $activity->id;
-                        $activity_user->age_group_id = Helper::age($inviter->birthdate);
+                        $activity_user->age_group_id = Helper::ageGroup($inviter->birthdate);
                         $activity_user->reading_number = 0;
                         $activity_user->voted_number = 0;
                         $activity_user->receive_status = 0;
