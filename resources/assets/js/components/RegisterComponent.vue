@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid" v-if="!loading">
+    <div class="container-fluid" v-if="!loading && hasMounted">
         <form class="register-form row" v-if="!succeeded && !hasRegistered" method="POST" @submit.prevent="register">
             <div class="form-content">
                 <div class="form-group" v-bind:class="hasError && errMsg.name ? 'has-error' : ''">
@@ -92,6 +92,7 @@
         },
         data() {
             return {
+                hasMounted: false,
                 privacySeen: false,
                 hasError: false,
                 succeeded: false,
@@ -150,6 +151,9 @@
                 document.body.style.background = '#fff';
             }
             this.$store.dispatch('initRegisterPage')
+        },
+        mounted(){
+            this.hasMounted = true
         },
         methods: {
             disableKey() {

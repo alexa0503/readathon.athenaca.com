@@ -74,7 +74,7 @@ let wxShare = async function (to, from) {
         if (window["__wxjs_is_wkwebview"]) {
             history.replaceState(null, null, store.state.wxShareUrl);
         } else {
-            location.replace(store.state.wxShareUrl);
+            // location.replace(store.state.wxShareUrl);
         }
         setTimeout(function(){
             jssdk.loadWxShare(store.state.wxShareUrl).then((config) => {
@@ -127,7 +127,6 @@ router.beforeEach((to, from, next) => {
     next()
 })
 router.afterEach((to, from) => {
-    console.log(to.name)
     wxShare(to, from)
     store.dispatch('finished')
 })

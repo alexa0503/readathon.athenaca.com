@@ -85,7 +85,6 @@ class QuestionController extends Controller
             return response()->json(['ret' => 1200, 'errMsg' => '活动已过期或者还未开始'], 403);
         }
         $answer_id = $request->input('answer');
-        $date = date('Y-m-d');
         $answer = QuestionAnswer::where('question_id', $id)
             ->where('id', $answer_id)
             ->first();
@@ -94,7 +93,11 @@ class QuestionController extends Controller
         }
 
         $question = Question::find($id);
-        if ($question->activity_id != $activity->id) {
+        $timestamp = time();
+        if( $timestamp <= strtotime($question->start_date) || $timestamp > strtotime($question->end_date.' 23:59:59') ){
+            return response()->json(['ret' => 1005, 'errMsg' => '该问题已超过时限'], 403);
+        }
+        elseif ($question->activity_id != $activity->id) {
             return response()->json(['ret' => 1003, 'errMsg' => '该问题不属于当前活动'], 403);
         }
 
