@@ -88,8 +88,6 @@ class QuestionController extends Controller
         $date = date('Y-m-d');
         $answer = QuestionAnswer::where('question_id', $id)
             ->where('id', $answer_id)
-            ->where('start_date', '<=', $date)
-            ->where('end_date', '>=', $date)
             ->first();
         if ($answer == null) {
             return response()->json(['ret' => 1001, 'errMsg' => '不存在该问题或者答案'], 403);
