@@ -18,6 +18,7 @@ class QuestionController extends Controller
     public function index()
     {
         $user_id = session('wx.user.id');
+        $date = date('Y-m-d');
         $activity = Helper::getCurrentActivity();
         $ret = 0;
         $err_msg = '';
@@ -33,7 +34,10 @@ class QuestionController extends Controller
         $activity_user = ActivityUser::where('activity_id', $activity->id)
             ->where('user_id', $user_id)->first();
 
-        $question = Question::where('activity_id', $activity->id)->first();
+        $question = Question::where('activity_id', $activity->id)
+            ->where('start_date', '<=', $date)
+            ->where('end_date', '>=', $date)
+            ->first();
         if (null == $question) {
             $ret = 1001;
             $err_msg = '现在没有可以回答的问题';
@@ -81,7 +85,12 @@ class QuestionController extends Controller
             return response()->json(['ret' => 1200, 'errMsg' => '活动已过期或者还未开始'], 403);
         }
         $answer_id = $request->input('answer');
-        $answer = QuestionAnswer::where('question_id', $id)->where('id', $answer_id)->first();
+        $date = date('Y-m-d');
+        $answer = QuestionAnswer::where('question_id', $id)
+            ->where('id', $answer_id)
+            ->where('start_date', '<=', $date)
+            ->where('end_date', '>=', $date)
+            ->first();
         if ($answer == null) {
             return response()->json(['ret' => 1001, 'errMsg' => '不存在该问题或者答案'], 403);
         }
