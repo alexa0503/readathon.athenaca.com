@@ -70,7 +70,10 @@ class Helper
     }
     public static function getLatestActivity()
     {
-        $activity = Activity::orderBy('start_date', 'ASC')->first();
+        $date = date('Y-m-d');
+        $activity = Activity::orderBy('start_date', 'DESC')
+            ->where('start_date', '<', $date)
+            ->first();
         return $activity;
     }
     public static function httpGet($url)
